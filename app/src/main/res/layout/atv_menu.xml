@@ -47,6 +47,7 @@
         android:backgroundTint="#070B4E"
         android:backgroundTintMode="add"
         android:hapticFeedbackEnabled="false"
+        android:onClick="telavideo"
         android:text="Vídeos"
         android:textColorLink="#233CC8"
         android:textSize="18sp"
