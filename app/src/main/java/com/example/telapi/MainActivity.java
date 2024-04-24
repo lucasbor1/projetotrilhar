@@ -7,16 +7,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+
 
     ListView lstDespesas;
     Spinner spnMeses;
@@ -28,10 +31,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int indice;
     DespesaDao dao;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         btnAdicionar = findViewById(R.id.btnAdicionar);
         btnAdicionar.setOnClickListener(this);
 
@@ -43,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dao = new DespesaDao(this);
         atualizarLista();
     }
+
+
     @Override
     protected void onResume(){
         super.onResume();
