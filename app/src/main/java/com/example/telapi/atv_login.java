@@ -37,7 +37,10 @@ public class atv_login extends AppCompatActivity {
         if (user.getText().toString().equals("Admin") && senha.getText().toString().equals("123")) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-
+        }
+        else {
+            Toast.makeText(this,"Senha Incorreta",Toast.LENGTH_LONG).show();
+            }
         }
     }
-}
+git
