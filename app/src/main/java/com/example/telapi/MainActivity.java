@@ -87,4 +87,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(telaCad);
     }
 
+    public void botaovoltar (View view) {
+        Intent intent = new Intent(this, atv_menu.class);
+        startActivity(intent);
+    }
+
 }

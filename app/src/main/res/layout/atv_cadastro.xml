@@ -30,7 +30,7 @@
             android:text="Despesa"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
-            android:textSize="16sp" />
+            android:textSize="18dp" />
 
     </FrameLayout>
 

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#060D41">
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="159dp"
+        android:layout_height="52dp"
+        android:text="M E N U"
+        android:textAlignment="center"
+        android:textColor="#EFEBEB"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.229" />
+
+    <Button
+        android:id="@+id/btnfin"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="308dp"
+        android:layout_height="70dp"
+        android:backgroundTint="#070B4E"
+        android:backgroundTintMode="add"
+        android:hapticFeedbackEnabled="false"
+        android:onClick="controlefinanceiro"
+        android:text="Controle financeiro"
+        android:textColorLink="#233CC8"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.413" />
+
+    <Button
+        android:id="@+id/btnvid"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="308dp"
+        android:layout_height="70dp"
+        android:backgroundTint="#070B4E"
+        android:backgroundTintMode="add"
+        android:hapticFeedbackEnabled="false"
+        android:text="Vídeos"
+        android:textColorLink="#233CC8"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.556" />
+
+    <Button
+        android:id="@+id/btnrec"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="308dp"
+        android:layout_height="70dp"
+        android:backgroundTint="#070B4E"
+        android:backgroundTintMode="add"
+        android:hapticFeedbackEnabled="false"
+        android:text="Recompensas"
+        android:textColorLink="#233CC8"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.701" />
+
+    <Button
+        android:id="@+id/btnconf"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="308dp"
+        android:layout_height="70dp"
+        android:backgroundTint="#070B4E"
+        android:backgroundTintMode="add"
+        android:hapticFeedbackEnabled="false"
+        android:text="Configurações"
+        android:textColorLink="#233CC8"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.845" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

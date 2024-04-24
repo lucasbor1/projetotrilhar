@@ -35,7 +35,7 @@ public class atv_login extends AppCompatActivity {
 
     public void clicaBotao(View view) {
         if (user.getText().toString().equals("Admin") && senha.getText().toString().equals("123")) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, atv_menu.class);
             startActivity(intent);
         }
         else {

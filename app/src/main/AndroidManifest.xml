@@ -19,6 +19,9 @@
             android:name=".atv_cadastro"
             android:exported="false" />
         <activity
+            android:name=".atv_menu"
+            android:exported="false" />
+        <activity
             android:name=".atv_login"
             android:exported="true">
             <intent-filter>
