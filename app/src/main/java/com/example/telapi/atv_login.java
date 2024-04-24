@@ -43,4 +43,3 @@ public class atv_login extends AppCompatActivity {
             }
         }
     }
-git
