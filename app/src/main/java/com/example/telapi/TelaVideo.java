@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import androidx.activity.EdgeToEdge;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 public class TelaVideo extends AppCompatActivity {
 
@@ -12,7 +15,12 @@ public class TelaVideo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_tela_video); // Correção aqui
+        setContentView(R.layout.activity_tela_video);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.video), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         // Configurando os WebViews
         WebView webView = findViewById(R.id.webView);
