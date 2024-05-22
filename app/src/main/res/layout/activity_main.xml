@@ -1,129 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/despesas"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/azul_escuro"
     tools:context=".MainActivity">
 
-
-    <ImageButton
-        android:id="@+id/btnVoltar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#060D41"
-        android:textAlignment="center"
-        android:tint="#FFFFFF"
-        app:srcCompat="@android:drawable/ic_menu_revert" />
-
-    <TextView
-        android:id="@+id/textView2"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:onClick="botaovoltar"
-        android:text="Minhas Despesas"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="18dp" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            android:text="Minhas Despesas"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"/>
+
+        <ImageButton
+            android:id="@+id/btnAdicionar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/btn_add"
+            android:src="@android:drawable/ic_input_add"
+            app:tint="@color/white" />
+    </LinearLayout>
 
     <Spinner
         android:id="@+id/spnMeses"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FEFEFE"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/spinner"
         android:entries="@array/meses"
-        android:foregroundTint="#FEFEFE"
         android:gravity="center"
         android:padding="8sp"
         android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.238"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.064" />
-
-    <ImageButton
-        android:id="@+id/btnAdicionar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="48dp"
-        android:background="#060D41"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        android:textColor="@color/white" />
 
     <ListView
         android:id="@+id/lstDespesas"
-        android:layout_width="422dp"
-        android:layout_height="473dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.372" />
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"/>
 
-    <EditText
-        android:id="@+id/edtSaldo"
-        style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
-        android:layout_width="190dp"
-        android:layout_height="43dp"
-        android:ems="10"
-        android:inputType="number"
-        android:textColor="#FEFEFE"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.947"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.96" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Saldo a pagar"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/edtSaldo"
-        app:layout_constraintHorizontal_bias="0.778"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.944" />
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-    <EditText
-        android:id="@+id/edtTotal"
-        style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
-        android:layout_width="191dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="0"
-        android:textColor="#FEFEFE"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.947"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.871" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Total mensal:"
+            android:textColor="#FFFFFF" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total a pagar"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/edtTotal"
-        app:layout_constraintHorizontal_bias="0.787"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.858" />
+        <EditText
+            android:id="@+id/edtTotal"
+            style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="number"
+            android:textColor="#FEFEFE"
+            android:textSize="10sp"
+            android:layout_marginStart="8dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            android:text="Em aberto:"
+            android:textColor="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/edtSaldo"
+            style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="number"
+            android:textColor="#FEFEFE"
+            android:textSize="10sp"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+</LinearLayout>
