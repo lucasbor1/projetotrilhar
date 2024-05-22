@@ -61,28 +61,36 @@
         android:textSize="16sp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="R$"
-        android:textSize="16sp"
-        android:textColor="@color/black" />
 
-    <EditText
-        android:id="@+id/edtValor"
-        android:layout_width="135dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:inputType="numberDecimal"
-        android:textSize="16sp" />
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="R$"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginEnd="8dp"/>
+
+        <EditText
+            android:id="@+id/edtValor"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Vencimento  "
+        android:text="Vencimento:"
         android:textSize="16sp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp" />
@@ -92,6 +100,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp">
 
         <ImageView
@@ -99,7 +108,8 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/ic_calendar"
-            android:contentDescription="Ícone de calendário"/>
+            android:contentDescription="Ícone de calendário"
+            android:layout_marginEnd="8dp"/>
 
         <TextView
             android:id="@+id/txtDataSelecionada"
