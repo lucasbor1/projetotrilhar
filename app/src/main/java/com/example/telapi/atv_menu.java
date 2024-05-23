@@ -13,8 +13,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class atv_menu  extends AppCompatActivity {
 
-    Button btnfin, btnvid, btnrec, btnconf;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,18 +23,13 @@ public class atv_menu  extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        btnfin = findViewById(R.id.btnfin);
-        btnvid = findViewById(R.id.btnvid);
-        btnrec = findViewById(R.id.btnrec);
-        btnconf = findViewById(R.id.btnconf);
     }
 
     public void controlefinanceiro(View view) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
-    public void telavideo(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+    public void videos(View view) {
         Intent intent = new Intent(this, TelaVideo.class);
         startActivity(intent);
     }
