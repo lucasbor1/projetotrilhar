@@ -39,19 +39,35 @@
             app:tint="@color/white" />
     </LinearLayout>
 
-    <Spinner
-        android:id="@+id/spnMeses"
+    <!-- New horizontal LinearLayout for Spinner and ImageView -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="51dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/spinner"
-        android:entries="@array/meses"
-        android:gravity="center"
-        android:padding="8sp"
-        android:spinnerMode="dropdown"
-        android:textColor="@color/white" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:paddingBottom="8dp">
+
+        <Spinner
+            android:id="@+id/spnMeses"
+            android:layout_width="269dp"
+            android:layout_height="51dp"
+            android:layout_weight="1"
+            android:background="@drawable/spinner"
+            android:entries="@array/meses"
+            android:gravity="center"
+            android:padding="8sp"
+            android:spinnerMode="dropdown"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            app:srcCompat="@drawable/setabaixo" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/lstDespesas"

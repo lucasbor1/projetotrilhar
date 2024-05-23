@@ -12,13 +12,5 @@
     </item>
 
 
-    <item
-        android:right="8dp"
-        android:gravity="end|center_vertical">
-        <bitmap
-            android:src="@drawable/setabaixo"
-            android:width="10dp"
-            android:height="10dp" />
-    </item>
 
 </layer-list>
