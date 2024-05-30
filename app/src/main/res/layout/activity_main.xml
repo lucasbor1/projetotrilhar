@@ -9,23 +9,21 @@
     android:background="@color/azul_escuro"
     tools:context=".MainActivity">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="8dp">
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="start|center_vertical"
             android:text="Minhas Despesas"
+            android:gravity="center"
             android:textColor="#FFFFFF"
             android:textSize="18sp"/>
 
@@ -33,50 +31,49 @@
             android:id="@+id/btnAdicionar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/btn_add"
-            android:src="@android:drawable/ic_input_add"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/btn_add"
             app:tint="@color/white" />
     </LinearLayout>
 
-    <!-- New horizontal LinearLayout for Spinner and ImageView -->
-    <LinearLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="0dp"
-        android:paddingEnd="0dp"
-        android:paddingBottom="8dp">
+        android:padding="8dp">
 
         <Spinner
             android:id="@+id/spnMeses"
-            android:layout_width="269dp"
-            android:layout_height="51dp"
-            android:layout_weight="1"
-            android:background="@drawable/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:entries="@array/meses"
-            android:gravity="center"
-            android:padding="8sp"
             android:spinnerMode="dropdown"
-            android:textColor="@color/white" />
+            android:background="@drawable/spinner"
+            android:paddingStart="16dp"
+            android:paddingEnd="48dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textAlignment="gravity" />
 
         <ImageView
-            android:id="@+id/imageView2"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            app:srcCompat="@drawable/setabaixo" />
-    </LinearLayout>
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/setabaixo"
+            app:tint="@color/white" />
+    </FrameLayout>
 
     <ListView
         android:id="@+id/lstDespesas"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#FFFFFF"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"/>
+        android:divider="?android:attr/listDivider"
+        android:dividerHeight="3dp"
+        android:background="#FFFFFF"/>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -115,7 +112,7 @@
             android:textColor="#FFFFFF" />
 
         <EditText
-            android:id="@+id/edtSaldo"
+            android:id="@+id/edtAberto"
             style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -125,6 +122,8 @@
             android:textColor="#FEFEFE"
             android:textSize="10sp"
             android:layout_marginStart="8dp"/>
+
+
     </LinearLayout>
 
 </LinearLayout>

@@ -1,0 +1,6 @@
+<!-- google_button_style.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="4dp" />
+    <solid android:color="@color/azul_escuro" />
+</shape>

@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ListView lstDespesas;
     Spinner spnMeses;
     ImageButton btnAdicionar;
-    EditText edtTotal, edtSaldo;
+    EditText edtTotal, edtAberto;
 
     List<Despesa> listaDespesa = new ArrayList<>();
     ListAdapter listAdapter;
@@ -51,12 +51,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnAdicionar.setOnClickListener(this);
 
         edtTotal = findViewById(R.id.edtTotal);
-        edtSaldo = findViewById(R.id.edtSaldo);
+        edtAberto = findViewById(R.id.edtAberto);
 
         lstDespesas = findViewById(R.id.lstDespesas);
         lstDespesas.setOnItemClickListener(this);
         dao = new DespesaDao(this);
         atualizarLista();
+
+
     }
 
 

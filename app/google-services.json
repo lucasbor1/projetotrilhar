@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "467457485020",
+    "project_id": "trilhar-51569",
+    "storage_bucket": "trilhar-51569.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467457485020:android:8c5001e98664fd3e102c19",
+        "android_client_info": {
+          "package_name": "com.example.telapi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "467457485020-jpgv12gnqdrug94g1lpvlcdlrk193f0v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.telapi",
+            "certificate_hash": "63d4f9bf9485cf3c0d6a6803399918f7dbf332c6"
+          }
+        },
+        {
+          "client_id": "467457485020-a4mue1bkadrecra3tnbf8t5pmmt06d2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANyhdRUeY4S-c5LLW-IQOk6cLGck3X5DY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467457485020-a4mue1bkadrecra3tnbf8t5pmmt06d2g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

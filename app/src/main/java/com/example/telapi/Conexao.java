@@ -10,8 +10,8 @@ public class Conexao extends SQLiteOpenHelper {
     private static final String NAME = "banco.db";
     private static final int VERSION = 1;
 
-    private static final String SQL_CREATE = "create table cliente(" +
-            "id integer primary key autoincrement, " + // Adicione uma vírgula aqui
+    private static final String SQL_CREATE = "create table despesa(" +
+            "id integer primary key autoincrement, " +
             "descricao varchar(50), " +
             "valor varchar(20), " +
             "vencimento date);";
@@ -25,5 +25,7 @@ public class Conexao extends SQLiteOpenHelper {
     };
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){}
+
+
 
 }

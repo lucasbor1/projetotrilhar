@@ -11,18 +11,17 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="15dp">
 
         <TextView
             android:id="@+id/logo"
@@ -35,112 +34,43 @@
     </LinearLayout>
 
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:padding="1dp"
+        android:background="@color/white">
+
     <LinearLayout
+        android:id="@+id/btnGoogleSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@drawable/btn_google"
+        android:onClick="signInWithGoogle">
 
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_user"
-                app:tint="@color/white" />
-
-            <EditText
-                android:id="@+id/user"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:hint="Usuário"
-                android:inputType="text"
-                android:padding="10dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="200dp"
-            android:layout_height="1dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dp"
-            android:background="@color/white" />
-
-        <!-- Password Field -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_cadeado"
-                app:tint="@color/white" />
-
-            <EditText
-                android:id="@+id/senha"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:hint="Senha"
-                android:inputType="textPassword"
-                android:padding="10dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="200dp"
-            android:layout_height="1dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dp"
-            android:background="@color/white" />
-
-        <Button
-            android:id="@+id/btn"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="@color/white"
-            android:onClick="clicaBotao"
-            android:padding="12dp"
-            android:text="Entrar"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_google"
+            app:tint="@color/white" />
 
         <TextView
-            android:id="@+id/textView12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:onClick="onForgotPasswordClick"
-            android:text="Esqueceu a senha?"
+            android:layout_marginStart="16dp"
+            android:text="Entre com a conta Google"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
+
     </LinearLayout>
+</FrameLayout>
 
 
-    <Space
+<Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
 </LinearLayout>
