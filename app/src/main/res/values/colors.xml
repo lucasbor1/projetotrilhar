@@ -3,4 +3,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="azul_escuro">#060D41</color>
+    <color name="button_pressed">#BEBEBE</color>
+    <color name="button_default">#CCCCCC</color>
+
+
 </resources>

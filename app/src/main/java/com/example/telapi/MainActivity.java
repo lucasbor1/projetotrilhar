@@ -1,107 +1,119 @@
 package com.example.telapi;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.telapi.Despesa;
+import com.example.telapi.atv_cadastro;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends AppCompatActivity {
 
-
-    ListView lstDespesas;
-    Spinner spnMeses;
-    ImageButton btnAdicionar;
-    EditText edtTotal, edtAberto;
-
-    List<Despesa> listaDespesa = new ArrayList<>();
-    ListAdapter listAdapter;
-    int indice;
-    DespesaDao dao;
-
+    private Spinner spinnerMeses;
+    private ListView listViewDespesas;
+    private DespesaAdapter despesaAdapter;
+    private CollectionReference despesasRef;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.despesas), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        ImageButton btnAdicionar = findViewById(R.id.btnAdicionar);
+        btnAdicionar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, atv_cadastro.class);
+                startActivity(intent);
+            }
         });
 
-        btnAdicionar = findViewById(R.id.btnAdicionar);
-        btnAdicionar.setOnClickListener(this);
+        // Inicializar Firebase Firestore
+        despesasRef = FirebaseFirestore.getInstance().collection("despesas");
 
-        edtTotal = findViewById(R.id.edtTotal);
-        edtAberto = findViewById(R.id.edtAberto);
+        // Inicializar Spinner de Meses
+        spinnerMeses = findViewById(R.id.spnMeses);
+        ArrayAdapter<CharSequence> mesesAdapter = ArrayAdapter.createFromResource(this,
+                R.array.meses, android.R.layout.simple_spinner_item);
+        mesesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMeses.setAdapter(mesesAdapter);
 
-        lstDespesas = findViewById(R.id.lstDespesas);
-        lstDespesas.setOnItemClickListener(this);
-        dao = new DespesaDao(this);
-        atualizarLista();
+        // Inicializar ListView de Despesas
+        listViewDespesas = findViewById(R.id.lstDespesas);
+        despesaAdapter = new DespesaAdapter(this, new ArrayList<>());
+        listViewDespesas.setAdapter(despesaAdapter);
 
+        // Configurar Listener para o Spinner de Meses
+        spinnerMeses.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String mesSelecionado = parent.getItemAtPosition(position).toString();
+                // Atualizar a lista de despesas de acordo com o mês selecionado
+                atualizarListaDespesas(mesSelecionado);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Nenhuma ação necessária se nada for selecionado
+            }
+        });
     }
 
-
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        atualizarLista();
-        atualizarTotalDespesas();
-    }
-    private void atualizarTotalDespesas() {
-        float totalDespesas = dao.somaValores();
-        edtTotal.setText(String.valueOf(totalDespesas));
-    }
-    public void atualizarLista() {
-        listaDespesa = dao.listar();
-        listAdapter = new ArrayAdapter<Despesa>(this, android.R.layout.simple_list_item_1, listaDespesa);
-        lstDespesas.setAdapter(listAdapter);
-    }
-    @Override
-    public void onClick(View v){
-        if(v == btnAdicionar){
-            Despesa d = new Despesa();
-            d.setId(0L);
-            abrirCadastro("Inserir", d);
+        // Atualizar a lista de despesas quando a MainActivity é retomada
+        if (despesaAdapter != null) {
+            String mesSelecionado = spinnerMeses.getSelectedItem().toString();
+            atualizarListaDespesas(mesSelecionado);
         }
     }
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-        indice = position;
-        Despesa d = (Despesa) lstDespesas.getItemAtPosition(position);
-        abrirCadastro("Alterar", d);
+
+    private void atualizarListaDespesas(String mesSelecionado) {
+        despesasRef.whereEqualTo("mes", mesSelecionado)
+                .orderBy("data")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<Despesa> despesas = new ArrayList<>();
+                            for (DocumentSnapshot document : task.getResult()) {
+                                Despesa despesa = document.toObject(Despesa.class);
+                                despesas.add(despesa);
+                            }
+
+                            despesaAdapter.atualizarDespesas(despesas);
+                        } else {
+
+                            Toast.makeText(MainActivity.this, "Erro ao carregar despesas: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
-    private void abrirCadastro(String acao, Despesa obj){
-        Intent telaCad = new Intent(this, atv_cadastro.class);
-        telaCad.putExtra("acao", acao);
-        telaCad.putExtra("obj", obj);
-        startActivity(telaCad);
-    }
-
-    public void botaovoltar (View view) {
-        Intent intent = new Intent(this, atv_menu.class);
+    public void adicionarDespesa(View view) {
+        // Abrir a atividade de cadastro para adicionar uma nova despesa
+        Intent intent = new Intent(this, atv_cadastro.class);
         startActivity(intent);
     }
-
 }

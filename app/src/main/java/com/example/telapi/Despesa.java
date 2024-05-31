@@ -1,30 +1,20 @@
 package com.example.telapi;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Despesa implements Serializable {
+    private String id;
+    private String descricao;
+    private double valor;
+    private String vencimento;
 
-    Long id;
-    String descricao, vencimento;
-    double valor;
 
 
-    public Despesa(Long id, String descricao, double valor, String vencimento) {
-        this.id = id;
-        this.descricao = descricao;
-        this.valor = valor;
-        this.vencimento = vencimento;
-    }
-
-    public Despesa(){
-
-    }
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -53,9 +43,7 @@ public class Despesa implements Serializable {
     }
 
     @Override
-    public String toString(){
-          return id + " - " + descricao + "\n" +
-            "Valor: "+  valor + "\n" +
-            "Vencimento: "+ vencimento;
-}
+    public String toString() {
+        return descricao + " - " + valor;
+    }
 }
