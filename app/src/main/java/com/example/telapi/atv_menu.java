@@ -3,7 +3,6 @@ package com.example.telapi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +25,7 @@ public class atv_menu  extends AppCompatActivity {
     }
 
     public void controlefinanceiro(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, atv_despesa.class);
         startActivity(intent);
     }
     public void videos(View view) {

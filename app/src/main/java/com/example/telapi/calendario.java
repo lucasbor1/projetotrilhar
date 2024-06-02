@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 
 import androidx.core.content.ContextCompat;
 
@@ -12,9 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class DatePickerDialogCustom extends DatePickerDialog {
+public class calendario extends DatePickerDialog {
 
-    public DatePickerDialogCustom(Context context, OnDateSetListener listener, int year, int month, int dayOfMonth) {
+    public calendario(Context context, OnDateSetListener listener, int year, int month, int dayOfMonth) {
         super(context, listener, year, month, dayOfMonth);
         getDatePicker().setCalendarViewShown(false);
     }

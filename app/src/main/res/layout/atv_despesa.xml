@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/azul_escuro"
-    tools:context=".MainActivity">
-
+    tools:context=".atv_despesa">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,15 +16,18 @@
         android:gravity="center_vertical"
         android:padding="16dp">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"            >
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Minhas Despesas"
                 android:textColor="#FFFFFF"
                 android:textSize="25sp"
@@ -34,58 +36,47 @@
 
             <ImageButton
                 android:id="@+id/btnAdicionar"
-                android:layout_width="29dp"
+                android:layout_width="wrap_content"
                 android:layout_height="26dp"
-                android:layout_gravity="end|center_vertical"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
                 android:src="@drawable/ic_add"
-                app:tint="@color/white" />
+                app:tint="@color/white"
+                android:layout_gravity="end|center_vertical" />
 
+        </LinearLayout>
 
-        </FrameLayout>
     </LinearLayout>
 
-
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:orientation="horizontal"
+        android:layout_margin="16dp">
 
         <Spinner
             android:id="@+id/spnMeses"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:entries="@array/meses"
-            android:spinnerMode="dropdown"
+            android:layout_width="0dp"
+            android:layout_height="51dp"
+            android:layout_weight="1"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:background="@drawable/spinner"
-            android:paddingStart="16dp"
-            android:paddingEnd="48dp"
-            android:gravity="center_vertical"
-            android:textColor="@color/white"
-            android:textAlignment="gravity" />
+            android:textColor="@color/white" />
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/setabaixo"
-            app:tint="@color/white" />
-    </FrameLayout>
+
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/lstDespesas"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="?android:attr/listDivider"
-        android:dividerHeight="3dp"
-        android:background="#FFFFFF"/>
-
-
+        android:padding="8dp"
+        android:background="#FFFFFF" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -134,7 +125,6 @@
             android:textColor="#FEFEFE"
             android:textSize="10sp"
             android:layout_marginStart="8dp"/>
-
 
     </LinearLayout>
 
