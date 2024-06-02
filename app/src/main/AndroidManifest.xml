@@ -21,6 +21,21 @@
             android:name=".TelaVideo"
             android:exported="false" />
         <activity
+            android:name=".TelaVideo2"
+            android:exported="false" />
+        <activity
+            android:name=".TelaVideo3"
+            android:exported="false" />
+        <activity
+            android:name=".TelaVideo4"
+            android:exported="false" />
+        <activity
+            android:name=".TelaVideo5"
+            android:exported="false" />
+        <activity
+            android:name=".atv_modulos"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity

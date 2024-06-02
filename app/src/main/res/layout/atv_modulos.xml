@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/modulos"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/azul_escuro"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Menu"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="34sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/white" />
+
+    <TextView
+        android:id="@+id/Mod1"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/azul_escuro"
+        android:gravity="center"
+        android:text="Módulo 1 (Iniciante)"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="309dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/videos1"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imagem1"
+                android:layout_width="57dp"
+                android:layout_height="48dp"
+                android:onClick="video1"
+                android:src="@drawable/ic_videos"
+                app:tint="@color/white" />
+
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:onClick="video1"
+                android:text="Vídeo1"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/videos2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imagem2"
+                android:layout_width="57dp"
+                android:layout_height="48dp"
+                android:onClick="video2"
+                android:src="@drawable/ic_videos"
+                app:tint="@color/white" />
+
+            <Button
+                android:id="@+id/btn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="video2"
+                android:text="Vídeo2"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/videos3"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imagem3"
+                android:layout_width="59dp"
+                android:layout_height="48dp"
+                android:onClick="video3"
+                android:src="@drawable/ic_videos"
+                app:tint="@color/white" />
+
+            <Button
+                android:id="@+id/btn3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="video3"
+                android:text="Vídeo3"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/videos4"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imagem4"
+                android:layout_width="59dp"
+                android:layout_height="48dp"
+                android:onClick="video4"
+                android:src="@drawable/ic_videos"
+                app:tint="@color/white" />
+
+            <Button
+                android:id="@+id/btn4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="video4"
+                android:text="Vídeo4"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/videos5"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imagem5"
+                android:layout_width="59dp"
+                android:layout_height="48dp"
+                android:onClick="video5"
+                android:src="@drawable/ic_videos"
+                app:tint="@color/white" />
+
+            <Button
+                android:id="@+id/btn5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="video5"
+                android:text="Vídeo5"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
