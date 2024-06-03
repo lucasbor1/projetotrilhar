@@ -128,6 +128,7 @@ public class atv_despesa extends AppCompatActivity {
         exibirDespesasPorMes(mes); // Atualiza a exibição da lista
     }
 
+
     // Remove uma despesa da lista e atualiza a exibição no ListView
     private void removerDespesaExistente(Despesa despesaRemovida) {
         String mes = obterMesDaDespesa(despesaRemovida);

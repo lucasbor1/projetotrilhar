@@ -1,8 +1,11 @@
 package com.example.telapi;
 
+import android.icu.text.SimpleDateFormat;
+
 import com.google.firebase.Timestamp;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 public class Despesa implements Serializable {
     private String descricao;
@@ -15,7 +18,8 @@ public class Despesa implements Serializable {
 
     }
 
-    public Despesa(String categoria, String descricao, double valor, Timestamp vencimento) {
+    public Despesa(String id, String categoria, String descricao, double valor, Timestamp vencimento) {
+        this.id = id;
         this.categoria = categoria;
         this.descricao = descricao;
         this.valor = valor;
@@ -67,6 +71,9 @@ public class Despesa implements Serializable {
 
     @Override
     public String toString() {
-        return categoria + ": " + descricao + " - R$" + valor + " (Vencimento: " + (vencimento != null ? vencimento.toDate().toString() : "Sem Data") + ")";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String dataFormatada = vencimento != null ? sdf.format(vencimento.toDate()) : "Sem Data";
+        return  descricao +  String.format("%.2f", valor)  + dataFormatada;
     }
+
 }

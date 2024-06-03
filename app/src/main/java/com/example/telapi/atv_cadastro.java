@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 public class atv_cadastro extends AppCompatActivity implements View.OnClickListener {
 
@@ -118,7 +119,6 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         double valor = extrairValorDigitado(edtValor.getText().toString());
         String dataVencimentoStr = edtVencimento.getText().toString();
 
-
         if (categoria.isEmpty() || descricao.isEmpty() || valor <= 0 || dataVencimentoStr.isEmpty()) {
             // Exibir mensagem de erro para o usuário
             Toast.makeText(this, "Por favor, preencha todos os campos corretamente.", Toast.LENGTH_SHORT).show();
@@ -138,11 +138,13 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             return null;
         }
 
-        // Criar nova despesa com os dados coletados
-        return new Despesa(categoria, descricao, valor, vencimento);
+        // Gerar um ID único para a nova despesa
+        String id = UUID.randomUUID().toString();
 
-
+        // Criar nova despesa com os dados coletados e o ID gerado
+        return new Despesa(id, categoria, descricao, valor, vencimento);
     }
+
 
 
     private void configurarTecladoNumerico() {
