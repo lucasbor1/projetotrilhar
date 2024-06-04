@@ -1,31 +1,38 @@
 package com.example.telapi;
 
-import android.icu.text.SimpleDateFormat;
-
-import com.google.firebase.Timestamp;
-
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 public class Despesa implements Serializable {
+    private String id;
     private String descricao;
     private double valor;
-    private Timestamp vencimento;
+    private String vencimento;
     private String categoria;
-    private String id;
 
     public Despesa() {
-
+        // Construtor vazio necessário para Firestore
     }
 
-    public Despesa(String id, String categoria, String descricao, double valor, Timestamp vencimento) {
-        this.id = id;
+
+    public Despesa(String categoria, String descricao, double valor, String vencimento) {
+        this.id = UUID.randomUUID().toString();
         this.categoria = categoria;
         this.descricao = descricao;
         this.valor = valor;
         this.vencimento = vencimento;
     }
 
+    public Despesa(String id, String categoria, String descricao, double valor, String vencimento) {
+        this.id = id;
+        this.categoria = categoria;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.vencimento = vencimento;
+    }
 
     // Getters e Setters
 
@@ -53,11 +60,11 @@ public class Despesa implements Serializable {
         this.valor = valor;
     }
 
-    public Timestamp getVencimento() {
+    public String getVencimento() {
         return vencimento;
     }
 
-    public void setVencimento(Timestamp vencimento) {
+    public void setVencimento(String vencimento) {
         this.vencimento = vencimento;
     }
 
@@ -71,9 +78,12 @@ public class Despesa implements Serializable {
 
     @Override
     public String toString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String dataFormatada = vencimento != null ? sdf.format(vencimento.toDate()) : "Sem Data";
-        return  descricao +  String.format("%.2f", valor)  + dataFormatada;
+        return "Despesa{" +
+                "id='" + id + '\'' +
+                ", categoria='" + categoria + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", valor=" + valor +
+                ", vencimento='" + vencimento + '\'' +
+                '}';
     }
-
 }

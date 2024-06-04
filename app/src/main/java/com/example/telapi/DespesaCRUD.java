@@ -22,6 +22,7 @@ public class DespesaCRUD {
     }
 
     public void adicionarDespesa(Despesa despesa) {
+        Log.d("DespesaCRUD", "Adicionando despesa: " + despesa.toString());
         db.collection("despesas").add(despesa)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
@@ -37,6 +38,7 @@ public class DespesaCRUD {
     }
 
     public void alterarDespesa(Despesa despesa) {
+        Log.d("DespesaCRUD", "Alterando despesa: " + despesa.toString());
         db.collection("despesas").document(despesa.getId())
                 .set(despesa)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -44,7 +46,6 @@ public class DespesaCRUD {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d("DespesaCRUD", "Despesa alterada com ID: " + despesa.getId());
-
                         } else {
                             Log.e("DespesaCRUD", "Erro ao alterar despesa", task.getException());
                         }
@@ -53,6 +54,7 @@ public class DespesaCRUD {
     }
 
     public void removerDespesa(String idDespesa) {
+        Log.d("DespesaCRUD", "Removendo despesa com ID: " + idDespesa);
         db.collection("despesas").document(idDespesa)
                 .delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {

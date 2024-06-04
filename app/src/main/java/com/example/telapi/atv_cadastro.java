@@ -39,7 +39,9 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
     private Button btnGravar, btnExcluir;
     private Despesa despesa;
     private String acao;
+    private DespesaCRUD despesaCRUD;
     private FirebaseFirestore db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         edtVencimento = findViewById(R.id.edtVencimento);
         btnGravar = findViewById(R.id.btnGravar);
         btnExcluir = findViewById(R.id.btnExcluir);
+
+        despesaCRUD = new DespesaCRUD();
         db = FirebaseFirestore.getInstance();
 
         ImageView imgCalendario = findViewById(R.id.imgCalendario);
@@ -80,27 +84,27 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         btnGravar.setOnClickListener(v -> {
             Despesa despesaAtualizada = criarDespesa();
             if (despesaAtualizada != null) {
-                DespesaCRUD despesaCRUD = new DespesaCRUD();
                 if ("Inserir".equals(acao)) {
                     despesaCRUD.adicionarDespesa(despesaAtualizada);
                     Toast.makeText(atv_cadastro.this, "Despesa adicionada com sucesso: " + despesaAtualizada.toString(), Toast.LENGTH_SHORT).show();
+                    finish();
                 } else if ("Alterar".equals(acao)) {
                     despesaCRUD.alterarDespesa(despesaAtualizada);
                     Toast.makeText(atv_cadastro.this, "Despesa atualizada com sucesso: " + despesaAtualizada.toString(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     intent.putExtra("despesa_atualizada", despesaAtualizada);
                     setResult(RESULT_OK, intent);
+                    finish();
                 }
-                finish();
             }
         });
 
         btnExcluir.setOnClickListener(v -> {
             if (despesa != null) {
-                DespesaCRUD despesaCRUD = new DespesaCRUD();
                 despesaCRUD.removerDespesa(despesa.getId());
+                Toast.makeText(atv_cadastro.this, "Despesa removida com sucesso", Toast.LENGTH_SHORT).show();
+                finish();
             }
-            finish();
         });
 
         edtVencimento.setOnClickListener(v -> abrirCalendario());
@@ -112,37 +116,35 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         getCategorias();
     }
 
-
     private Despesa criarDespesa() {
         String categoria = autoCompleteCategoria.getText().toString();
         String descricao = edtDescricao.getText().toString();
-        double valor = extrairValorDigitado(edtValor.getText().toString());
+        String valorStr = edtValor.getText().toString().replace("R$", "").replace(",", "");
+        double valor = valorStr.isEmpty() ? 0.0 : Double.parseDouble(valorStr);
         String dataVencimentoStr = edtVencimento.getText().toString();
 
+        Log.d("atv_cadastro", "Categoria: " + categoria);
+        Log.d("atv_cadastro", "Descrição: " + descricao);
+        Log.d("atv_cadastro", "Valor: " + valor);
+        Log.d("atv_cadastro", "Data de Vencimento: " + dataVencimentoStr);
+
         if (categoria.isEmpty() || descricao.isEmpty() || valor <= 0 || dataVencimentoStr.isEmpty()) {
-            // Exibir mensagem de erro para o usuário
             Toast.makeText(this, "Por favor, preencha todos os campos corretamente.", Toast.LENGTH_SHORT).show();
             return null;
         }
-        Log.d(TAG, "Categoria: " + categoria);
-        Log.d(TAG, "Descrição: " + descricao);
-        Log.d(TAG, "Valor: " + valor);
-        Log.d(TAG, "Data de Vencimento: " + dataVencimentoStr);
 
-        Timestamp vencimento;
-        try {
-            vencimento = new Timestamp(parseData(dataVencimentoStr));
-        } catch (Exception e) {
-            // Exibir mensagem de erro para o usuário
-            Toast.makeText(this, "Formato de data inválido.", Toast.LENGTH_SHORT).show();
-            return null;
-        }
+        String id = (despesa != null && despesa.getId() != null) ? despesa.getId() : UUID.randomUUID().toString();
 
-        // Gerar um ID único para a nova despesa
-        String id = UUID.randomUUID().toString();
+        return new Despesa(id, categoria, descricao, valor, dataVencimentoStr);
+    }
 
-        // Criar nova despesa com os dados coletados e o ID gerado
-        return new Despesa(id, categoria, descricao, valor, vencimento);
+
+
+    private void preencherCamposDespesa() {
+        autoCompleteCategoria.setText(despesa.getCategoria());
+        edtDescricao.setText(despesa.getDescricao());
+        edtValor.setText(String.valueOf(despesa.getValor()));
+        edtVencimento.setText(despesa.getVencimento());
     }
 
 
@@ -191,7 +193,6 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         edtValor.setText("R$" + formattedValue.toString());
     }
-
     @Override
     public void onClick(View v) {
         onNumberClick(v);
@@ -211,12 +212,6 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         datePickerDialog.show();
     }
 
-    private void preencherCamposDespesa() {
-        autoCompleteCategoria.setText(despesa.getCategoria());
-        edtDescricao.setText(despesa.getDescricao());
-        edtValor.setText(String.valueOf(despesa.getValor()));
-        edtVencimento.setText(formatarData(despesa.getVencimento().toDate()));
-    }
 
 
 

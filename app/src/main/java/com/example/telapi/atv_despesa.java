@@ -35,19 +35,26 @@ public class atv_despesa extends AppCompatActivity {
     private Map<String, List<String>> despesasPorMes;
 
     // Carrega as despesas do banco de dados Firebase
+    // Carrega as despesas do banco de dados Firebase
+    // Carrega as despesas do banco de dados Firebase
     private void carregarDespesas() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("despesas").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (DocumentSnapshot document : task.getResult()) {
                     Despesa despesa = document.toObject(Despesa.class);
-                    adicionarDespesaNova(despesa);
+                    adicionarDespesaNova(despesa); // Adiciona a despesa à lista geral
                 }
+                // Após carregar todas as despesas, exibe as despesas do mês atual selecionado no Spinner
+                String mesSelecionado = spnMeses.getSelectedItem().toString();
+                exibirDespesasPorMes(mesSelecionado);
             } else {
                 Log.w("atv_despesa", "Erro ao carregar despesas.", task.getException());
             }
         });
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +100,7 @@ public class atv_despesa extends AppCompatActivity {
         });
     }
 
+
     // Manipula o resultado da atividade de cadastro de despesa
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -106,6 +114,9 @@ public class atv_despesa extends AppCompatActivity {
                         Log.d("atv_despesa", "Nova despesa sem data de vencimento: " + novaDespesa.toString());
                     } else {
                         adicionarDespesaNova(novaDespesa);
+                        // Atualiza a exibição para mostrar a nova despesa
+                        String mesSelecionado = spnMeses.getSelectedItem().toString();
+                        exibirDespesasPorMes(mesSelecionado);
                     }
                 } else if (data.hasExtra("despesa_atualizada")) {
                     Despesa despesaAtualizada = (Despesa) data.getSerializableExtra("despesa_atualizada");
@@ -119,17 +130,23 @@ public class atv_despesa extends AppCompatActivity {
         }
     }
 
-    // Adiciona uma nova despesa à lista e exibe no ListView
+
+
     private void adicionarDespesaNova(Despesa novaDespesa) {
         String mes = obterMesDaDespesa(novaDespesa);
         List<String> despesasDoMes = despesasPorMes.getOrDefault(mes, new ArrayList<>());
         despesasDoMes.add(novaDespesa.toString());
         despesasPorMes.put(mes, despesasDoMes);
-        exibirDespesasPorMes(mes); // Atualiza a exibição da lista
+        exibirDespesasPorMes(mes);
+
+        // Adiciona a despesa diretamente ao mês correto no mapa despesasPorMes
+        List<String> despesasGeral = despesasPorMes.getOrDefault("Geral", new ArrayList<>());
+        despesasGeral.add(novaDespesa.toString());
+        despesasPorMes.put("Geral", despesasGeral);
     }
 
 
-    // Remove uma despesa da lista e atualiza a exibição no ListView
+
     private void removerDespesaExistente(Despesa despesaRemovida) {
         String mes = obterMesDaDespesa(despesaRemovida);
         if (despesasPorMes.containsKey(mes)) {
@@ -139,7 +156,6 @@ public class atv_despesa extends AppCompatActivity {
         }
     }
 
-    // Atualiza uma despesa existente na lista e exibe no ListView
     private void atualizarDespesaExistente(Despesa despesaAtualizada) {
         String mes = obterMesDaDespesa(despesaAtualizada);
         if (despesasPorMes.containsKey(mes)) {
@@ -155,22 +171,27 @@ public class atv_despesa extends AppCompatActivity {
     }
 
     // Obtém o mês da despesa a partir do Timestamp
+// Obtém o mês da despesa a partir do Timestamp
     private String obterMesDaDespesa(Despesa despesa) {
-        Timestamp vencimento = despesa.getVencimento();
-        if (vencimento == null) {
+        String vencimento = despesa.getVencimento();
+        if (vencimento == null || vencimento.isEmpty()) {
             Log.d("atv_despesa", "Vencimento é nulo para a despesa: " + despesa.toString());
             return "Mês Desconhecido";
         }
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(vencimento.toDate());
-        int mes = calendar.get(Calendar.MONTH);
+        String[] partesData = vencimento.split("/");
+        if (partesData.length < 2) {
+            Log.d("atv_despesa", "Formato de data inválido para a despesa: " + despesa.toString());
+            return "Mês Desconhecido";
+        }
+        int mes = Integer.parseInt(partesData[1]);
         String[] nomesMeses = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
-        return nomesMeses[mes];
+        return nomesMeses[mes - 1];
     }
 
-    // Exibe as despesas de um determinado mês no ListView
+
     private void exibirDespesasPorMes(String mes) {
-        List<String> despesas = despesasPorMes.get(mes);        if (despesas != null) {
+        List<String> despesas = despesasPorMes.get(mes);
+        if (despesas != null) {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_list_item_1, despesas);
             lstDespesas.setAdapter(adapter);
@@ -179,12 +200,13 @@ public class atv_despesa extends AppCompatActivity {
         }
     }
 
+
     // Converte a despesa atual em uma representação de string formatada
     @Override
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        Timestamp vencimento = despesaAtual != null ? despesaAtual.getVencimento() : null;
-        String dataFormatada = vencimento != null ? sdf.format(vencimento.toDate()) : "Sem Data";
+        String vencimento = despesaAtual != null ? despesaAtual.getVencimento() : null;
+        String dataFormatada = vencimento != null ? sdf.format(vencimento) : "Sem Data";
         return despesaAtual != null ? despesaAtual.getCategoria() + ": " + despesaAtual.getDescricao() + " - R$" + String.format("%.2f", despesaAtual.getValor()) + " (Vencimento: " + dataFormatada + ")" : "";
     }
 }
