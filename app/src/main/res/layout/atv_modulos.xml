@@ -9,11 +9,15 @@
     android:orientation="vertical">
 
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="64dp" />
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Menu"
+        android:text="Videos"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="34sp" />
@@ -62,10 +66,15 @@
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
                 android:onClick="video1"
-                android:text="Vídeo1"
+                android:text="Reserva de emergência"
                 android:textSize="16sp" />
 
         </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <LinearLayout
             android:id="@+id/videos2"
@@ -86,10 +95,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="video2"
-                android:text="Vídeo2"
+                android:text="O que é a Educação FInanceira"
                 android:textSize="16sp" />
 
         </LinearLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <LinearLayout
             android:id="@+id/videos3"
@@ -110,9 +123,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="video3"
-                android:text="Vídeo3"
+                android:text="7 níveis da riqueza"
                 android:textSize="16sp" />
+            <Space
+                android:layout_width="179dp"
+                android:layout_height="27dp"
+                android:layout_weight="1" />
         </LinearLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <LinearLayout
             android:id="@+id/videos4"
@@ -133,10 +154,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="video4"
-                android:text="Vídeo4"
+                android:text="Como fazer o dinheiro crescer"
                 android:textSize="16sp" />
+            <Space
+                android:layout_width="179dp"
+                android:layout_height="27dp"
+                android:layout_weight="1" />
 
         </LinearLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <LinearLayout
             android:id="@+id/videos5"
@@ -157,11 +186,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="video5"
-                android:text="Vídeo5"
+                android:text="O segredo da mente milionária"
                 android:textSize="16sp" />
         </LinearLayout>
-
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/logo"
+            android:layout_width="394dp"
+            android:layout_height="49dp"
+            android:layout_gravity="center_horizontal|top"
+            android:background="@color/azul_escuro"
+            android:gravity="center"
+            android:text="T R I L H A R"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.873" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
 

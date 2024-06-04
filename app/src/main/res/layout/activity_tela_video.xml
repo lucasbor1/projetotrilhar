@@ -16,21 +16,47 @@
         android:layout_height="55dp"
         android:background="@color/azul_escuro"
         android:gravity="center"
-        android:text="VÍDEOS"
+        android:text="Reserva de Emergência"
         android:textColor="#FFFFFF"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:text="Descrição 1"
-        android:textColor="#FFFFFF" />
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text=""
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
 
     <WebView
         android:id="@+id/webView"
         android:layout_width="331dp"
         android:layout_height="229dp"
         android:layout_marginBottom="60dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/logo"
+            android:layout_width="394dp"
+            android:layout_height="49dp"
+            android:layout_gravity="center_horizontal|top"
+            android:background="@color/azul_escuro"
+            android:gravity="center"
+            android:text="T R I L H A R"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.873" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
