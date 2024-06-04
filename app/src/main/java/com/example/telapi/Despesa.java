@@ -78,12 +78,8 @@ public class Despesa implements Serializable {
 
     @Override
     public String toString() {
-        return "Despesa{" +
-                "id='" + id + '\'' +
-                ", categoria='" + categoria + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", valor=" + valor +
-                ", vencimento='" + vencimento + '\'' +
-                '}';
+        return descricao + '\n' +
+               + valor +
+                "\n'" + vencimento;
     }
 }

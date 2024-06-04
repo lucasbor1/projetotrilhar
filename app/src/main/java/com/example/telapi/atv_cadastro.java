@@ -2,6 +2,8 @@ package com.example.telapi;
 
 import static android.content.ContentValues.TAG;
 
+import static com.example.telapi.atv_despesa.REQUEST_CODE;
+
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -87,6 +89,13 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
                 if ("Inserir".equals(acao)) {
                     despesaCRUD.adicionarDespesa(despesaAtualizada);
                     Toast.makeText(atv_cadastro.this, "Despesa adicionada com sucesso: " + despesaAtualizada.toString(), Toast.LENGTH_SHORT).show();
+
+                    // Defina a variável novaDespesa aqui
+                    Despesa novaDespesa = despesaAtualizada;
+
+                    Intent intent = new Intent();
+                    intent.putExtra("nova_despesa", novaDespesa);
+                    setResult(RESULT_OK, intent);
                     finish();
                 } else if ("Alterar".equals(acao)) {
                     despesaCRUD.alterarDespesa(despesaAtualizada);
@@ -98,6 +107,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
+
 
         btnExcluir.setOnClickListener(v -> {
             if (despesa != null) {
@@ -138,6 +148,18 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         return new Despesa(id, categoria, descricao, valor, dataVencimentoStr);
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null && data.hasExtra("nova_despesa")) {
+                Despesa novaDespesa = (Despesa) data.getSerializableExtra("nova_despesa");
+                // Atualize a lista de despesas com a nova despesa aqui
+            }
+        }
+    }
 
 
     private void preencherCamposDespesa() {
