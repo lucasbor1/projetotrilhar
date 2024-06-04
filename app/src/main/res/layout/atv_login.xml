@@ -1,59 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/azul_escuro"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".atv_despesa">
+    tools:context=".MainActivity">
 
-    <Space
+    <!-- Imagem de fundo que preenche toda a tela -->
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/trilharcapa05" /> 
+
+    <!-- Logo do aplicativo -->
+
+    <!-- Conteúdo do login com fundo azul -->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="15dp">
+        android:padding="16dp"
+        android:layout_gravity="center"
+        android:background="@color/azul_escuro">
 
-        <TextView
-            android:id="@+id/logo"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="15dp">
+            
+            <!-- Adicione outros elementos aqui, se necessário -->
+        
+        </LinearLayout>
+
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="T R I L H A R"
-            android:textColor="@color/white"
-            android:textSize="40sp"
-            android:textStyle="bold" />
+            android:layout_marginTop="16dp"
+            android:background="@color/white"
+            android:padding="1dp">
+            
+            <!-- Adicione outros elementos aqui, se necessário -->
+        
+        </FrameLayout>
+
     </LinearLayout>
 
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:padding="1dp"
-        android:background="@color/white">
-
+    <!-- Botão de login com Google -->
     <LinearLayout
         android:id="@+id/btnGoogleSignIn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="66dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="32dp"
+        android:background="@color/azul_escuro"
         android:gravity="center"
+        android:onClick="signInWithGoogle"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:background="@drawable/btn_google"
-        android:onClick="signInWithGoogle">
+        android:padding="16dp">
 
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="34dp"
+            android:layout_height="39dp"
             android:src="@drawable/ic_google"
             app:tint="@color/white" />
 
@@ -64,13 +78,40 @@
             android:text="Entre com a conta Google"
             android:textColor="@color/white"
             android:textSize="18sp" />
-
     </LinearLayout>
-</FrameLayout>
 
-
-<Space
+    <!-- Barra de progresso -->
+    <ProgressBar
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/loginProgressBar"
+        android:indeterminateTint="@color/white"
+        android:indeterminate="true"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"            
+        android:visibility="invisible"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/logo"
+            android:layout_width="414dp"
+            android:layout_height="52dp"
+            android:layout_gravity="center_horizontal|top"
+            android:background="@color/azul_escuro"
+            android:gravity="center"
+            android:text="T R I L H A R"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.873" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

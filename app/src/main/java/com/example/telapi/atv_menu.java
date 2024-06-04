@@ -29,7 +29,8 @@ public class atv_menu  extends AppCompatActivity {
         startActivity(intent);
     }
     public void videos(View view) {
-        Intent intent = new Intent(this, TelaVideo.class);
+        Intent intent = new Intent(this, atv_modulos.class);
         startActivity(intent);
     }
+
 }

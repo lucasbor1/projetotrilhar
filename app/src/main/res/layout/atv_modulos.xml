@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/modulos"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/azul_escuro"
+    android:orientation="vertical">
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="64dp" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Videos"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="34sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/white" />
+
+    <TextView
+        android:id="@+id/Mod1"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/azul_escuro"
+        android:gravity="center"
+        android:text="Módulo 1 (Iniciante)"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="309dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/videos1"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imagem1"
+                android:layout_width="57dp"
+                android:layout_height="48dp"
+                android:onClick="video1"
+                android:src="@drawable/ic_videos"
+                app:tint="@color/white" />
+
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:onClick="video1"
+                android:text="Reserva de emergência"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/videos2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imagem2"
+                android:layout_width="57dp"
+                android:layout_height="48dp"
+                android:onClick="video2"
+                android:src="@drawable/ic_videos"
+                app:tint="@color/white" />
+
+            <Button
+                android:id="@+id/btn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="video2"
+                android:text="O que é a Educação FInanceira"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/videos3"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imagem3"
+                android:layout_width="59dp"
+                android:layout_height="48dp"
+                android:onClick="video3"
+                android:src="@drawable/ic_videos"
+                app:tint="@color/white" />
+
+            <Button
+                android:id="@+id/btn3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="video3"
+                android:text="7 níveis da riqueza"
+                android:textSize="16sp" />
+            <Space
+                android:layout_width="179dp"
+                android:layout_height="27dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/videos4"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imagem4"
+                android:layout_width="59dp"
+                android:layout_height="48dp"
+                android:onClick="video4"
+                android:src="@drawable/ic_videos"
+                app:tint="@color/white" />
+
+            <Button
+                android:id="@+id/btn4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="video4"
+                android:text="Como fazer o dinheiro crescer"
+                android:textSize="16sp" />
+            <Space
+                android:layout_width="179dp"
+                android:layout_height="27dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/videos5"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imagem5"
+                android:layout_width="59dp"
+                android:layout_height="48dp"
+                android:onClick="video5"
+                android:src="@drawable/ic_videos"
+                app:tint="@color/white" />
+
+            <Button
+                android:id="@+id/btn5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="video5"
+                android:text="O segredo da mente milionária"
+                android:textSize="16sp" />
+        </LinearLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/logo"
+            android:layout_width="394dp"
+            android:layout_height="49dp"
+            android:layout_gravity="center_horizontal|top"
+            android:background="@color/azul_escuro"
+            android:gravity="center"
+            android:text="T R I L H A R"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.873" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
+
