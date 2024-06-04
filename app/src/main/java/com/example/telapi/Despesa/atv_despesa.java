@@ -1,7 +1,6 @@
-package com.example.telapi;
+package com.example.telapi.Despesa;
 
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,12 +11,13 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.telapi.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class atv_despesa extends AppCompatActivity {

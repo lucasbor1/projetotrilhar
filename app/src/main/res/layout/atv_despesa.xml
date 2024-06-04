@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/azul_escuro"
-    tools:context=".atv_despesa">
+    tools:context=".Despesa.atv_despesa">
 
     <LinearLayout
         android:layout_width="match_parent"

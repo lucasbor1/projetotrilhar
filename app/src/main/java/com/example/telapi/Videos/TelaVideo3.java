@@ -1,4 +1,4 @@
-package com.example.telapi;
+package com.example.telapi.Videos;
 
 import android.os.Bundle;
 import android.webkit.WebChromeClient;

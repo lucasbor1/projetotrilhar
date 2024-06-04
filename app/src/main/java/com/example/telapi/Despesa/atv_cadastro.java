@@ -1,6 +1,6 @@
-package com.example.telapi;
+package com.example.telapi.Despesa;
 
-import static com.example.telapi.atv_despesa.REQUEST_CODE;
+import static com.example.telapi.Despesa.atv_despesa.REQUEST_CODE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.telapi.CategoriaCRUD;
+import com.example.telapi.Categoria.CategoriaCRUD;
+import com.example.telapi.Categoria.modal_categoria;
+import com.example.telapi.R;
+import com.example.telapi.calendario;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -219,7 +222,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         int mes = calendario.get(Calendar.MONTH);
         int dia = calendario.get(Calendar.DAY_OF_MONTH);
 
-        calendario datePickerDialog = new calendario(this, (view, year, monthOfYear, dayOfMonth) -> {
+        com.example.telapi.calendario datePickerDialog = new calendario(this, (view, year, monthOfYear, dayOfMonth) -> {
             String dataSelecionada = String.format("%02d/%02d/%d", dayOfMonth, monthOfYear + 1, year);
             edtVencimento.setText(dataSelecionada);
         }, ano, mes, dia);
