@@ -103,7 +103,6 @@ public class atv_despesa extends AppCompatActivity {
         });
     }
 
-    // Manipula o resultado da atividade de cadastro de despesa
 
 
     @Override

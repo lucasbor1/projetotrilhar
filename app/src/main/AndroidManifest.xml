@@ -36,7 +36,7 @@
             android:name=".atv_modulos"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".atv_despesa"
             android:exported="false" />
         <activity
             android:name=".atv_cadastro"

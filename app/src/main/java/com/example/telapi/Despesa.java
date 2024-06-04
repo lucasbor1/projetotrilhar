@@ -14,7 +14,7 @@ public class Despesa implements Serializable {
     private String categoria;
 
     public Despesa() {
-        // Construtor vazio necessário para Firestore
+
     }
 
 
