@@ -1,10 +1,8 @@
 package com.example.telapi;
 
-import static android.content.ContentValues.TAG;
+import static com.example.telapi.atv_despesa.REQUEST_CODE;
 
-import android.app.DatePickerDialog;
-import android.icu.text.DecimalFormat;
-import android.icu.util.Calendar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,144 +10,181 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.example.telapi.CRUDDespesas;
-import com.example.telapi.CategoriaDialogFragment;
-import com.example.telapi.Despesa;
+import com.example.telapi.CategoriaCRUD;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
-public class atv_cadastro extends AppCompatActivity implements View.OnClickListener, CategoriaDialogFragment.CategoriaDialogListener {
-    Button btnGravar, btnExcluir;
-    ImageButton btnVoltar;
-    TextView edtVencimento;
-    EditText edtDescricao, edtValor;
-    String acao;
-    Despesa d;
-    CRUDDespesas crudDespesas;
-    private FirebaseFirestore db;
+public class atv_cadastro extends AppCompatActivity implements View.OnClickListener {
+
     private AutoCompleteTextView autoCompleteCategoria;
+    private EditText edtDescricao, edtValor, edtVencimento;
+    private Button btnGravar, btnExcluir;
+    private Despesa despesa;
+    private String acao;
+    private DespesaCRUD despesaCRUD;
+    private FirebaseFirestore db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.atv_cadastro);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.cadastro), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        db = FirebaseFirestore.getInstance();
 
         autoCompleteCategoria = findViewById(R.id.autoCompleteCategoria);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<>());
-        autoCompleteCategoria.setAdapter(adapter);
-        atualizarAutoCompleteCategoria();
+        edtDescricao = findViewById(R.id.edtDescricao);
+        edtValor = findViewById(R.id.edtValor);
+        edtVencimento = findViewById(R.id.edtVencimento);
+        btnGravar = findViewById(R.id.btnGravar);
+        btnExcluir = findViewById(R.id.btnExcluir);
 
-        FloatingActionButton btnAddCategoria = findViewById(R.id.btnAddCategoria);
-        btnAddCategoria.setOnClickListener(v -> {
-            CategoriaDialogFragment dialog = new CategoriaDialogFragment();
-            dialog.setCategoriaDialogListener(atv_cadastro.this);
-            dialog.show(getSupportFragmentManager(), "CategoriaDialogFragment");
-        });
+        despesaCRUD = new DespesaCRUD();
+        db = FirebaseFirestore.getInstance();
+
+        ImageView imgCalendario = findViewById(R.id.imgCalendario);
+        imgCalendario.setOnClickListener(v -> abrirCalendario());
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new String[]{});
+        autoCompleteCategoria.setAdapter(adapter);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             acao = extras.getString("acao");
-            d = (Despesa) extras.getSerializable("obj");
+            despesa = (Despesa) extras.getSerializable("obj");
         } else {
             acao = "Inserir";
-            d = null;
+            despesa = null;
         }
 
-        crudDespesas = new CRUDDespesas();
-        criarComponentes();
+        btnGravar.setText(acao);
 
-        if ("Alterar".equals(acao) && d != null) {
-            edtDescricao.setText(d.getDescricao());
-            edtValor.setText(formatarValor(d.getValor()));
-            edtVencimento.setText(d.getVencimento());
+        if ("Alterar".equals(acao) && despesa != null) {
+            preencherCamposDespesa();
         } else {
             edtValor.setText("R$0,00");
         }
-    }
 
-    private void criarComponentes() {
-        btnGravar = findViewById(R.id.btnGravar);
-        btnGravar.setOnClickListener(this);
-        btnGravar.setText(acao);
-        btnExcluir = findViewById(R.id.btnExcluir);
-        btnExcluir.setOnClickListener(this);
+        btnGravar.setOnClickListener(v -> {
+            Despesa despesaAtualizada = criarDespesa();
+            if (despesaAtualizada != null) {
+                if ("Inserir".equals(acao)) {
+                    despesaCRUD.adicionarDespesa(despesaAtualizada);
+                    Toast.makeText(atv_cadastro.this, "Despesa adicionada com sucesso: " + despesaAtualizada.toString(), Toast.LENGTH_SHORT).show();
 
-        if ("Inserir".equals(acao)) {
-            btnExcluir.setVisibility(View.INVISIBLE);
-        } else {
-            btnExcluir.setVisibility(View.VISIBLE);
-        }
+                    // Defina a variável novaDespesa aqui
+                    Despesa novaDespesa = despesaAtualizada;
 
-        edtDescricao = findViewById(R.id.edtDescricao);
-        edtValor = findViewById(R.id.edtValor);
-        edtVencimento = findViewById(R.id.txtDataSelecionada);
-        ImageView imgCalendario = findViewById(R.id.imgCalendario);
-        imgCalendario.setOnClickListener(this);
+                    Intent intent = new Intent();
+                    intent.putExtra("nova_despesa", novaDespesa);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else if ("Alterar".equals(acao)) {
+                    despesaCRUD.alterarDespesa(despesaAtualizada);
+                    Toast.makeText(atv_cadastro.this, "Despesa atualizada com sucesso: " + despesaAtualizada.toString(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.putExtra("despesa_atualizada", despesaAtualizada);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            }
+        });
+
+
+        btnExcluir.setOnClickListener(v -> {
+            if (despesa != null) {
+                despesaCRUD.removerDespesa(despesa.getId());
+                Toast.makeText(atv_cadastro.this, "Despesa removida com sucesso", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+
+        edtVencimento.setOnClickListener(v -> abrirCalendario());
+
+        FloatingActionButton btnAddCategoria = findViewById(R.id.btnAddCategoria);
+        btnAddCategoria.setOnClickListener(v -> abrirModalCategoria());
 
         configurarTecladoNumerico();
+        getCategorias();
     }
 
-    private void configurarTecladoNumerico() {
-        TextView button0 = findViewById(R.id.button0);
-        TextView button1 = findViewById(R.id.button1);
-        TextView button2 = findViewById(R.id.button2);
-        TextView button3 = findViewById(R.id.button3);
-        TextView button4 = findViewById(R.id.button4);
-        TextView button5 = findViewById(R.id.button5);
-        TextView button6 = findViewById(R.id.button6);
-        TextView button7 = findViewById(R.id.button7);
-        TextView button8 = findViewById(R.id.button8);
-        TextView button9 = findViewById(R.id.button9);
-        TextView buttonErase = findViewById(R.id.buttonErase);
+    private Despesa criarDespesa() {
+        String categoria = autoCompleteCategoria.getText().toString();
+        String descricao = edtDescricao.getText().toString();
+        String valorStr = edtValor.getText().toString().replace("R$", "").replace(",", "");
+        double valor = valorStr.isEmpty() ? 0.0 : Double.parseDouble(valorStr);
+        String dataVencimentoStr = edtVencimento.getText().toString();
 
-        button0.setOnClickListener(this);
-        button1.setOnClickListener(this);
-        button2.setOnClickListener(this);
-        button3.setOnClickListener(this);
-        button4.setOnClickListener(this);
-        button5.setOnClickListener(this);
-        button6.setOnClickListener(this);
-        button7.setOnClickListener(this);
-        button8.setOnClickListener(this);
-        button9.setOnClickListener(this);
-        buttonErase.setOnClickListener(this);
+        Log.d("atv_cadastro", "Categoria: " + categoria);
+        Log.d("atv_cadastro", "Descrição: " + descricao);
+        Log.d("atv_cadastro", "Valor: " + valor);
+        Log.d("atv_cadastro", "Data de Vencimento: " + dataVencimentoStr);
+
+        if (categoria.isEmpty() || descricao.isEmpty() || valor <= 0 || dataVencimentoStr.isEmpty()) {
+            Toast.makeText(this, "Por favor, preencha todos os campos corretamente.", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        String id = (despesa != null && despesa.getId() != null) ? despesa.getId() : UUID.randomUUID().toString();
+
+        return new Despesa(id, categoria, descricao, valor, dataVencimentoStr);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null && data.hasExtra("nova_despesa")) {
+                Despesa novaDespesa = (Despesa) data.getSerializableExtra("nova_despesa");
+                // Atualize a lista de despesas com a nova despesa aqui
+            }
+        }
+    }
+
+
+    private void preencherCamposDespesa() {
+        autoCompleteCategoria.setText(despesa.getCategoria());
+        edtDescricao.setText(despesa.getDescricao());
+        edtValor.setText(String.valueOf(despesa.getValor()));
+        edtVencimento.setText(despesa.getVencimento());
+    }
+
+
+
+    private void configurarTecladoNumerico() {
+        findViewById(R.id.button0).setOnClickListener(this);
+        findViewById(R.id.button1).setOnClickListener(this);
+        findViewById(R.id.button2).setOnClickListener(this);
+        findViewById(R.id.button3).setOnClickListener(this);
+        findViewById(R.id.button4).setOnClickListener(this);
+        findViewById(R.id.button5).setOnClickListener(this);
+        findViewById(R.id.button6).setOnClickListener(this);
+        findViewById(R.id.button7).setOnClickListener(this);
+        findViewById(R.id.button8).setOnClickListener(this);
+        findViewById(R.id.button9).setOnClickListener(this);
+
+        findViewById(R.id.buttonErase).setOnClickListener(v -> apagarUltimoCaractere());
     }
 
     private void apagarUltimoCaractere() {
         String currentValue = edtValor.getText().toString();
-        if (currentValue.length() > 4) { // para garantir que sempre temos "R$0,00"
+        if (!currentValue.isEmpty()) {
             currentValue = currentValue.substring(0, currentValue.length() - 1);
-            if (currentValue.length() == 3) {
-                currentValue = "R$0,00";
-            } else {
-                currentValue = formatarValor(Double.parseDouble(currentValue.replace("R$", "").replace(",", ".")) / 10);
-            }
-            edtValor.setText(currentValue);
         }
+        edtValor.setText(currentValue);
     }
 
     private void onNumberClick(View v) {
@@ -160,12 +195,10 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         if (currentValue.equals("0")) {
             currentValue = buttonText;
         } else {
-            // Remove os zeros à esquerda
             currentValue = currentValue.replaceAll("^0+(?!$)", "");
             currentValue += buttonText;
         }
 
-        // Formatando o valor para adicionar a vírgula
         StringBuilder formattedValue = new StringBuilder(currentValue);
         if (formattedValue.length() >= 3) {
             formattedValue.insert(formattedValue.length() - 2, ",");
@@ -173,125 +206,89 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             formattedValue.insert(0, "0,");
         }
 
-        // Adicionando o "R$" novamente ao texto
         edtValor.setText("R$" + formattedValue.toString());
     }
-
-
-    private String formatarValor(double valor) {
-        DecimalFormat df = new DecimalFormat("R$#,##0.00");
-        return df.format(valor);
-    }
-
     @Override
     public void onClick(View v) {
-        int id = v.getId();
-
-        if (id == R.id.btnGravar) {
-            if ("Inserir".equals(acao)) {
-                adicionarDespesa();
-            } else if ("Alterar".equals(acao)) {
-                atualizarDespesa();
-            }
-        } else if (id == R.id.btnExcluir) {
-            excluirDespesa();
-        } else if (id == R.id.imgCalendario) {
-            abrirDatePicker();
-        } else if (id == R.id.buttonErase) {
-            apagarUltimoCaractere();
-        } else {
-            onNumberClick(v);
-        }
+        onNumberClick(v);
     }
 
-    private void abrirDatePicker() {
-        Calendar calendario = Calendar.getInstance();
+    private void abrirCalendario() {
+        final Calendar calendario = Calendar.getInstance();
         int ano = calendario.get(Calendar.YEAR);
         int mes = calendario.get(Calendar.MONTH);
         int dia = calendario.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog dialog = new DatePickerDialog(this,
-                (view, year, monthOfYear, dayOfMonth) -> edtVencimento.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year), ano, mes, dia);
-        dialog.show();
+        calendario datePickerDialog = new calendario(this, (view, year, monthOfYear, dayOfMonth) -> {
+            String dataSelecionada = String.format("%02d/%02d/%d", dayOfMonth, monthOfYear + 1, year);
+            edtVencimento.setText(dataSelecionada);
+        }, ano, mes, dia);
+
+        datePickerDialog.show();
     }
 
-    private void adicionarDespesa() {
-        String descricao = edtDescricao.getText().toString();
-        double valor = Double.parseDouble(edtValor.getText().toString().replace("R$", "").replace(",", "."));
-        String vencimento = edtVencimento.getText().toString();
 
-        Despesa despesa = new Despesa();
-        despesa.setDescricao(descricao);
-        despesa.setValor(valor);
-        despesa.setVencimento(vencimento);
 
-        db.collection("despesas")
-                .add(despesa)
-                .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(this, "Despesa adicionada com sucesso!", Toast.LENGTH_SHORT).show();
-                    finish();
-                })
-                .addOnFailureListener(e -> Toast.makeText(this, "Erro ao adicionar despesa", Toast.LENGTH_SHORT).show());
+
+    private String formatarData(java.util.Date data) {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
+        return sdf.format(data);
     }
 
-    private void atualizarDespesa() {
-        d.setDescricao(edtDescricao.getText().toString());
-        d.setValor(Double.parseDouble(edtValor.getText().toString().replace("R$", "").replace(",", ".")));
-        d.setVencimento(edtVencimento.getText().toString());
-
-        db.collection("despesas")
-                .document(d.getId())
-                .set(d)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Despesa atualizada com sucesso!", Toast.LENGTH_SHORT).show();
-                    finish();
-                })
-                .addOnFailureListener(e -> Toast.makeText(this, "Erro ao atualizar despesa", Toast.LENGTH_SHORT).show());
+    private java.util.Date parseData(String dataString) {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
+        try {
+            return sdf.parse(dataString);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    private void excluirDespesa() {
-        db.collection("despesas")
-                .document(d.getId())
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Despesa excluída com sucesso!", Toast.LENGTH_SHORT).show();
-                    finish();
-                })
-                .addOnFailureListener(e -> Toast.makeText(this, "Erro ao excluir despesa", Toast.LENGTH_SHORT).show());
+    private double extrairValorDigitado(String valorDigitado) {
+        if (valorDigitado.isEmpty()) return 0.0;
+
+        return Double.parseDouble(valorDigitado.replace("R$", "").replace(",", "."));
     }
 
-    private void atualizarAutoCompleteCategoria() {
-        db.collection("categorias")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<String> categorias = new ArrayList<>();
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        String nomeCategoria = documentSnapshot.getString("nome");
-                        categorias.add(nomeCategoria);
-                    }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, categorias);
-                    autoCompleteCategoria.setAdapter(adapter);
-                })
-                .addOnFailureListener(e -> Toast.makeText(atv_cadastro.this, "Erro ao obter categorias", Toast.LENGTH_SHORT).show());
+    private void abrirModalCategoria() {
+        modal_categoria modal = new modal_categoria();
+
+        modal.setCategoriaDialogListener(new modal_categoria.CategoriaDialogListener() {
+            @Override
+            public void onCategoriaAdicionada(String categoria) {
+                autoCompleteCategoria.setText(categoria);
+            }
+
+            @Override
+            public void onCategoriaRemovida(String categoriaId) {
+                CategoriaCRUD categoriaCRUD = new CategoriaCRUD();
+                categoriaCRUD.removerCategoria(categoriaId);
+            }
+        });
+
+        modal.show(getSupportFragmentManager(), "modal_categoria");
     }
 
-    @Override
-    public void onCategoriaAdicionada(String categoria) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("nome", categoria);
+    private void getCategorias() {
+        CollectionReference categoriasRef = db.collection("categorias");
 
-        db.collection("categorias").add(data)
-                .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(atv_cadastro.this, "Categoria adicionada com sucesso!", Toast.LENGTH_SHORT).show();
-                    atualizarAutoCompleteCategoria();
-                })
-                .addOnFailureListener(e -> Toast.makeText(atv_cadastro.this, "Erro ao adicionar categoria", Toast.LENGTH_SHORT).show());
-    }
+        categoriasRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<String> categorias = new ArrayList<>();
+                for (DocumentSnapshot document : task.getResult()) {
+                    String nomeCategoria = document.getString("nome");
+                    categorias.add(nomeCategoria);
+                }
 
-    @Override
-    public void onCategoriaRemovida(String categoriaId) {
-        db.collection("categorias").document(categoriaId).delete()
-                .addOnSuccessListener(aVoid -> Toast.makeText(atv_cadastro.this, "Categoria removida com sucesso!", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(atv_cadastro.this, "Erro ao remover categoria", Toast.LENGTH_SHORT).show());
+                String[] categoriasArray = categorias.toArray(new String[0]);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(atv_cadastro.this, android.R.layout.simple_dropdown_item_1line, categoriasArray);
+                autoCompleteCategoria.setAdapter(adapter);
+            } else {
+                Log.e("getCategorias", "Erro ao buscar categorias", task.getException());
+            }
+        });
     }
 }
+

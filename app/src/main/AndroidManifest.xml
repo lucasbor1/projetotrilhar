@@ -15,7 +15,7 @@
         android:theme="@style/Theme.TelaPi"
         tools:targetApi="31">
         <activity
-            android:name=".atv_CadastroUsuario"
+            android:name=".MesAdapter"
             android:exported="false" />
         <activity
             android:name=".TelaVideo"
@@ -36,7 +36,7 @@
             android:name=".atv_modulos"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".atv_despesa"
             android:exported="false" />
         <activity
             android:name=".atv_cadastro"

@@ -109,13 +109,13 @@
             android:contentDescription="Ícone de calendário"
             android:src="@drawable/ic_calendar" />
 
-        <TextView
-            android:id="@+id/txtDataSelecionada"
+        <EditText
+            android:id="@+id/edtVencimento"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:text=""
-            android:textSize="16sp" />
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="date" />
     </LinearLayout>
 
     <LinearLayout
@@ -380,6 +380,7 @@
                 android:elevation="4dp"
                 android:focusable="true"
                 android:gravity="center" />
+
 
 
         </LinearLayout>

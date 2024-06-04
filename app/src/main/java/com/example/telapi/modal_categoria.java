@@ -1,5 +1,6 @@
 package com.example.telapi;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,10 +12,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.app.AlertDialog;
 
 import androidx.fragment.app.DialogFragment;
 
+import com.example.telapi.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -23,9 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CategoriaDialogFragment extends DialogFragment {
+public class modal_categoria extends DialogFragment {
     private EditText edtCategoria;
-    private ImageButton btnAddCategoria;
+    private ImageButton btnAddCat;
     private ListView lvCategorias;
     private CategoriaDialogListener mListener;
 
@@ -46,37 +47,37 @@ public class CategoriaDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.categorias, container, false);
         edtCategoria = view.findViewById(R.id.edtCategoria);
-        btnAddCategoria = view.findViewById(R.id.btnAddCat);
+        btnAddCat = view.findViewById(R.id.btnAddCat);
         lvCategorias = view.findViewById(R.id.lvCategorias);
 
         db = FirebaseFirestore.getInstance();
 
-        // Configurar o botão de adicionar categoria
-        btnAddCategoria.setOnClickListener(new View.OnClickListener() {
+
+        btnAddCat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adicionarCategoria();
+                String novaCategoria = edtCategoria.getText().toString();
+                adicionarCategoria(novaCategoria);
             }
         });
 
         // Configurar a lista de categorias
         categoriaAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1);
         lvCategorias.setAdapter(categoriaAdapter);
-        lvCategorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvCategorias.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 String categoria = categoriaAdapter.getItem(position);
                 exibirDialogoConfirmacaoExclusao(categoria);
+                return true;
             }
         });
 
-        carregarCategorias(); // Carregar as categorias existentes do Firestore
-
+        carregarCategorias();
         return view;
     }
 
-    private void adicionarCategoria() {
-        String novaCategoria = edtCategoria.getText().toString();
+    private void adicionarCategoria(String novaCategoria) {
         if (!novaCategoria.isEmpty()) {
             Map<String, Object> data = new HashMap<>();
             data.put("nome", novaCategoria);
@@ -85,7 +86,11 @@ public class CategoriaDialogFragment extends DialogFragment {
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(getContext(), "Categoria adicionada com sucesso!", Toast.LENGTH_SHORT).show();
                         edtCategoria.setText(""); // Limpar o campo de texto após adicionar
-                        carregarCategorias(); // Recarregar a lista de categorias
+                        carregarCategorias(); // Atualizar a lista de categorias no AutoCompleteTextView
+                        if (mListener != null) {
+                            mListener.onCategoriaAdicionada(novaCategoria);
+                        }
+                        dismiss();
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(getContext(), "Erro ao adicionar categoria", Toast.LENGTH_SHORT).show();
@@ -149,4 +154,5 @@ public class CategoriaDialogFragment extends DialogFragment {
                     Toast.makeText(getContext(), "Erro ao carregar categorias", Toast.LENGTH_SHORT).show();
                 });
     }
+
 }

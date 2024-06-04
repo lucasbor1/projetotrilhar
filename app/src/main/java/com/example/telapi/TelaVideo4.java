@@ -7,6 +7,8 @@ import android.webkit.WebView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.telapi.R;
+
 public class TelaVideo4 extends AppCompatActivity {
 
     @Override
