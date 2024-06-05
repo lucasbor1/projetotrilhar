@@ -1,5 +1,9 @@
 package com.example.telapi.Despesa;
 
+import static android.text.method.TextKeyListener.clear;
+
+import static java.util.Collections.addAll;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -101,7 +105,28 @@ public class atv_despesa extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
+
+        lstDespesas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Despesa despesaSelecionada = despesasAdapter.getDespesa(position);
+                if (despesaSelecionada != null) {
+                    abrirTelaCadastroComDespesa(despesaSelecionada);
+                }
+            }
+        });
+
+
     }
+
+    private void abrirTelaCadastroComDespesa(Despesa despesa) {
+        Intent intent = new Intent(atv_despesa.this, atv_cadastro.class);
+        intent.putExtra("acao", "Alterar"); // Defina a ação como "Alterar"
+        intent.putExtra("obj", despesa); // Passe a despesa selecionada para a tela de cadastro
+        startActivity(intent);
+    }
+
+
 
     private void exibirDespesasPorMesOrdenadas(String mes) {
         List<Despesa> despesas = despesasPorMes.get(mes);
@@ -164,6 +189,10 @@ public class atv_despesa extends AppCompatActivity {
             }
         }
     }
+
+
+
+
 
     private void adicionarDespesaNova(Despesa novaDespesa) {
         String mes = obterMesDaDespesa(novaDespesa);

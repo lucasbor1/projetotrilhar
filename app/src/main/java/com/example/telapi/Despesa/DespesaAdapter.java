@@ -18,6 +18,12 @@ public class DespesaAdapter extends ArrayAdapter<Despesa> {
         super(context, 0, despesas);
     }
 
+    public Despesa getDespesa(int position) {
+        return getItem(position);
+    }
+
+
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

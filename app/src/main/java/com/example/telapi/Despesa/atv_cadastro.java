@@ -75,9 +75,12 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         if ("Alterar".equals(acao) && despesa != null) {
             preencherCamposDespesa();
+            btnExcluir.setVisibility(View.VISIBLE); // Torna o botão de exclusão visível
         } else {
+            btnExcluir.setVisibility(View.GONE); // Oculta o botão de exclusão
             edtValor.setText("R$0,00");
         }
+
 
         btnGravar.setOnClickListener(v -> {
             Despesa despesaAtualizada = criarDespesa();
