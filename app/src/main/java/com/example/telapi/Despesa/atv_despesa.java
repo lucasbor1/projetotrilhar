@@ -17,6 +17,7 @@ import com.example.telapi.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +84,7 @@ public class atv_despesa extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String mesSelecionado = parent.getItemAtPosition(position).toString();
-                exibirDespesasPorMes(mesSelecionado);
+                exibirDespesasPorMesOrdenadas(mesSelecionado);
             }
 
             @Override
@@ -102,6 +103,31 @@ public class atv_despesa extends AppCompatActivity {
         });
     }
 
+    private void exibirDespesasPorMesOrdenadas(String mes) {
+        List<Despesa> despesas = despesasPorMes.get(mes);
+        if (despesas != null) {
+            ordenarDespesasPorDia(despesas); // Ordena as despesas por dia
+            despesasAdapter.clear();
+            despesasAdapter.addAll(despesas);
+            despesasAdapter.notifyDataSetChanged();
+            Log.d("atv_despesa", "Lista de despesas atualizada para o mês " + mes);
+        } else {
+            despesasAdapter.clear();
+            despesasAdapter.notifyDataSetChanged();
+            Log.d("atv_despesa", "Nenhuma despesa encontrada para o mês " + mes);
+        }
+    }
+
+    // Método para ordenar as despesas por dia
+    private void ordenarDespesasPorDia(List<Despesa> despesas) {
+        Collections.sort(despesas, (d1, d2) -> {
+            String[] data1 = d1.getVencimento().split("/");
+            String[] data2 = d2.getVencimento().split("/");
+            int dia1 = Integer.parseInt(data1[0]);
+            int dia2 = Integer.parseInt(data2[0]);
+            return Integer.compare(dia1, dia2);
+        });
+    }
 
 
     @Override
@@ -151,6 +177,19 @@ public class atv_despesa extends AppCompatActivity {
         despesasAdapter.notifyDataSetChanged();
     }
 
+    private void ordenarDespesasPorMes() {
+        for (Map.Entry<String, List<Despesa>> entry : despesasPorMes.entrySet()) {
+            List<Despesa> despesasDoMes = entry.getValue();
+            Collections.sort(despesasDoMes, (d1, d2) -> {
+                String[] data1 = d1.getVencimento().split("/");
+                String[] data2 = d2.getVencimento().split("/");
+                int dia1 = Integer.parseInt(data1[0]);
+                int dia2 = Integer.parseInt(data2[0]);
+                return Integer.compare(dia1, dia2);
+            });
+        }
+    }
+
     private void removerDespesaExistente(Despesa despesaRemovida) {
         String mes = obterMesDaDespesa(despesaRemovida);
         if (despesasPorMes.containsKey(mes)) {
@@ -191,6 +230,7 @@ public class atv_despesa extends AppCompatActivity {
     }
 
     private void exibirDespesasPorMes(String mes) {
+        ordenarDespesasPorMes(); // Ordena as despesas antes de exibir
         List<Despesa> despesas = despesasPorMes.get(mes);
         if (despesas != null) {
             despesasAdapter.clear();
@@ -204,6 +244,7 @@ public class atv_despesa extends AppCompatActivity {
         }
     }
 }
+
 
 
 
