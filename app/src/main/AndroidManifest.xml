@@ -15,6 +15,9 @@
         android:theme="@style/Theme.TelaPi"
         tools:targetApi="31">
         <activity
+            android:name=".Despesa.DespesaAdapter"
+            android:exported="false" />
+        <activity
             android:name=".Videos.TelaVideo"
             android:exported="false" />
         <activity

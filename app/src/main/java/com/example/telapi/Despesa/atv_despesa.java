@@ -29,8 +29,8 @@ public class atv_despesa extends AppCompatActivity {
     private EditText edtTotal;
     private EditText edtAberto;
     public static final int REQUEST_CODE = 1;
-    private Despesa despesaAtual;
-    private ArrayAdapter<String> despesasAdapter;
+
+    private DespesaAdapter despesasAdapter;
 
 
     private Map<String, List<Despesa>> despesasPorMes;
@@ -68,13 +68,12 @@ public class atv_despesa extends AppCompatActivity {
         edtAberto = findViewById(R.id.edtAberto);
         despesasPorMes = new HashMap<>();
 
-        despesasAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1);
+        // Inicializa o adapter personalizado
+        despesasAdapter = new DespesaAdapter(this, new ArrayList<>());
         lstDespesas.setAdapter(despesasAdapter);
 
         // Carregar despesas do banco de dados Firebase
         carregarDespesas();
-
 
         // Configuração do Spinner para selecionar meses
         AdpSpinner adapter = new AdpSpinner(this, R.layout.item_spinner, getResources().getTextArray(R.array.meses));
@@ -99,7 +98,6 @@ public class atv_despesa extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(atv_despesa.this, atv_cadastro.class);
                 startActivityForResult(intent, REQUEST_CODE);
-
             }
         });
     }
@@ -141,9 +139,6 @@ public class atv_despesa extends AppCompatActivity {
         }
     }
 
-
-
-
     private void adicionarDespesaNova(Despesa novaDespesa) {
         String mes = obterMesDaDespesa(novaDespesa);
         List<Despesa> despesasDoMes = despesasPorMes.getOrDefault(mes, new ArrayList<>());
@@ -152,11 +147,9 @@ public class atv_despesa extends AppCompatActivity {
         Log.d("atv_despesa", "Despesa adicionada ao mês " + mes + ": " + novaDespesa.toString());
 
         // Adicione a nova despesa ao adapter
-        despesasAdapter.add(novaDespesa.toString());
+        despesasAdapter.add(novaDespesa);
         despesasAdapter.notifyDataSetChanged();
-
     }
-
 
     private void removerDespesaExistente(Despesa despesaRemovida) {
         String mes = obterMesDaDespesa(despesaRemovida);
@@ -184,7 +177,7 @@ public class atv_despesa extends AppCompatActivity {
     private String obterMesDaDespesa(Despesa despesa) {
         String vencimento = despesa.getVencimento();
         if (vencimento == null || vencimento.isEmpty()) {
-            Log.d("atv_despesa", "Vencimento é nulo para a despesa: "        + despesa.toString());
+            Log.d("atv_despesa", "Vencimento é nulo para a despesa: " + despesa.toString());
             return "Mês Desconhecido";
         }
         String[] partesData = vencimento.split("/");
@@ -200,23 +193,18 @@ public class atv_despesa extends AppCompatActivity {
     private void exibirDespesasPorMes(String mes) {
         List<Despesa> despesas = despesasPorMes.get(mes);
         if (despesas != null) {
-            List<String> despesasString = new ArrayList<>();
-            for (Despesa despesa : despesas) {
-                despesasString.add(despesa.toString());
-            }
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, despesasString);
-            lstDespesas.setAdapter(adapter);
-
-            // Notifica o adapter sobre as mudanças nos dados
-            adapter.notifyDataSetChanged();
+            despesasAdapter.clear();
+            despesasAdapter.addAll(despesas);
+            despesasAdapter.notifyDataSetChanged();
             Log.d("atv_despesa", "Lista de despesas atualizada para o mês " + mes);
         } else {
-            lstDespesas.setAdapter(null);
+            despesasAdapter.clear();
+            despesasAdapter.notifyDataSetChanged();
             Log.d("atv_despesa", "Nenhuma despesa encontrada para o mês " + mes);
         }
     }
-
-
 }
+
+
+
 
