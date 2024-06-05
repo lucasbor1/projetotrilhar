@@ -73,8 +73,7 @@
             android:id="@+id/edtDescricao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp
-"
+            android:layout_margin="10dp"
             android:inputType="text"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -96,18 +95,18 @@
             android:src="@drawable/ic_calendar" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:hint="Vencimento">
+            android:hint="Vencimento"
+            android:gravity="center">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtVencimento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp
-"
+                android:layout_margin="10dp"
                 android:inputType="date"
                 android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>

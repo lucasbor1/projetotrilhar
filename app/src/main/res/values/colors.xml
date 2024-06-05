@@ -7,5 +7,7 @@
     <color name="button_default">#CCCCCC</color>
     <color name="vermelho">#FF5252</color>
     <color name="verde">#4CAF50</color>
+    <color name="azul_claro">#90CAF9</color>
+
 
 </resources>

@@ -92,9 +92,9 @@
             android:text="Total mensal:"
             android:textColor="#FFFFFF" />
 
-        <EditText
+        <TextView
             android:id="@+id/edtTotal"
-            style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+            style="@style/AppTheme.EditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -103,6 +103,7 @@
             android:textColor="#FEFEFE"
             android:textSize="10sp"
             android:layout_marginStart="8dp"/>
+
 
         <TextView
             android:id="@+id/textView3"
@@ -114,9 +115,9 @@
             android:text="Em aberto:"
             android:textColor="#FFFFFF" />
 
-        <EditText
+        <TextView
             android:id="@+id/edtAberto"
-            style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+            style="@style/AppTheme.EditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
