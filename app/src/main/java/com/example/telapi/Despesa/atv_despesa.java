@@ -23,6 +23,7 @@ import com.example.telapi.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -99,6 +100,8 @@ public class atv_despesa extends AppCompatActivity {
             }
         });
 
+
+
         // Configuração do botão para adicionar nova despesa
         btnAdicionar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,8 +120,14 @@ public class atv_despesa extends AppCompatActivity {
                 }
             }
         });
+        configurarSpinnerMesAtual();
+    }
+    private void configurarSpinnerMesAtual() {
+        Calendar cal = Calendar.getInstance();
+        int mesAtual = cal.get(Calendar.MONTH); // Obtém o mês atual (0 a 11)
 
-
+        // Define o mês atual como a seleção do Spinner
+        spnMeses.setSelection(mesAtual);
     }
 
     private void abrirTelaCadastroComDespesa(Despesa despesa) {
@@ -143,6 +152,7 @@ public class atv_despesa extends AppCompatActivity {
                     despesasEmAberto += despesa.getValor();
                 }
             }
+
 
             // Atualizar os EditTexts com os valores calculados
             edtTotal.setText(String.valueOf(totalMensal));
@@ -237,10 +247,6 @@ public class atv_despesa extends AppCompatActivity {
         }
     }
 
-
-
-
-
     private void adicionarDespesaNova(Despesa novaDespesa) {
         String mes = obterMesDaDespesa(novaDespesa);
         List<Despesa> despesasDoMes = despesasPorMes.getOrDefault(mes, new ArrayList<>());
@@ -248,10 +254,24 @@ public class atv_despesa extends AppCompatActivity {
         despesasPorMes.put(mes, despesasDoMes); // Atualize a entrada correspondente no mapa
         Log.d("atv_despesa", "Despesa adicionada ao mês " + mes + ": " + novaDespesa.toString());
 
+        // Atualizar o total de despesas em aberto
+        double totalDespesasEmAberto = 0;
+        for (List<Despesa> despesas : despesasPorMes.values()) {
+            for (Despesa despesa : despesas) {
+                if (!despesa.isPago()) {
+                    totalDespesasEmAberto += despesa.getValor();
+                }
+            }
+        }
+
+        // Atualize os EditTexts com o novo valor
+        edtAberto.setText(String.valueOf(totalDespesasEmAberto));
+
         // Adicione a nova despesa ao adapter
         despesasAdapter.add(novaDespesa);
         despesasAdapter.notifyDataSetChanged();
     }
+
 
     private void ordenarDespesasPorMes() {
         for (Map.Entry<String, List<Despesa>> entry : despesasPorMes.entrySet()) {
