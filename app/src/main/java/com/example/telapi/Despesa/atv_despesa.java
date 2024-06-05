@@ -238,9 +238,13 @@ public class atv_despesa extends AppCompatActivity {
                     break;
                 }
             }
-            exibirDespesasPorMes(spnMeses.getSelectedItem().toString());
+            // Atualiza a lista de despesas do mês
+            despesasPorMes.put(mes, despesasDoMes);
+            // Exibe as despesas atualizadas
+            exibirDespesasPorMes(mes);
         }
     }
+
 
     private String obterMesDaDespesa(Despesa despesa) {
         String vencimento = despesa.getVencimento();

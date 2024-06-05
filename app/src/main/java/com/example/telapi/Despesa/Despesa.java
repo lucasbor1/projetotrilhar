@@ -12,6 +12,7 @@ public class Despesa implements Serializable {
     private double valor;
     private String vencimento;
     private String categoria;
+    private  boolean pago;
 
     public Despesa() {
 
@@ -26,15 +27,24 @@ public class Despesa implements Serializable {
         this.vencimento = vencimento;
     }
 
-    public Despesa(String id, String categoria, String descricao, double valor, String vencimento) {
+    public Despesa(String id, String categoria, String descricao, double valor, String vencimento, boolean pago) {
         this.id = id;
         this.categoria = categoria;
         this.descricao = descricao;
         this.valor = valor;
         this.vencimento = vencimento;
+        this.pago = pago;
     }
 
     // Getters e Setters
+
+    public boolean isPago() {
+        return pago;
+    }
+
+    public void setPago(boolean pago) {
+        this.pago = pago;
+    }
 
     public String getId() {
         return id;

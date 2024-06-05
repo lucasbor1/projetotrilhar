@@ -29,9 +29,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Minhas Despesas"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:textSize="25sp"
-                android:gravity="center_vertical"
+                android:gravity="end"
                 android:paddingEnd="40dp" />
 
             <ImageButton

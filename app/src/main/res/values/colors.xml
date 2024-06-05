@@ -5,6 +5,7 @@
     <color name="azul_escuro">#060D41</color>
     <color name="button_pressed">#BEBEBE</color>
     <color name="button_default">#CCCCCC</color>
-
+    <color name="vermelho">#FF5252</color>
+    <color name="verde">#4CAF50</color>
 
 </resources>

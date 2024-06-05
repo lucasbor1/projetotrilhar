@@ -19,6 +19,7 @@ import com.example.telapi.Categoria.modal_categoria;
 import com.example.telapi.R;
 import com.example.telapi.calendario;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,6 +41,8 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
     private DespesaCRUD despesaCRUD;
     private FirebaseFirestore db;
 
+    private SwitchMaterial switchDespesaPaga;
+    private ImageView imgDespesaStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,9 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         edtVencimento = findViewById(R.id.edtVencimento);
         btnGravar = findViewById(R.id.btnGravar);
         btnExcluir = findViewById(R.id.btnExcluir);
+
+        switchDespesaPaga = findViewById(R.id.switchDespesaPaga);
+        imgDespesaStatus = findViewById(R.id.imgDespesaStatus);
 
         despesaCRUD = new DespesaCRUD();
         db = FirebaseFirestore.getInstance();
@@ -81,6 +87,13 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             edtValor.setText("R$0,00");
         }
 
+        switchDespesaPaga.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                imgDespesaStatus.setImageResource(R.drawable.pago);
+            } else {
+                imgDespesaStatus.setImageResource(R.drawable.naopago);
+            }
+        });
 
         btnGravar.setOnClickListener(v -> {
             Despesa despesaAtualizada = criarDespesa();
@@ -107,7 +120,6 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-
         btnExcluir.setOnClickListener(v -> {
             if (despesa != null) {
                 despesaCRUD.removerDespesa(despesa.getId());
@@ -132,10 +144,13 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         double valor = valorStr.isEmpty() ? 0.0 : Double.parseDouble(valorStr);
         String dataVencimentoStr = edtVencimento.getText().toString();
 
+        boolean isPaga = switchDespesaPaga.isChecked();
+
         Log.d("atv_cadastro", "Categoria: " + categoria);
         Log.d("atv_cadastro", "Descrição: " + descricao);
         Log.d("atv_cadastro", "Valor: " + valor);
         Log.d("atv_cadastro", "Data de Vencimento: " + dataVencimentoStr);
+        Log.d("atv_cadastro", "Paga: " + isPaga);
 
         if (categoria.isEmpty() || descricao.isEmpty() || valor <= 0 || dataVencimentoStr.isEmpty()) {
             Toast.makeText(this, "Por favor, preencha todos os campos corretamente.", Toast.LENGTH_SHORT).show();
@@ -144,9 +159,8 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         String id = (despesa != null && despesa.getId() != null) ? despesa.getId() : UUID.randomUUID().toString();
 
-        return new Despesa(id, categoria, descricao, valor, dataVencimentoStr);
+        return new Despesa(id, categoria, descricao, valor, dataVencimentoStr, isPaga);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -160,15 +174,13 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     private void preencherCamposDespesa() {
         autoCompleteCategoria.setText(despesa.getCategoria());
         edtDescricao.setText(despesa.getDescricao());
         edtValor.setText(String.valueOf(despesa.getValor()));
         edtVencimento.setText(despesa.getVencimento());
+        switchDespesaPaga.setChecked(despesa.isPago());
     }
-
-
 
     private void configurarTecladoNumerico() {
         findViewById(R.id.button0).setOnClickListener(this);
@@ -214,6 +226,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         edtValor.setText("R$" + formattedValue.toString());
     }
+
     @Override
     public void onClick(View v) {
         onNumberClick(v);
@@ -232,9 +245,6 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         datePickerDialog.show();
     }
-
-
-
 
     private String formatarData(java.util.Date data) {
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
@@ -297,4 +307,3 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         });
     }
 }
-
