@@ -20,19 +20,13 @@
         <item name="android:padding">12dp</item>
     </style>
 
+    <style name="AppTheme.EditTextStyle" parent="Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColorHint">#CCCCCC</item>
+        <item name="android:backgroundTint">@color/azul_claro</item>
+    </style>
 
 
-<!--    <style name="DatePickerTheme" parent="Theme.AppCompat.Light.Dialog">-->
-<!--        &lt;!&ndash; Cor de fundo do DatePickerDialog &ndash;&gt;-->
-<!--        <item name="android:background">#ffffff</item>-->
-<!--        &lt;!&ndash; Cor do texto das datas no DatePickerDialog &ndash;&gt;-->
-<!--        <item name="android:textColorPrimary">#000000</item>-->
-<!--        &lt;!&ndash; Cor do texto do mês e do ano no DatePickerDialog &ndash;&gt;-->
-<!--        <item name="android:textColorPrimaryInverse">#000000</item>-->
-<!--        &lt;!&ndash; Cor dos botões do DatePickerDialog &ndash;&gt;-->
-<!--        <item name="android:textColorSecondary">@color/azul_escuro</item>-->
-<!--        &lt;!&ndash; Cor do seletor do DatePickerDialog &ndash;&gt;-->
-<!--        <item name="colorAccent">#FF4081</item>-->
-<!--    </style>-->
+
 
 </resources>

@@ -7,6 +7,12 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.telapi.Videos.TelaVideo;
+import com.example.telapi.Videos.TelaVideo2;
+import com.example.telapi.Videos.TelaVideo3;
+import com.example.telapi.Videos.TelaVideo4;
+import com.example.telapi.Videos.TelaVideo5;
+
 public class atv_modulos extends AppCompatActivity {
 
 

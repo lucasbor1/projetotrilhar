@@ -1,4 +1,4 @@
-package com.example.telapi;
+package com.example.telapi.Despesa;
 
 import android.util.Log;
 
@@ -39,18 +39,32 @@ public class DespesaCRUD {
 
     public void alterarDespesa(Despesa despesa) {
         Log.d("DespesaCRUD", "Alterando despesa: " + despesa.toString());
-        db.collection("despesas").document(despesa.getId())
-                .set(despesa)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("DespesaCRUD", "Despesa alterada com ID: " + despesa.getId());
-                        } else {
-                            Log.e("DespesaCRUD", "Erro ao alterar despesa", task.getException());
-                        }
+        DocumentReference docRef = db.collection("despesas").document(despesa.getId());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("DespesaCRUD", "Documento existe, atualizando...");
+                        docRef.set(despesa).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("DespesaCRUD", "Despesa alterada com ID: " + despesa.getId());
+                                } else {
+                                    Log.e("DespesaCRUD", "Erro ao alterar despesa", task.getException());
+                                }
+                            }
+                        });
+                    } else {
+                        Log.d("DespesaCRUD", "Documento não existe, não é possível atualizar.");
                     }
-                });
+                } else {
+                    Log.e("DespesaCRUD", "Erro ao verificar existência do documento", task.getException());
+                }
+            }
+        });
     }
 
     public void removerDespesa(String idDespesa) {
@@ -62,13 +76,13 @@ public class DespesaCRUD {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d("DespesaCRUD", "Despesa removida com ID: " + idDespesa);
-                            // Ação adicional após remover a despesa, se necessário
                         } else {
                             Log.e("DespesaCRUD", "Erro ao remover despesa", task.getException());
                         }
                     }
                 });
     }
+
 
     public void listarDespesas(final DespesaListListener listener) {
         db.collection("despesas").get()

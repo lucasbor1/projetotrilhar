@@ -8,7 +8,7 @@
     android:background="@color/azul_escuro"
     android:orientation="vertical"
     android:padding="40dp"
-    tools:context=".TelaVideo4">
+    tools:context=".Videos.TelaVideo4">
 
     <TextView
         android:id="@+id/Mod4"

@@ -15,31 +15,31 @@
         android:theme="@style/Theme.TelaPi"
         tools:targetApi="31">
         <activity
-            android:name=".MesAdapter"
+            android:name=".Despesa.DespesaAdapter"
             android:exported="false" />
         <activity
-            android:name=".TelaVideo"
+            android:name=".Videos.TelaVideo"
             android:exported="false" />
         <activity
-            android:name=".TelaVideo2"
+            android:name=".Videos.TelaVideo2"
             android:exported="false" />
         <activity
-            android:name=".TelaVideo3"
+            android:name=".Videos.TelaVideo3"
             android:exported="false" />
         <activity
-            android:name=".TelaVideo4"
+            android:name=".Videos.TelaVideo4"
             android:exported="false" />
         <activity
-            android:name=".TelaVideo5"
+            android:name=".Videos.TelaVideo5"
             android:exported="false" />
         <activity
             android:name=".atv_modulos"
             android:exported="false" />
         <activity
-            android:name=".atv_despesa"
+            android:name=".Despesa.atv_despesa"
             android:exported="false" />
         <activity
-            android:name=".atv_cadastro"
+            android:name=".Despesa.atv_cadastro"
             android:exported="false" />
         <activity
             android:name=".atv_menu"
