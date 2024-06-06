@@ -5,6 +5,7 @@
     android:id="@+id/login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/trilharcapa05"
     tools:context=".MainActivity">
 
     <!-- Imagem de fundo que preenche toda a tela -->
@@ -12,45 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/trilharcapa05" /> 
+        android:src="@drawable/trilharcapa05" />
 
     <!-- Logo do aplicativo -->
 
     <!-- Conteúdo do login com fundo azul -->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_gravity="center"
-        android:background="@color/azul_escuro">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="15dp">
-            
-            <!-- Adicione outros elementos aqui, se necessário -->
-        
-        </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@color/white"
-            android:padding="1dp">
-            
-            <!-- Adicione outros elementos aqui, se necessário -->
-        
-        </FrameLayout>
-
-    </LinearLayout>
 
     <!-- Botão de login com Google -->
     <LinearLayout
@@ -81,20 +48,11 @@
     </LinearLayout>
 
     <!-- Barra de progresso -->
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/loginProgressBar"
-        android:indeterminateTint="@color/white"
-        android:indeterminate="true"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"            
-        android:visibility="invisible"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="@color/azul_escuro">
 
         <TextView
             android:id="@+id/logo"
@@ -112,6 +70,6 @@
             app:layout_constraintHorizontal_bias="0.666"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.873" />
+            app:layout_constraintVertical_bias="0.023" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
