@@ -56,6 +56,7 @@ public class atv_despesa extends AppCompatActivity {
                 // Após carregar todas as despesas, exibe as despesas do mês atual selecionado no Spinner
                 String mesSelecionado = spnMeses.getSelectedItem().toString();
                 exibirDespesasPorMes(mesSelecionado);
+                atualizarTotalMensal();
             } else {
                 Log.w("atv_despesa", "Erro ao carregar despesas.", task.getException());
             }
@@ -92,6 +93,7 @@ public class atv_despesa extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String mesSelecionado = parent.getItemAtPosition(position).toString();
                 exibirDespesasPorMesOrdenadas(mesSelecionado);
+
             }
 
             @Override
@@ -153,14 +155,14 @@ public class atv_despesa extends AppCompatActivity {
                 }
             }
 
-
-            // Atualizar os EditTexts com os valores calculados
-            edtTotal.setText(String.valueOf(totalMensal));
-            edtAberto.setText(String.valueOf(despesasEmAberto));
-
             despesasAdapter.clear();
             despesasAdapter.addAll(despesas);
             despesasAdapter.notifyDataSetChanged();
+
+            // Atualizar os EditTexts com os valores calculados após notificar o adapter
+            edtTotal.setText(String.valueOf(totalMensal));
+            edtAberto.setText(String.valueOf(despesasEmAberto));
+
             Log.d("atv_despesa", "Lista de despesas atualizada para o mês " + mes);
         } else {
             edtTotal.setText("0");
@@ -170,6 +172,7 @@ public class atv_despesa extends AppCompatActivity {
             Log.d("atv_despesa", "Nenhuma despesa encontrada para o mês " + mes);
         }
     }
+
 
 
 
@@ -231,16 +234,17 @@ public class atv_despesa extends AppCompatActivity {
         List<Despesa> despesas = despesasPorMes.get(mesSelecionado);
         if (despesas != null) {
             double totalMensal = 0;
-            int despesasEmAberto = 0;
+            double despesasEmAberto = 0; // Alteração aqui
+
             for (Despesa despesa : despesas) {
                 totalMensal += despesa.getValor();
                 if (!despesa.isPago()) {
-                    despesasEmAberto++;
+                    despesasEmAberto += despesa.getValor(); // Alteração aqui
                 }
             }
             // Atualizar os TextViews com os valores calculados
             edtTotal.setText(String.valueOf(totalMensal));
-            edtAberto.setText(String.valueOf(despesasEmAberto));
+            edtAberto.setText(String.valueOf(despesasEmAberto)); // Alteração aqui
         } else {
             edtTotal.setText("R$0,00");
             edtAberto.setText("R$0,00");

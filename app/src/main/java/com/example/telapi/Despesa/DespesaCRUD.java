@@ -67,24 +67,16 @@ public class DespesaCRUD {
         });
     }
 
-
     public void removerDespesa(String idDespesa) {
-        // Log para indicar o início do processo de remoção
         Log.d("DespesaCRUD", "Removendo despesa com ID: " + idDespesa);
-
-        // Acessa o documento específico pelo ID e chama o método delete()
         db.collection("despesas").document(idDespesa)
                 .delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        // Verifica se a tarefa foi concluída com sucesso
                         if (task.isSuccessful()) {
-                            // Log para confirmar a remoção da despesa
                             Log.d("DespesaCRUD", "Despesa removida com ID: " + idDespesa);
-                            // Ação adicional após remover a despesa, se necessário
                         } else {
-                            // Log para indicar erro na remoção da despesa
                             Log.e("DespesaCRUD", "Erro ao remover despesa", task.getException());
                         }
                     }
