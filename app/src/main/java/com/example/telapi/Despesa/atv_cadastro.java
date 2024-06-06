@@ -81,9 +81,9 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         if ("Alterar".equals(acao) && despesa != null) {
             preencherCamposDespesa();
-            btnExcluir.setVisibility(View.VISIBLE); // Torna o botão de exclusão visível
+            btnExcluir.setVisibility(View.VISIBLE);
         } else {
-            btnExcluir.setVisibility(View.GONE); // Oculta o botão de exclusão
+            btnExcluir.setVisibility(View.GONE);
             edtValor.setText("R$0,00");
         }
 
@@ -122,11 +122,18 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         btnExcluir.setOnClickListener(v -> {
             if (despesa != null) {
+                Log.d("atv_cadastro", "Tentando remover despesa com ID: " + despesa.getId());
                 despesaCRUD.removerDespesa(despesa.getId());
                 Toast.makeText(atv_cadastro.this, "Despesa removida com sucesso", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.putExtra("despesa_removida", despesa);
+                setResult(RESULT_OK, intent);
                 finish();
+            } else {
+                Log.e("atv_cadastro", "Despesa é null, não é possível remover.");
             }
         });
+
 
         edtVencimento.setOnClickListener(v -> abrirCalendario());
 

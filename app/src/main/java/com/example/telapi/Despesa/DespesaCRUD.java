@@ -68,9 +68,15 @@ public class DespesaCRUD {
     }
 
     public void removerDespesa(String idDespesa) {
-        Log.d("DespesaCRUD", "Removendo despesa com ID: " + idDespesa);
-        db.collection("despesas").document(idDespesa)
-                .delete()
+        Log.d("DespesaCRUD", "Tentando remover despesa com ID: " + idDespesa);
+
+        if (idDespesa == null || idDespesa.isEmpty()) {
+            Log.e("DespesaCRUD", "ID da despesa inválido.");
+            return;
+        }
+
+        DocumentReference docRef = db.collection("despesas").document(idDespesa);
+        docRef.delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -84,25 +90,24 @@ public class DespesaCRUD {
     }
 
 
-    public void listarDespesas(final DespesaListListener listener) {
+    public void listarDespesas() {
         db.collection("despesas").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            List<Despesa> despesas = new ArrayList<>();
                             for (DocumentSnapshot document : task.getResult()) {
+                                String id = document.getId();
                                 Despesa despesa = document.toObject(Despesa.class);
-                                despesas.add(despesa);
+                                Log.d("DespesaCRUD", "ID: " + id + " -> " + despesa.toString());
                             }
-                            listener.onDespesasRetrieved(despesas);
                         } else {
                             Log.e("DespesaCRUD", "Erro ao listar despesas", task.getException());
-                            listener.onDespesasFailed(task.getException());
                         }
                     }
                 });
     }
+
 
     public interface DespesaListListener {
         void onDespesasRetrieved(List<Despesa> despesas);

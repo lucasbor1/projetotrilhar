@@ -1,4 +1,3 @@
-// src/main/java/com/example/telapi/Despesa/DespesaAdapter.java
 package com.example.telapi.Despesa;
 
 import android.content.Context;
@@ -38,14 +37,13 @@ public class DespesaAdapter extends ArrayAdapter<Despesa> {
         TextView txtDescricao = convertView.findViewById(R.id.txtDescricao);
         TextView txtValor = convertView.findViewById(R.id.txtValor);
         TextView txtVencimento = convertView.findViewById(R.id.txtVencimento);
-        CardView cardView = (CardView) convertView; // Cast convertView to CardView
-
+        CardView cardView = (CardView) convertView;
         if (despesa != null) {
             txtDescricao.setText(despesa.getDescricao());
             txtValor.setText(String.valueOf(despesa.getValor()));
             txtVencimento.setText(despesa.getVencimento());
 
-            // Define a cor do fundo com base no estado de pagamento e vencimento da despesa
+
             if (despesa.isPago()) {
 
                 cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.verde_claro));
