@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+
 import com.example.telapi.R;
 import java.util.List;
 
@@ -36,13 +38,26 @@ public class DespesaAdapter extends ArrayAdapter<Despesa> {
         TextView txtDescricao = convertView.findViewById(R.id.txtDescricao);
         TextView txtValor = convertView.findViewById(R.id.txtValor);
         TextView txtVencimento = convertView.findViewById(R.id.txtVencimento);
+        CardView cardView = (CardView) convertView; // Cast convertView to CardView
 
         if (despesa != null) {
             txtDescricao.setText(despesa.getDescricao());
             txtValor.setText(String.valueOf(despesa.getValor()));
             txtVencimento.setText(despesa.getVencimento());
+
+            // Verifica se a despesa está atrasada
+            if (despesa.isAtrasada()) {
+                cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.vermelho_claro));
+            } else if (despesa.isPago()) { // Verifica se a despesa foi paga
+                cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.verde_claro));
+            } else {
+                // Caso contrário, use a cor padrão
+                cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.cinza_claro));
+            }
         }
 
         return convertView;
     }
+
+
 }
