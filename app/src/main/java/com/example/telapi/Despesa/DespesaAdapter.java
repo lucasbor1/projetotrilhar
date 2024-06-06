@@ -45,19 +45,20 @@ public class DespesaAdapter extends ArrayAdapter<Despesa> {
             txtValor.setText(String.valueOf(despesa.getValor()));
             txtVencimento.setText(despesa.getVencimento());
 
-            // Verifica se a despesa está atrasada
-            if (despesa.isAtrasada()) {
-                cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.vermelho_claro));
-            } else if (despesa.isPago()) { // Verifica se a despesa foi paga
+            // Define a cor do fundo com base no estado de pagamento e vencimento da despesa
+            if (despesa.isPago()) {
+
                 cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.verde_claro));
+            } else if (despesa.isAtrasada()) {
+
+                cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.vermelho_claro));
             } else {
-                // Caso contrário, use a cor padrão
+
                 cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.cinza_claro));
             }
         }
 
         return convertView;
     }
-
 
 }
