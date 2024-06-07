@@ -100,11 +100,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
+            android:clickable="false"
             android:ems="10"
             android:inputType="number"
+            android:longClickable="false"
             android:textColor="#FEFEFE"
-            android:textSize="10sp"
-            android:clickable="false" />
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/textView3"
@@ -121,13 +122,14 @@
             style="@style/AppTheme.EditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
+            android:clickable="false"
             android:ems="10"
             android:inputType="number"
+            android:longClickable="false"
             android:textColor="#FEFEFE"
-            android:textSize="10sp"
-            android:layout_marginStart="8dp"
-            android:clickable="false" />
+            android:textSize="10sp" />
 
     </LinearLayout>
 
