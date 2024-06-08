@@ -21,7 +21,7 @@ public class AdpSpinner extends ArrayAdapter<CharSequence> {
             view = inflater.inflate(R.layout.item_spinner, null);
         }
 
-        TextView textView = view.findViewById(R.id.textView);
+        TextView textView = view.findViewById(R.id.mes);
         textView.setText(getItem(position));
 
         return view;

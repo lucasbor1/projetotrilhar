@@ -1,4 +1,4 @@
-package com.example.telapi;
+package com.example.telapi.Categoria;
 
 public class Categoria {
     private String nome;

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/azul_escuro"
-    tools:context=".atv_despesa">
+    tools:context=".Despesa.atv_despesa">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,9 +29,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Minhas Despesas"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:textSize="25sp"
-                android:gravity="center_vertical"
+                android:gravity="end"
                 android:paddingEnd="40dp" />
 
             <ImageButton
@@ -92,20 +92,17 @@
             android:text="Total mensal:"
             android:textColor="#FFFFFF" />
 
-        <EditText
+
+        <TextView
             android:id="@+id/edtTotal"
-            style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+            style="@style/AppTheme.EditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:background="#F6F2F2"
-            android:clickable="false"
-            android:contextClickable="false"
             android:ems="10"
             android:inputType="number"
-            android:linksClickable="false"
-            android:longClickable="false"
             android:textColor="@color/azul_escuro"
             android:textSize="10sp" />
 
@@ -119,23 +116,18 @@
             android:text="Em aberto:"
             android:textColor="#FFFFFF" />
 
-        <EditText
+        <TextView
             android:id="@+id/edtAberto"
-            style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+            style="@style/AppTheme.EditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:background="#FBF6F6"
-            android:clickable="false"
-            android:contextClickable="false"
             android:ems="10"
             android:inputType="number"
-            android:linksClickable="false"
-            android:longClickable="false"
             android:textColor="@color/azul_escuro"
             android:textSize="10sp" />
 
     </LinearLayout>
-
 </LinearLayout>

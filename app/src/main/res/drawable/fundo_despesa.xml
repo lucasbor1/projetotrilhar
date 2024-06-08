@@ -1,0 +1,8 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Estado quando a despesa está paga -->
+    <item android:state_selected="true" android:drawable="@color/verde_claro" />
+    <!-- Estado quando a despesa está atrasada -->
+    <item android:state_selected="false" android:drawable="@color/vermelho_claro" />
+    <!-- Estado padrão -->
+    <item android:drawable="@color/cinza_claro" />
+</selector>

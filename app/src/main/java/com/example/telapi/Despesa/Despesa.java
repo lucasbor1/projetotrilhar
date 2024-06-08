@@ -1,7 +1,10 @@
-package com.example.telapi;
+package com.example.telapi.Despesa;
+
+import android.net.ParseException;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -12,10 +15,29 @@ public class Despesa implements Serializable {
     private double valor;
     private String vencimento;
     private String categoria;
+    private  boolean pago;
 
     public Despesa() {
 
     }
+
+    public boolean isAtrasada() {
+        // Obtenha a data atual
+        Calendar hoje = Calendar.getInstance();
+        // Converta a data de vencimento da despesa para o tipo Calendar
+        Calendar dataVencimento = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            dataVencimento.setTime(sdf.parse(this.getVencimento()));
+        } catch (ParseException | java.text.ParseException e) {
+            e.printStackTrace();
+            // Se houver um erro ao analisar a data, considere a despesa como não atrasada
+            return false;
+        }
+        // Verifique se a data atual é posterior à data de vencimento
+        return hoje.after(dataVencimento);
+    }
+
 
 
     public Despesa(String categoria, String descricao, double valor, String vencimento) {
@@ -26,15 +48,24 @@ public class Despesa implements Serializable {
         this.vencimento = vencimento;
     }
 
-    public Despesa(String id, String categoria, String descricao, double valor, String vencimento) {
+    public Despesa(String id, String categoria, String descricao, double valor, String vencimento, boolean pago) {
         this.id = id;
         this.categoria = categoria;
         this.descricao = descricao;
         this.valor = valor;
         this.vencimento = vencimento;
+        this.pago = pago;
     }
 
     // Getters e Setters
+
+    public boolean isPago() {
+        return pago;
+    }
+
+    public void setPago(boolean pago) {
+        this.pago = pago;
+    }
 
     public String getId() {
         return id;
