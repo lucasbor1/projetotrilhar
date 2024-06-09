@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.telapi.AdpSpinner;
@@ -50,10 +51,11 @@ public class atv_despesa extends AppCompatActivity {
             if (task.isSuccessful()) {
                 for (DocumentSnapshot document : task.getResult()) {
                     Despesa despesa = document.toObject(Despesa.class);
+                    despesa.setId(document.getId());
                     Log.d("atv_despesa", "Despesa carregada: " + despesa.toString());
-                    adicionarDespesaNova(despesa); // Adiciona a despesa ao mês correspondente
+                    adicionarDespesaNova(despesa);
                 }
-                // Após carregar todas as despesas, exibe as despesas do mês atual selecionado no Spinner
+
                 String mesSelecionado = spnMeses.getSelectedItem().toString();
                 exibirDespesasPorMes(mesSelecionado);
                 atualizarTotalMensal();
@@ -67,6 +69,7 @@ public class atv_despesa extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.atv_despesa);
 
         // Inicialização dos componentes da UI
@@ -126,9 +129,7 @@ public class atv_despesa extends AppCompatActivity {
     }
     private void configurarSpinnerMesAtual() {
         Calendar cal = Calendar.getInstance();
-        int mesAtual = cal.get(Calendar.MONTH); // Obtém o mês atual (0 a 11)
-
-        // Define o mês atual como a seleção do Spinner
+        int mesAtual = cal.get(Calendar.MONTH);
         spnMeses.setSelection(mesAtual);
     }
 
@@ -173,10 +174,6 @@ public class atv_despesa extends AppCompatActivity {
         }
     }
 
-
-
-
-    // Método para ordenar as despesas por dia
     private void ordenarDespesasPorDia(List<Despesa> despesas) {
         Collections.sort(despesas, (d1, d2) -> {
             String[] data1 = d1.getVencimento().split("/");
@@ -200,13 +197,6 @@ public class atv_despesa extends AppCompatActivity {
                         Log.d("atv_despesa", "Nova despesa sem data de vencimento: " + novaDespesa.toString());
                     } else {
                         adicionarDespesaNova(novaDespesa);
-                        // Atualize a exibição para mostrar a nova despesa
-                        String mesSelecionado = spnMeses.getSelectedItem().toString();
-                        exibirDespesasPorMes(mesSelecionado);
-                        // Recalcule o total mensal após adicionar uma nova despesa
-                        atualizarTotalMensal();
-                        // Notifique o adapter sobre as mudanças nos dados
-                        despesasAdapter.notifyDataSetChanged();
                     }
                 } else if (data.hasExtra("despesa_atualizada")) {
                     Despesa despesaAtualizada = (Despesa) data.getSerializableExtra("despesa_atualizada");
@@ -214,37 +204,36 @@ public class atv_despesa extends AppCompatActivity {
                         Log.d("atv_despesa", "Despesa atualizada sem data de vencimento: " + despesaAtualizada.toString());
                     } else {
                         atualizarDespesaExistente(despesaAtualizada);
-                        // Atualize a exibição para refletir a despesa atualizada
-                        String mesSelecionado = spnMeses.getSelectedItem().toString();
-                        exibirDespesasPorMes(mesSelecionado);
-                        // Recalcule o total mensal após atualizar uma despesa existente
-                        atualizarTotalMensal();
-                        // Notifique o adapter sobre as mudanças nos dados
-                        despesasAdapter.notifyDataSetChanged();
                     }
+                } else if (data.hasExtra("despesa_removida")) {
+                    Despesa despesaRemovida = (Despesa) data.getSerializableExtra("despesa_removida");
+                    removerDespesaExistente(despesaRemovida);
                 }
+
+                String mesSelecionado = spnMeses.getSelectedItem().toString();
+                exibirDespesasPorMes(mesSelecionado);
+                atualizarTotalMensal();
+                despesasAdapter.notifyDataSetChanged();
             }
         }
     }
 
-
-    // Método para recalcular o total mensal
     private void atualizarTotalMensal() {
         String mesSelecionado = spnMeses.getSelectedItem().toString();
         List<Despesa> despesas = despesasPorMes.get(mesSelecionado);
         if (despesas != null) {
             double totalMensal = 0;
-            double despesasEmAberto = 0; // Alteração aqui
+            double despesasEmAberto = 0;
 
             for (Despesa despesa : despesas) {
                 totalMensal += despesa.getValor();
                 if (!despesa.isPago()) {
-                    despesasEmAberto += despesa.getValor(); // Alteração aqui
+                    despesasEmAberto += despesa.getValor();
                 }
             }
-            // Atualizar os TextViews com os valores calculados
+
             edtTotal.setText(String.valueOf(totalMensal));
-            edtAberto.setText(String.valueOf(despesasEmAberto)); // Alteração aqui
+            edtAberto.setText(String.valueOf(despesasEmAberto));
         } else {
             edtTotal.setText("R$0,00");
             edtAberto.setText("R$0,00");
@@ -268,34 +257,23 @@ public class atv_despesa extends AppCompatActivity {
             }
         }
 
-        // Atualize os EditTexts com o novo valor
         edtAberto.setText(String.valueOf(totalDespesasEmAberto));
-
-        // Adicione a nova despesa ao adapter
         despesasAdapter.add(novaDespesa);
         despesasAdapter.notifyDataSetChanged();
     }
-
-
-    private void ordenarDespesasPorMes() {
-        for (Map.Entry<String, List<Despesa>> entry : despesasPorMes.entrySet()) {
-            List<Despesa> despesasDoMes = entry.getValue();
-            Collections.sort(despesasDoMes, (d1, d2) -> {
-                String[] data1 = d1.getVencimento().split("/");
-                String[] data2 = d2.getVencimento().split("/");
-                int dia1 = Integer.parseInt(data1[0]);
-                int dia2 = Integer.parseInt(data2[0]);
-                return Integer.compare(dia1, dia2);
-            });
-        }
-    }
-
     private void removerDespesaExistente(Despesa despesaRemovida) {
         String mes = obterMesDaDespesa(despesaRemovida);
         if (despesasPorMes.containsKey(mes)) {
             List<Despesa> despesasDoMes = despesasPorMes.get(mes);
-            despesasDoMes.remove(despesaRemovida);
-            exibirDespesasPorMes(mes); // Atualiza a exibição da lista
+            if (despesasDoMes.remove(despesaRemovida)) {
+                Log.d("atv_despesa", "Despesa removida com ID: " + despesaRemovida.getId());
+                despesasAdapter.remove(despesaRemovida);
+                despesasAdapter.notifyDataSetChanged();
+            } else {
+                Log.d("atv_despesa", "Despesa não encontrada para remoção com ID: " + despesaRemovida.getId());
+            }
+        } else {
+            Log.d("atv_despesa", "Nenhuma despesa encontrada para o mês " + mes);
         }
     }
 
@@ -309,10 +287,22 @@ public class atv_despesa extends AppCompatActivity {
                     break;
                 }
             }
-            // Atualiza a lista de despesas do mês
             despesasPorMes.put(mes, despesasDoMes);
-            // Exibe as despesas atualizadas
             exibirDespesasPorMes(mes);
+            despesasAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void ordenarDespesasPorMes() {
+        for (Map.Entry<String, List<Despesa>> entry : despesasPorMes.entrySet()) {
+            List<Despesa> despesasDoMes = entry.getValue();
+            Collections.sort(despesasDoMes, (d1, d2) -> {
+                String[] data1 = d1.getVencimento().split("/");
+                String[] data2 = d2.getVencimento().split("/");
+                int dia1 = Integer.parseInt(data1[0]);
+                int dia2 = Integer.parseInt(data2[0]);
+                return Integer.compare(dia1, dia2);
+            });
         }
     }
 
