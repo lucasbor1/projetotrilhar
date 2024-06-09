@@ -131,7 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
-            app:backgroundTint="@drawable/switch_cor"/>
+            app:thumbTint="@color/trocar_cor"/>
 
         <ImageView
             android:id="@+id/imgDespesaStatus"
@@ -139,8 +139,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:contentDescription="Status da despesa"
-            android:src="@drawable/naopago"
-            app:backgroundTint="@drawable/switch_cor"/>
+            android:src="@drawable/naopago"/>
     </LinearLayout>
 
     <LinearLayout

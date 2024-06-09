@@ -189,6 +189,11 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         edtValor.setText(String.valueOf(despesa.getValor()));
         edtVencimento.setText(despesa.getVencimento());
         switchDespesaPaga.setChecked(despesa.isPago());
+        if (despesa.isPago()) {
+            imgDespesaStatus.setImageResource(R.drawable.pago);
+        } else {
+            imgDespesaStatus.setImageResource(R.drawable.naopago);
+        }
     }
 
     private void configurarTecladoNumerico() {
