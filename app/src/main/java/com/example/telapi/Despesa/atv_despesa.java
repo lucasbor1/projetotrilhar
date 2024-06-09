@@ -136,7 +136,7 @@ public class atv_despesa extends AppCompatActivity {
 
     private void abrirTelaCadastroComDespesa(Despesa despesa) {
         Intent intent = new Intent(atv_despesa.this, atv_cadastro.class);
-        intent.putExtra("acao", "Alterar");
+        intent.putExtra("acao", "ALTERAR");
         intent.putExtra("obj", despesa);
         startActivity(intent);
     }

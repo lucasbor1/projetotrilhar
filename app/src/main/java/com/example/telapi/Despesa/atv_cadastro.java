@@ -81,7 +81,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         btnGravar.setText(acao);
 
-        if ("Alterar".equals(acao) && despesa != null) {
+        if ("ALTERAR".equals(acao) && despesa != null) {
             preencherCamposDespesa();
             btnExcluir.setVisibility(View.VISIBLE);
         } else {
@@ -111,7 +111,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
                     intent.putExtra("nova_despesa", novaDespesa);
                     setResult(RESULT_OK, intent);
                     finish();
-                } else if ("Alterar".equals(acao)) {
+                } else if ("ALTERAR".equals(acao)) {
                     despesaCRUD.alterarDespesa(despesaAtualizada);
                     Toast.makeText(atv_cadastro.this, "Despesa atualizada com sucesso: " + despesaAtualizada.toString(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
