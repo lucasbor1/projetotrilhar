@@ -176,7 +176,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null && data.hasExtra("nova_despesa")) {
                 Despesa novaDespesa = (Despesa) data.getSerializableExtra("nova_despesa");
-                // Atualize a lista de despesas com a nova despesa aqui
+
             }
         }
     }

@@ -187,32 +187,31 @@ public class atv_despesa extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            if (data != null) {
-                if (data.hasExtra("nova_despesa")) {
-                    Despesa novaDespesa = (Despesa) data.getSerializableExtra("nova_despesa");
-                    if (novaDespesa.getVencimento() == null) {
-                        Log.d("atv_despesa", "Nova despesa sem data de vencimento: " + novaDespesa.toString());
-                    } else {
-                        adicionarDespesaNova(novaDespesa);
-                    }
-                } else if (data.hasExtra("despesa_atualizada")) {
-                    Despesa despesaAtualizada = (Despesa) data.getSerializableExtra("despesa_atualizada");
-                    if (despesaAtualizada.getVencimento() == null) {
-                        Log.d("atv_despesa", "Despesa atualizada sem data de vencimento: " + despesaAtualizada.toString());
-                    } else {
-                        atualizarDespesaExistente(despesaAtualizada);
-                    }
-                } else if (data.hasExtra("despesa_removida")) {
-                    Despesa despesaRemovida = (Despesa) data.getSerializableExtra("despesa_removida");
-                    removerDespesaExistente(despesaRemovida);
-                }
+        String mesSelecionado = spnMeses.getSelectedItem().toString();
 
-                String mesSelecionado = spnMeses.getSelectedItem().toString();
-                exibirDespesasPorMes(mesSelecionado);
-                atualizarTotalMensal();
-                despesasAdapter.notifyDataSetChanged();
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            if (data.hasExtra("nova_despesa")) {
+                Despesa novaDespesa = (Despesa) data.getSerializableExtra("nova_despesa");
+                if (novaDespesa.getVencimento() == null) {
+                    Log.d("atv_despesa", "Nova despesa sem data de vencimento: " + novaDespesa.toString());
+                } else {
+                    adicionarDespesaNova(novaDespesa);
+                }
+            } else if (data.hasExtra("despesa_atualizada")) {
+                Despesa despesaAtualizada = (Despesa) data.getSerializableExtra("despesa_atualizada");
+                if (despesaAtualizada.getVencimento() == null) {
+                    Log.d("atv_despesa", "Despesa atualizada sem data de vencimento: " + despesaAtualizada.toString());
+                } else {
+                    atualizarDespesaExistente(despesaAtualizada);
+                }
+            } else if (data.hasExtra("despesa_removida")) {
+                Despesa despesaRemovida = (Despesa) data.getSerializableExtra("despesa_removida");
+                removerDespesaExistente(despesaRemovida);
             }
+
+            exibirDespesasPorMes(mesSelecionado);
+            atualizarTotalMensal();
+            despesasAdapter.notifyDataSetChanged();
         }
     }
 
@@ -265,13 +264,15 @@ public class atv_despesa extends AppCompatActivity {
             List<Despesa> despesasDoMes = despesasPorMes.get(mes);
             if (despesasDoMes.remove(despesaRemovida)) {
                 Log.d("atv_despesa", "Despesa removida com ID: " + despesaRemovida.getId());
+
+                // Remova a despesa da lista de despesas que está sendo exibida na tela
                 despesasAdapter.remove(despesaRemovida);
+
+                // Notifique o adapter da lista sobre a remoção
                 despesasAdapter.notifyDataSetChanged();
             } else {
                 Log.d("atv_despesa", "Despesa não encontrada para remoção com ID: " + despesaRemovida.getId());
             }
-        } else {
-            Log.d("atv_despesa", "Nenhuma despesa encontrada para o mês " + mes);
         }
     }
 
