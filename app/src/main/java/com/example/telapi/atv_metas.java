@@ -1,0 +1,61 @@
+package com.example.telapi.Metas;
+
+
+import android.os.Bundle;
+
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.telapi.R;
+
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Toast;
+
+
+
+public class atv_metas extends AppCompatActivity {
+
+        private CheckBox checkBoxMeta1;
+        private CheckBox checkBoxMeta2;
+        private CheckBox checkBoxMeta3;
+        private CheckBox checkBoxMeta4;
+        private CheckBox checkBoxMeta5;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            EdgeToEdge.enable(this);
+            setContentView(R.layout.atv_metas);
+
+            checkBoxMeta1 = findViewById(R.id.checkBoxMeta1);
+            checkBoxMeta2 = findViewById(R.id.checkBoxMeta2);
+            checkBoxMeta3 = findViewById(R.id.checkBoxMeta3);
+            checkBoxMeta4 = findViewById(R.id.checkBoxMeta4);
+            checkBoxMeta5 = findViewById(R.id.checkBoxMeta5);
+
+            checkBoxMeta1.setOnCheckedChangeListener(new MetaCheckedChangeListener("Meta 1"));
+            checkBoxMeta2.setOnCheckedChangeListener(new MetaCheckedChangeListener("Meta 2"));
+            checkBoxMeta3.setOnCheckedChangeListener(new MetaCheckedChangeListener("Meta 3"));
+            checkBoxMeta4.setOnCheckedChangeListener(new MetaCheckedChangeListener("Meta 4"));
+            checkBoxMeta5.setOnCheckedChangeListener(new MetaCheckedChangeListener("Meta 5"));
+        }
+
+        private class MetaCheckedChangeListener implements CompoundButton.OnCheckedChangeListener {
+            private String metaName;
+
+            MetaCheckedChangeListener(String metaName) {
+                this.metaName = metaName;
+            }
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Toast.makeText(atv_metas.this, metaName + " realizada!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(atv_metas.this, metaName + " não realizada.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
