@@ -11,7 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
 import com.example.telapi.R;
+
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class DespesaAdapter extends ArrayAdapter<Despesa> {
 
@@ -22,8 +25,6 @@ public class DespesaAdapter extends ArrayAdapter<Despesa> {
     public Despesa getDespesa(int position) {
         return getItem(position);
     }
-
-
 
     @NonNull
     @Override
@@ -38,25 +39,25 @@ public class DespesaAdapter extends ArrayAdapter<Despesa> {
         TextView txtValor = convertView.findViewById(R.id.txtValor);
         TextView txtVencimento = convertView.findViewById(R.id.txtVencimento);
         CardView cardView = (CardView) convertView;
+
         if (despesa != null) {
             txtDescricao.setText(despesa.getDescricao());
-            txtValor.setText(String.valueOf(despesa.getValor()));
+
+            // Formata o valor para moeda
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+            txtValor.setText(currencyFormat.format(despesa.getValor()));
+
             txtVencimento.setText(despesa.getVencimento());
 
-
             if (despesa.isPago()) {
-
                 cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.verde_claro));
             } else if (despesa.isAtrasada()) {
-
                 cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.vermelho_claro));
             } else {
-
                 cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.cinza_claro));
             }
         }
 
         return convertView;
     }
-
 }

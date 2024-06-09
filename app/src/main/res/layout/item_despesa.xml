@@ -22,6 +22,8 @@
             android:textSize="18sp"
             android:textColor="#333333"
             android:fontFamily="sans-serif-medium"
+            android:ellipsize="end"
+            android:singleLine="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="parent"
@@ -36,6 +38,8 @@
             android:textSize="16sp"
             android:textColor="#777777"
             android:fontFamily="sans-serif"
+            android:ellipsize="end"
+            android:singleLine="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/txtDescricao"
@@ -50,6 +54,8 @@
             android:textSize="18sp"
             android:textColor="@color/black"
             android:fontFamily="sans-serif-medium"
+            android:ellipsize="end"
+            android:singleLine="true"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -61,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="277dp" />
+            app:layout_constraintGuide_percent="0.7" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

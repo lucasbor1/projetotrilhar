@@ -10,7 +10,7 @@
     <color name="azul_claro">#90CAF9</color>
     <color name="verde_claro">#4CAF50</color>
     <color name="vermelho_claro">#F44336</color>
-    <color name="cinza_claro">#BDBDBD</color>
+    <color name="cinza_claro">#BDBDBD</color> 
     <color name="branco">#FFFFFF</color>
     <color name="cinza_escuro">#333333</color>
     <color name="cinza_medio">#777777</color>

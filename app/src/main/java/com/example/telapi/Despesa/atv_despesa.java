@@ -5,6 +5,7 @@ import static android.text.method.TextKeyListener.clear;
 import static java.util.Collections.addAll;
 
 import android.content.Intent;
+import android.icu.text.NumberFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -231,8 +232,9 @@ public class atv_despesa extends AppCompatActivity {
                 }
             }
 
-            edtTotal.setText(String.valueOf(totalMensal));
-            edtAberto.setText(String.valueOf(despesasEmAberto));
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+            edtTotal.setText(currencyFormat.format(totalMensal));
+            edtAberto.setText(currencyFormat.format(despesasEmAberto));
         } else {
             edtTotal.setText("R$0,00");
             edtAberto.setText("R$0,00");
@@ -243,10 +245,8 @@ public class atv_despesa extends AppCompatActivity {
         String mes = obterMesDaDespesa(novaDespesa);
         List<Despesa> despesasDoMes = despesasPorMes.getOrDefault(mes, new ArrayList<>());
         despesasDoMes.add(novaDespesa);
-        despesasPorMes.put(mes, despesasDoMes); // Atualize a entrada correspondente no mapa
-        Log.d("atv_despesa", "Despesa adicionada ao mês " + mes + ": " + novaDespesa.toString());
+        despesasPorMes.put(mes, despesasDoMes);
 
-        // Atualizar o total de despesas em aberto
         double totalDespesasEmAberto = 0;
         for (List<Despesa> despesas : despesasPorMes.values()) {
             for (Despesa despesa : despesas) {
@@ -256,7 +256,8 @@ public class atv_despesa extends AppCompatActivity {
             }
         }
 
-        edtAberto.setText(String.valueOf(totalDespesasEmAberto));
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+        edtAberto.setText(currencyFormat.format(totalDespesasEmAberto));
         despesasAdapter.add(novaDespesa);
         despesasAdapter.notifyDataSetChanged();
     }
