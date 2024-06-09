@@ -45,6 +45,9 @@
             android:name=".atv_menu"
             android:exported="false" />
         <activity
+            android:name=".atv_metas"
+            android:exported="false" />
+        <activity
             android:name=".atv_login"
             android:exported="true">
             <intent-filter>

@@ -35,4 +35,8 @@ public class atv_menu  extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void metas(View view) {
+        Intent intent = new Intent(this, atv_metas.class);
+        startActivity(intent);
+    }
 }

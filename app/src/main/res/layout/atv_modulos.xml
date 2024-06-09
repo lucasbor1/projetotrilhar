@@ -8,7 +8,6 @@
     android:background="@color/azul_escuro"
     android:orientation="vertical">
 
-
     <Space
         android:layout_width="match_parent"
         android:layout_height="64dp" />
@@ -24,7 +23,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="16dp" />
+        android:layout_height="24dp" />
 
     <View
         android:layout_width="match_parent"
@@ -34,10 +33,10 @@
     <TextView
         android:id="@+id/Mod1"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="74dp"
         android:background="@color/azul_escuro"
         android:gravity="center"
-        android:text="Módulo 1 (Iniciante)"
+        android:text="Módulo 1 "
         android:textColor="#FFFFFF"
         android:textSize="24sp" />
 
@@ -60,15 +59,22 @@
                 android:src="@drawable/ic_videos"
                 app:tint="@color/white" />
 
-            <Button
-                android:id="@+id/btn1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/azul_escuro"
+                android:gravity="center"
                 android:onClick="video1"
-                android:text="Reserva de emergência"
-                android:textSize="16sp" />
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reserva de emergência"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <Space
@@ -90,15 +96,24 @@
                 android:src="@drawable/ic_videos"
                 app:tint="@color/white" />
 
-            <Button
-                android:id="@+id/btn2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/azul_escuro"
+                android:gravity="center"
                 android:onClick="video2"
-                android:text="O que é a Educação FInanceira"
-                android:textSize="16sp" />
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="O que é a Educação FInanceira"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
         </LinearLayout>
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -118,18 +133,25 @@
                 android:src="@drawable/ic_videos"
                 app:tint="@color/white" />
 
-            <Button
-                android:id="@+id/btn3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/azul_escuro"
+                android:gravity="center"
                 android:onClick="video3"
-                android:text="7 níveis da riqueza"
-                android:textSize="16sp" />
-            <Space
-                android:layout_width="179dp"
-                android:layout_height="27dp"
-                android:layout_weight="1" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="152dp"
+                    android:layout_height="wrap_content"
+                    android:text="7 níveis da riqueza"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
         </LinearLayout>
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -149,19 +171,25 @@
                 android:src="@drawable/ic_videos"
                 app:tint="@color/white" />
 
-            <Button
-                android:id="@+id/btn4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/azul_escuro"
+                android:gravity="center"
                 android:onClick="video4"
-                android:text="Como fazer o dinheiro crescer"
-                android:textSize="16sp" />
-            <Space
-                android:layout_width="179dp"
-                android:layout_height="27dp"
-                android:layout_weight="1" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Como fazer o dinheiro crescer"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
         </LinearLayout>
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -181,14 +209,24 @@
                 android:src="@drawable/ic_videos"
                 app:tint="@color/white" />
 
-            <Button
-                android:id="@+id/btn5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/azul_escuro"
+                android:gravity="center"
                 android:onClick="video5"
-                android:text="O segredo da mente milionária"
-                android:textSize="16sp" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="O segredo da mente milionária"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
         </LinearLayout>
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -202,7 +240,7 @@
         <TextView
             android:id="@+id/logo"
             android:layout_width="394dp"
-            android:layout_height="49dp"
+            android:layout_height="48dp"
             android:layout_gravity="center_horizontal|top"
             android:background="@color/azul_escuro"
             android:gravity="center"
@@ -219,4 +257,3 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
-

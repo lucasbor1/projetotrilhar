@@ -101,11 +101,12 @@
 
 
         <LinearLayout
-            android:id="@+id/recompensas"
+            android:id="@+id/metas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:onClick="metas"
             android:padding="16dp">
 
             <ImageView
@@ -118,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Recompensas"
+                android:text="Metas"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -143,14 +144,14 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_configuracoes"
-                app:tint="@color/white" />
+                app:tint="@color/cinza_escuro" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="Configurações"
-                android:textColor="@color/white"
+                android:textColor="@color/cinza_escuro"
                 android:textSize="18sp" />
 
 

@@ -1,4 +1,4 @@
-package com.example.telapi.Metas;
+package com.example.telapi;
 
 
 import android.os.Bundle;
@@ -6,8 +6,9 @@ import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.telapi.R;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -28,6 +29,7 @@ public class atv_metas extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             EdgeToEdge.enable(this);
             setContentView(R.layout.atv_metas);
+
 
             checkBoxMeta1 = findViewById(R.id.checkBoxMeta1);
             checkBoxMeta2 = findViewById(R.id.checkBoxMeta2);

@@ -73,10 +73,10 @@
     <ListView
         android:id="@+id/lstDespesas"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
         android:layout_weight="1"
-        android:padding="8dp"
-        android:background="#FFFFFF" />
+        android:background="#FFFFFF"
+        android:padding="8dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -89,8 +89,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Total mensal:"
-            android:textColor="#FFFFFF" />
+            android:text="Total a pagar:"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
 
         <TextView
@@ -100,11 +101,22 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
+            android:clickable="false"
             android:ems="10"
             android:inputType="number"
+            android:longClickable="false"
             android:textColor="#FEFEFE"
-            android:textSize="10sp"
-            android:clickable="false" />
+            android:textSize="20sp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="0dp">
+
 
         <TextView
             android:id="@+id/textView3"
@@ -113,21 +125,42 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:gravity="start|center_vertical"
-            android:text="Em aberto:"
-            android:textColor="#FFFFFF" />
+            android:text="Saldo a pagar:"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/edtAberto"
             style="@style/AppTheme.EditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
+            android:clickable="false"
             android:ems="10"
             android:inputType="number"
+            android:longClickable="false"
             android:textColor="#FEFEFE"
-            android:textSize="10sp"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:clickable="false" />
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            android:text=""
+            android:textColor="#FFFFFF" />
+
 
     </LinearLayout>
 

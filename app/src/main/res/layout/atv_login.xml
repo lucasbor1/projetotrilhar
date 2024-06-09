@@ -5,7 +5,7 @@
     android:id="@+id/login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/trilharcapa05"
+    android:background="@color/azul_escuro"
     tools:context=".MainActivity">
 
     <!-- Imagem de fundo que preenche toda a tela -->
@@ -51,14 +51,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/azul_escuro">
 
         <TextView
             android:id="@+id/logo"
             android:layout_width="258dp"
             android:layout_height="55dp"
             android:layout_gravity="center_horizontal|top"
-            android:background="@color/azul_escuro"
             android:gravity="center"
             android:text="T R I L H A R"
             android:textColor="@color/white"
