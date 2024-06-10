@@ -3,6 +3,7 @@ package com.example.telapi.Despesa;
 import static com.example.telapi.Despesa.atv_despesa.REQUEST_CODE;
 
 import android.content.Intent;
+import android.icu.text.NumberFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class atv_cadastro extends AppCompatActivity implements View.OnClickListener {
@@ -148,12 +150,11 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
     private Despesa criarDespesa() {
         String categoria = autoCompleteCategoria.getText().toString();
         String descricao = edtDescricao.getText().toString();
-        String valorStr = edtValor.getText().toString().replace("R$", "").replace(",", "");
+        String valorStr = edtValor.getText().toString().replace("R$", "").replaceAll("[^\\d,]", "").replace(",", ".");
         double valor = valorStr.isEmpty() ? 0.0 : Double.parseDouble(valorStr);
         String dataVencimentoStr = edtVencimento.getText().toString();
 
         boolean isPaga = switchDespesaPaga.isChecked();
-
 
         if (categoria.isEmpty() || descricao.isEmpty() || valor <= 0 || dataVencimentoStr.isEmpty()) {
             Toast.makeText(this, "Por favor, preencha todos os campos corretamente.", Toast.LENGTH_SHORT).show();
@@ -164,6 +165,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         return new Despesa(id, categoria, descricao, valor, dataVencimentoStr, isPaga);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -180,7 +182,8 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
     private void preencherCamposDespesa() {
         autoCompleteCategoria.setText(despesa.getCategoria());
         edtDescricao.setText(despesa.getDescricao());
-        edtValor.setText(String.valueOf(despesa.getValor()));
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+        edtValor.setText(currencyFormat.format(despesa.getValor()));
         edtVencimento.setText(despesa.getVencimento());
         switchDespesaPaga.setChecked(despesa.isPago());
         if (despesa.isPago()) {
