@@ -16,7 +16,7 @@
         android:layout_height="55dp"
         android:background="@color/azul_escuro"
         android:gravity="center"
-        android:text="Reserva de Emergência"
+        android:text="Reserva de emergência."
         android:textColor="#FFFFFF"
         android:textSize="20sp" />
 
@@ -37,7 +37,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="348dp"
-        android:layout_height="172dp"/>
+        android:layout_height="172dp" />
 
     <TextView
         android:id="@+id/logo"
