@@ -145,7 +145,6 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         configurarTecladoNumerico();
         getCategorias();
     }
-
     private Despesa criarDespesa() {
         String categoria = autoCompleteCategoria.getText().toString();
         String descricao = edtDescricao.getText().toString();
@@ -155,11 +154,6 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         boolean isPaga = switchDespesaPaga.isChecked();
 
-        Log.d("atv_cadastro", "Categoria: " + categoria);
-        Log.d("atv_cadastro", "Descrição: " + descricao);
-        Log.d("atv_cadastro", "Valor: " + valor);
-        Log.d("atv_cadastro", "Data de Vencimento: " + dataVencimentoStr);
-        Log.d("atv_cadastro", "Paga: " + isPaga);
 
         if (categoria.isEmpty() || descricao.isEmpty() || valor <= 0 || dataVencimentoStr.isEmpty()) {
             Toast.makeText(this, "Por favor, preencha todos os campos corretamente.", Toast.LENGTH_SHORT).show();
@@ -275,12 +269,6 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private double extrairValorDigitado(String valorDigitado) {
-        if (valorDigitado.isEmpty()) return 0.0;
-
-        return Double.parseDouble(valorDigitado.replace("R$", "").replace(",", "."));
-    }
-
     private void abrirModalCategoria() {
         modal_categoria modal = new modal_categoria();
 
@@ -315,8 +303,6 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(atv_cadastro.this, android.R.layout.simple_dropdown_item_1line, categoriasArray);
                 autoCompleteCategoria.setAdapter(adapter);
-            } else {
-                Log.e("getCategorias", "Erro ao buscar categorias", task.getException());
             }
         });
     }

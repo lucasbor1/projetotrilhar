@@ -42,11 +42,8 @@ public class DespesaAdapter extends ArrayAdapter<Despesa> {
 
         if (despesa != null) {
             txtDescricao.setText(despesa.getDescricao());
-
-            // Formata o valor para moeda
             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
             txtValor.setText(currencyFormat.format(despesa.getValor()));
-
             txtVencimento.setText(despesa.getVencimento());
 
             if (despesa.isPago()) {

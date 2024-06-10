@@ -29,7 +29,7 @@ public class DespesaCRUD {
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if (task.isSuccessful()) {
                             Log.d("DespesaCRUD", "Despesa adicionada com ID: " + task.getResult().getId());
-                            // Ação adicional após adicionar a despesa, se necessário
+
                         } else {
                             Log.e("DespesaCRUD", "Erro ao adicionar despesa", task.getException());
                         }
@@ -87,32 +87,6 @@ public class DespesaCRUD {
                         }
                     }
                 });
-    }
-
-
-    public void listarDespesas() {
-        db.collection("despesas").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (DocumentSnapshot document : task.getResult()) {
-                                String id = document.getId();
-                                Despesa despesa = document.toObject(Despesa.class);
-                                Log.d("DespesaCRUD", "ID: " + id + " -> " + despesa.toString());
-                            }
-                        } else {
-                            Log.e("DespesaCRUD", "Erro ao listar despesas", task.getException());
-                        }
-                    }
-                });
-    }
-
-
-    public interface DespesaListListener {
-        void onDespesasRetrieved(List<Despesa> despesas);
-
-        void onDespesasFailed(Exception e);
     }
 
 

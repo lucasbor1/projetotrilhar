@@ -38,7 +38,7 @@ public class CategoriaCRUD {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d("CategoriaCRUD", "Categoria removida: " + nomeCategoria);
-                            // Ação adicional após remover a categoria, se necessário
+
                         } else {
                             Log.e("CategoriaCRUD", "Erro ao remover categoria", task.getException());
                         }

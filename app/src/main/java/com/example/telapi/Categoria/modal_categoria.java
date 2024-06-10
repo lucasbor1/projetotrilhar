@@ -85,8 +85,8 @@ public class modal_categoria extends DialogFragment {
             db.collection("categorias").add(data)
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(getContext(), "Categoria adicionada com sucesso!", Toast.LENGTH_SHORT).show();
-                        edtCategoria.setText(""); // Limpar o campo de texto após adicionar
-                        carregarCategorias(); // Atualizar a lista de categorias no AutoCompleteTextView
+                        edtCategoria.setText("");
+                        carregarCategorias();
                         if (mListener != null) {
                             mListener.onCategoriaAdicionada(novaCategoria);
                         }

@@ -22,30 +22,20 @@ public class Despesa implements Serializable {
     }
 
     public boolean isAtrasada() {
-        // Obtenha a data atual
+
         Calendar hoje = Calendar.getInstance();
-        // Converta a data de vencimento da despesa para o tipo Calendar
+
         Calendar dataVencimento = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         try {
             dataVencimento.setTime(sdf.parse(this.getVencimento()));
         } catch (ParseException | java.text.ParseException e) {
             e.printStackTrace();
-            // Se houver um erro ao analisar a data, considere a despesa como não atrasada
+
             return false;
         }
-        // Verifique se a data atual é posterior à data de vencimento
+
         return hoje.after(dataVencimento);
-    }
-
-
-
-    public Despesa(String categoria, String descricao, double valor, String vencimento) {
-        this.id = UUID.randomUUID().toString();
-        this.categoria = categoria;
-        this.descricao = descricao;
-        this.valor = valor;
-        this.vencimento = vencimento;
     }
 
     public Despesa(String id, String categoria, String descricao, double valor, String vencimento, boolean pago) {

@@ -70,7 +70,6 @@ public class atv_login extends AppCompatActivity {
                 autenticarNoFirebase(conta);
             } catch (ApiException e) {
 
-                Log.w(TAG, "Autenticação Google falhou", e);
                 Toast.makeText(atv_login.this, "Falha ao autenticar com o Google.", Toast.LENGTH_SHORT).show();
             }
         }
@@ -87,7 +86,7 @@ public class atv_login extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                        Log.w(TAG, "Falha na autenticação com o Firebase", task.getException());
+
                         Toast.makeText(atv_login.this, "Falha na autenticação com o Firebase.", Toast.LENGTH_SHORT).show();
                     }
                 });

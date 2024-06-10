@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.telapi.Despesa.atv_despesa;
 
-public class atv_menu  extends AppCompatActivity {
+public class atv_menu extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +30,7 @@ public class atv_menu  extends AppCompatActivity {
         Intent intent = new Intent(this, atv_despesa.class);
         startActivity(intent);
     }
+
     public void videos(View view) {
         Intent intent = new Intent(this, atv_modulos.class);
         startActivity(intent);
