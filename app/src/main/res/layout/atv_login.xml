@@ -12,63 +12,47 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/trilharcapa05" />
+        android:src="@drawable/trilhar_aguia_logo" />
 
     <!-- Logo do aplicativo -->
 
     <!-- Conteúdo do login com fundo azul -->
 
     <!-- Botão de login com Google -->
+
+    <!-- Barra de progresso -->
+
     <LinearLayout
         android:id="@+id/btnGoogleSignIn"
-        android:layout_width="match_parent"
-        android:layout_height="66dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="32dp"
-        android:background="@color/azul_escuro"
+        android:layout_width="286dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="70dp"
+        android:background="@color/cinza_claro"
         android:gravity="center"
         android:onClick="signInWithGoogle"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="09dp">
 
         <ImageView
             android:layout_width="34dp"
             android:layout_height="39dp"
             android:src="@drawable/ic_google"
-            app:tint="@color/white" />
+            app:tint="@color/azul_escuro" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="Entre com a conta Google"
-            android:textColor="@color/white"
+            android:textColor="@color/azul_escuro"
             android:textSize="18sp" />
     </LinearLayout>
 
-    <!-- Barra de progresso -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/azul_escuro">
-
-        <TextView
-            android:id="@+id/logo"
-            android:layout_width="258dp"
-            android:layout_height="55dp"
-            android:layout_gravity="center_horizontal|top"
-            android:gravity="center"
-            android:text="T R I L H A R"
-            android:textColor="@color/white"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
