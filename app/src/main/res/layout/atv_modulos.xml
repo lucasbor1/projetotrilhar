@@ -6,20 +6,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/azul_escuro"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="70dp">
+    <ImageView
+        android:id="@+id/imageViewLogo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="16dp"
+        android:contentDescription="Logo"
+        android:src="@drawable/trilhar_aguia_logo" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="64dp" />
+        android:layout_height="34dp" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Videos"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="34sp" />
+
 
     <Space
         android:layout_width="match_parent"
@@ -237,23 +239,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/logo"
-            android:layout_width="394dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center_horizontal|top"
-            android:background="@color/azul_escuro"
-            android:gravity="center"
-            android:text="T R I L H A R"
-            android:textColor="@color/white"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.47"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.732" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

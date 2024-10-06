@@ -9,6 +9,14 @@
     android:background="@color/azul_escuro"
     tools:context=".Despesa.atv_despesa">
 
+    <ImageView
+        android:id="@+id/imageViewLogo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="16dp"
+        android:contentDescription="Logo"
+        android:src="@drawable/trilhar_aguia_logo" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
