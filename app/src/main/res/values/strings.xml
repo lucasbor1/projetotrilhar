@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">telaPi</string>
+    <string name="app_name">trilhar</string>
     <string-array name="meses">
         <item>Janeiro</item>
         <item>Fevereiro</item>

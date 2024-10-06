@@ -9,7 +9,17 @@
     android:orientation="vertical"
     android:padding="40dp"
     tools:context=".Videos.TelaVideo5">
-
+    <ImageView
+        android:id="@+id/imageViewLogo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="16dp"
+        android:contentDescription="Logo"
+        android:src="@drawable/trilhar_aguia_logo"/>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
     <TextView
         android:id="@+id/Mod5"
         android:layout_width="match_parent"
@@ -35,17 +45,5 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="334dp"
         android:layout_height="177dp" />
-
-    <TextView
-        android:id="@+id/logo"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_gravity="center_horizontal|top"
-        android:background="@color/azul_escuro"
-        android:gravity="center"
-        android:text="T R I L H A R"
-        android:textColor="@color/white"
-        android:textSize="40sp"
-        android:textStyle="bold" />
 
 </LinearLayout>
