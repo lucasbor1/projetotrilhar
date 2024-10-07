@@ -46,7 +46,7 @@
             android:layout_marginStart="16dp"
             android:text="Entre com a conta Google"
             android:textColor="@color/azul_escuro"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
     </LinearLayout>
 
 
