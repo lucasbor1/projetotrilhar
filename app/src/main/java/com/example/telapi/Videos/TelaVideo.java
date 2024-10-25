@@ -2,9 +2,12 @@ package com.example.telapi.Videos;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.view.MenuItem;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -19,7 +22,21 @@ public class TelaVideo extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_tela_video);
 
+        // Configura a Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        // Habilita o botão de voltar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        }
+        if (getSupportActionBar() != null) {
+            // Usa um ícone de tamanho maior do drawable
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setNavigationIcon(R.drawable.ic_botao_back_small); // Substitua por seu ícone personalizado
+        }
 
         // Configurando os WebViews
         WebView webView = findViewById(R.id.webView);
@@ -27,6 +44,16 @@ public class TelaVideo extends AppCompatActivity {
         webView.loadData(video, "text/html", "utf-8");
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new WebChromeClient());
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            if (item.getItemId() == android.R.id.home) {
+                // Finaliza a atividade atual e retorna à anterior
+                finish();
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
 
 
     }

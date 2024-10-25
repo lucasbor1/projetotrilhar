@@ -5,8 +5,35 @@
     android:id="@+id/cadastro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/azul_escuro"
     android:orientation="vertical"
     tools:context=".Despesa.atv_cadastro">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/azul_escuro">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/azul_escuro"
+            android:theme="?attr/actionBarTheme"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:id="@+id/toolbarLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/trilhar_aguia_logo_toolbar_small"
+            android:contentDescription="Logo"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -21,7 +48,7 @@
             android:layout_height="match_parent"
             android:background="@color/azul_escuro"
             android:gravity="center"
-            android:text="Despesa"
+            android:text="Cadastro de Despesa"
             android:textColor="@color/white"
             android:textSize="25dp" />
     </FrameLayout>
@@ -45,7 +72,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textColor="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -56,7 +84,7 @@
             android:foregroundGravity="center"
             android:src="@drawable/ic_modal"
             app:backgroundTint="@color/azul_escuro"
-            app:tint="@android:color/white" />
+            app:tint="@color/white" />
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -64,7 +92,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-        android:hint="Descrição">
+        android:hint="Descrição"
+        android:textColor="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtDescricao"
@@ -72,7 +101,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:inputType="text"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textColor="@color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
@@ -97,7 +127,8 @@
             android:layout_weight="1"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:hint="Vencimento"
-            android:gravity="center">
+            android:gravity="center"
+            android:textColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtVencimento"
@@ -106,6 +137,7 @@
                 android:layout_margin="10dp"
                 android:inputType="date"
                 android:textSize="16sp"
+                android:textColor="@color/white"
                 android:focusable="false"
                 android:clickable="false" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -123,15 +155,15 @@
             android:layout_height="wrap_content"
             android:text="Pagar"
             android:textSize="24sp"
-            android:textColor="@android:color/black"
-            android:paddingEnd="8dp"/>
+            android:textColor="@color/white"
+            android:paddingEnd="8dp" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switchDespesaPaga"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
-            app:thumbTint="@color/trocar_cor"/>
+            app:thumbTint="@color/trocar_cor" />
 
         <ImageView
             android:id="@+id/imgDespesaStatus"
@@ -139,13 +171,13 @@
             android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:contentDescription="Status da despesa"
-            android:src="@drawable/naopago"/>
+            android:src="@drawable/naopago" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="09dp"
         android:orientation="horizontal">
 
         <Button
@@ -154,10 +186,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="6dp"
             android:backgroundTint="@color/azul_escuro"
             android:text="EXCLUIR"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btnGravar"
@@ -167,28 +199,29 @@
             android:layout_weight="1"
             android:backgroundTint="@color/azul_escuro"
             android:text="SALVAR"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-        android:hint="Valor">
+        android:hint="Valor"
+        android:textColor="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtValor"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:textSize="36sp"
-            android:text="R$0,00"
-            android:gravity="center"
+            android:layout_height="66dp"
+            android:clickable="false"
             android:focusable="false"
-            android:clickable="false" />
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:text="R$0,00"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -212,9 +245,9 @@
                 android:background="@drawable/btn_cal"
                 android:text="7"
                 android:textColor="#757575"
-                android:textSize="36sp"
+                android:textSize="20sp"
                 android:clickable="true"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:focusable="true"
                 android:gravity="center"
                 android:onClick="onNumberClick" />
@@ -227,9 +260,9 @@
                 android:background="@drawable/btn_cal"
                 android:text="8"
                 android:textColor="#757575"
-                android:textSize="36sp"
+                android:textSize="20sp"
                 android:clickable="true"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:focusable="true"
                 android:gravity="center"
                 android:onClick="onNumberClick" />
@@ -242,9 +275,9 @@
                 android:background="@drawable/btn_cal"
                 android:text="9"
                 android:textColor="#757575"
-                android:textSize="36sp"
+                android:textSize="20sp"
                 android:clickable="true"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:focusable="true"
                 android:gravity="center"
                 android:onClick="onNumberClick" />
@@ -264,9 +297,9 @@
                 android:background="@drawable/btn_cal"
                 android:text="4"
                 android:textColor="#757575"
-                android:textSize="36sp"
+                android:textSize="20sp"
                 android:clickable="true"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:focusable="true"
                 android:gravity="center"
                 android:onClick="onNumberClick" />
@@ -279,9 +312,9 @@
                 android:background="@drawable/btn_cal"
                 android:text="5"
                 android:textColor="#757575"
-                android:textSize="36sp"
+                android:textSize="20sp"
                 android:clickable="true"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:focusable="true"
                 android:gravity="center"
                 android:onClick="onNumberClick" />
@@ -294,9 +327,9 @@
                 android:background="@drawable/btn_cal"
                 android:text="6"
                 android:textColor="#757575"
-                android:textSize="36sp"
+                android:textSize="20sp"
                 android:clickable="true"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:focusable="true"
                 android:gravity="center"
                 android:onClick="onNumberClick" />
@@ -316,9 +349,9 @@
                 android:background="@drawable/btn_cal"
                 android:text="1"
                 android:textColor="#757575"
-                android:textSize="36sp"
+                android:textSize="20sp"
                 android:clickable="true"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:focusable="true"
                 android:gravity="center"
                 android:onClick="onNumberClick" />
@@ -331,9 +364,9 @@
                 android:background="@drawable/btn_cal"
                 android:text="2"
                 android:textColor="#757575"
-                android:textSize="36sp"
+                android:textSize="20sp"
                 android:clickable="true"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:focusable="true"
                 android:gravity="center"
                 android:onClick="onNumberClick" />
@@ -346,9 +379,9 @@
                 android:background="@drawable/btn_cal"
                 android:text="3"
                 android:textColor="#757575"
-                android:textSize="36sp"
+                android:textSize="20sp"
                 android:clickable="true"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:focusable="true"
                 android:gravity="center"
                 android:onClick="onNumberClick" />
@@ -374,9 +407,9 @@
                 android:background="@drawable/btn_cal"
                 android:text="0"
                 android:textColor="#757575"
-                android:textSize="36sp"
+                android:textSize="20sp"
                 android:clickable="true"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:focusable="true"
                 android:gravity="center"
                 android:onClick="onNumberClick" />
@@ -389,9 +422,9 @@
                 android:background="@drawable/btn_cal"
                 android:text="⌫"
                 android:textColor="#757575"
-                android:textSize="36sp"
+                android:textSize="20sp"
                 android:clickable="true"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:focusable="true"
                 android:gravity="center" />
         </LinearLayout>

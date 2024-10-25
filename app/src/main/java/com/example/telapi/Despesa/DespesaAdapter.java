@@ -27,6 +27,8 @@ public class DespesaAdapter extends ArrayAdapter<Despesa> {
     }
 
     @NonNull
+
+
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
@@ -47,7 +49,7 @@ public class DespesaAdapter extends ArrayAdapter<Despesa> {
             txtVencimento.setText(despesa.getVencimento());
 
             if (despesa.isPago()) {
-                cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.verde_claro));
+                cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.azul_escuro));
             } else if (despesa.isAtrasada()) {
                 cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.vermelho_claro));
             } else {

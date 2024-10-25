@@ -2,10 +2,12 @@ package com.example.telapi;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.telapi.Videos.TelaVideo;
 import com.example.telapi.Videos.TelaVideo2;
@@ -23,8 +25,22 @@ public class atv_modulos extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.atv_modulos);
 
-    }
+        // Configura a Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        // Habilita o botão de voltar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        }
+        if (getSupportActionBar() != null) {
+            // Usa um ícone de tamanho maior do drawable
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setNavigationIcon(R.drawable.ic_botao_back_small ); // Substitua por seu ícone personalizado
+        }
+    }
     public void video1(View view) {
         Intent intent = new Intent(this, TelaVideo.class);
         startActivity(intent);
@@ -51,6 +67,15 @@ public class atv_modulos extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Finaliza a atividade atual e retorna à anterior
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }
 

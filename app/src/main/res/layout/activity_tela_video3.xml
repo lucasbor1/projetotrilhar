@@ -7,16 +7,36 @@
     android:layout_height="match_parent"
     android:background="@color/azul_escuro"
     android:orientation="vertical"
-    android:padding="40dp"
     tools:context=".Videos.TelaVideo3">
-    <ImageView
-        android:id="@+id/imageViewLogo"
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="16dp"
-        android:contentDescription="Logo"
-        android:src="@drawable/trilhar_aguia_logo"/>
+        android:layout_height="50dp" />
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/azul_escuro">
+
+        <!-- Toolbar com ícone de navegação à esquerda -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/azul_escuro"
+            android:theme="?attr/actionBarTheme"
+            android:layout_alignParentStart="true"/>
+
+        <!-- Logo centralizada na Toolbar -->
+        <ImageView
+            android:id="@+id/toolbarLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/trilhar_aguia_logo_toolbar_small"
+            android:contentDescription="Logo"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
     <Space
         android:layout_width="match_parent"
         android:layout_height="20dp"/>

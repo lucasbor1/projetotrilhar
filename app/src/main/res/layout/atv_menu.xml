@@ -5,21 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#060D41"
-    android:orientation="vertical"
-    android:padding="70dp">
-
-    <ImageView
-        android:id="@+id/imageViewLogo"
+    android:orientation="vertical">
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="16dp"
-        android:contentDescription="Logo"
-        android:src="@drawable/trilhar_aguia_logo" />
+        android:layout_height="50dp" />
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/azul_escuro">
+
+        <!-- Toolbar com ícone de navegação à esquerda -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/azul_escuro"
+            android:theme="?attr/actionBarTheme"
+            android:layout_alignParentStart="true"/>
+
+        <!-- Logo centralizada na Toolbar -->
+        <ImageView
+            android:id="@+id/toolbarLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/trilhar_aguia_logo_toolbar_small"
+            android:contentDescription="Logo"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="70dp" />
+        android:layout_height="100dp" />
 
 
 
@@ -48,8 +67,8 @@
                 android:padding="16dp">
 
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="128dp"
+                    android:layout_height="86dp"
                     android:src="@drawable/ic_financas"
                     app:tint="@color/white" />
 
@@ -67,8 +86,8 @@
                 android:padding="16dp">
 
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="128dp"
+                    android:layout_height="93dp"
                     android:src="@drawable/ic_recompensas"
                     app:tint="@color/white" />
 
@@ -93,8 +112,8 @@
                 android:padding="16dp">
 
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="117dp"
+                    android:layout_height="87dp"
                     android:src="@drawable/ic_videos"
                     app:tint="@color/white" />
 
@@ -111,8 +130,8 @@
                 android:padding="16dp">
 
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="113dp"
+                    android:layout_height="94dp"
                     android:src="@drawable/ic_configuracoes"
                     app:tint="@color/cinza_escuro" />
 

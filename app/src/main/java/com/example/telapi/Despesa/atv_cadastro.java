@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.icu.text.NumberFormat;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,6 +54,22 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.atv_cadastro);
+
+        // Configura a Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Habilita o botão de voltar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        }
+        if (getSupportActionBar() != null) {
+            // Usa um ícone de tamanho maior do drawable
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setNavigationIcon(R.drawable.ic_botao_back_small); // Substitua por seu ícone personalizado
+        }
 
         autoCompleteCategoria = findViewById(R.id.autoCompleteCategoria);
         edtDescricao = findViewById(R.id.edtDescricao);
@@ -308,5 +326,16 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
                 autoCompleteCategoria.setAdapter(adapter);
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Finaliza a atividade atual e retorna à anterior
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+
     }
 }

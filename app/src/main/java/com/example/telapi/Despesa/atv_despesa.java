@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.icu.text.NumberFormat;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.telapi.AdpSpinner;
 import com.example.telapi.R;
@@ -73,6 +75,21 @@ public class atv_despesa extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.atv_despesa);
 
+        // Configura a Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Habilita o botão de voltar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        }
+        if (getSupportActionBar() != null) {
+            // Usa um ícone de tamanho maior do drawable
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setNavigationIcon(R.drawable.ic_botao_back_small); // Substitua por seu ícone personalizado
+        }
 
         btnAdicionar = findViewById(R.id.btnAdicionar);
         spnMeses = findViewById(R.id.spnMeses);
@@ -337,6 +354,17 @@ public class atv_despesa extends AppCompatActivity {
             despesasAdapter.notifyDataSetChanged();
 
         }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Finaliza a atividade atual e retorna à anterior
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+
     }
 }
 
