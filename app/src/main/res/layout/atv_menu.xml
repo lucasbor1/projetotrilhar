@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#060D41"
     android:orientation="vertical"
-    android:padding="70dp">
+    android:padding="40dp">
 
     <ImageView
         android:id="@+id/imageViewLogo"
@@ -19,7 +19,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="70dp" />
+        android:layout_height="100dp" />
 
 
 
@@ -48,8 +48,8 @@
                 android:padding="16dp">
 
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="128dp"
+                    android:layout_height="86dp"
                     android:src="@drawable/ic_financas"
                     app:tint="@color/white" />
 
@@ -67,8 +67,8 @@
                 android:padding="16dp">
 
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="128dp"
+                    android:layout_height="93dp"
                     android:src="@drawable/ic_recompensas"
                     app:tint="@color/white" />
 
@@ -93,8 +93,8 @@
                 android:padding="16dp">
 
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="117dp"
+                    android:layout_height="87dp"
                     android:src="@drawable/ic_videos"
                     app:tint="@color/white" />
 
@@ -111,8 +111,8 @@
                 android:padding="16dp">
 
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="113dp"
+                    android:layout_height="94dp"
                     android:src="@drawable/ic_configuracoes"
                     app:tint="@color/cinza_escuro" />
 
