@@ -25,6 +25,7 @@ public class TelaVideo extends AppCompatActivity {
         // Configura a Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false); // Remove o título
 
         // Habilita o botão de voltar
         if (getSupportActionBar() != null) {
@@ -37,6 +38,7 @@ public class TelaVideo extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             toolbar.setNavigationIcon(R.drawable.ic_botao_back_small); // Substitua por seu ícone personalizado
         }
+
 
         // Configurando os WebViews
         WebView webView = findViewById(R.id.webView);
@@ -54,7 +56,5 @@ public class TelaVideo extends AppCompatActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
-
-
     }
 }

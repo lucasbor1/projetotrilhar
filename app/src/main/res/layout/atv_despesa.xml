@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:background="@color/azul_escuro"
             android:theme="?attr/actionBarTheme"
+            android:title=""
             android:layout_alignParentStart="true"/>
 
         <!-- Logo centralizada na Toolbar -->

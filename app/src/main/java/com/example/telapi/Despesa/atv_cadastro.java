@@ -58,6 +58,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         // Configura a Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false); // Remove o título
 
         // Habilita o botão de voltar
         if (getSupportActionBar() != null) {
@@ -70,6 +71,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             toolbar.setNavigationIcon(R.drawable.ic_botao_back_small); // Substitua por seu ícone personalizado
         }
+
 
         autoCompleteCategoria = findViewById(R.id.autoCompleteCategoria);
         edtDescricao = findViewById(R.id.edtDescricao);

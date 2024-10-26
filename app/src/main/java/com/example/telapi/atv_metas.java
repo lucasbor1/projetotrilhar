@@ -35,6 +35,7 @@ public class atv_metas extends AppCompatActivity {
             // Configura a Toolbar
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayShowTitleEnabled(false); // Remove o título
 
             // Habilita o botão de voltar
             if (getSupportActionBar() != null) {
