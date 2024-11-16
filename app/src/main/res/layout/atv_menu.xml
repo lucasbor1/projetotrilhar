@@ -6,124 +6,148 @@
     android:layout_height="match_parent"
     android:background="#060D41"
     android:orientation="vertical"
-    android:padding="70dp">
+    android:gravity="center">
 
+    <!-- Logo do aplicativo, mais próxima do topo -->
     <ImageView
         android:id="@+id/imageViewLogo"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="247dp"
         android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="0dp"
         android:contentDescription="Logo"
         android:src="@drawable/trilhar_aguia_logo" />
 
+    <!-- Espaço menor entre a logo e os botões -->
     <Space
         android:layout_width="match_parent"
-        android:layout_height="70dp" />
+        android:layout_height="90dp" />
 
-
-
-
+    <!-- Bloco de Botões -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
         android:weightSum="2">
 
-        <!-- Primeiro bloco à esquerda -->
+        <!-- Primeira coluna de ícones -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:gravity="center">
 
+            <!-- Controle Financeiro -->
             <LinearLayout
                 android:id="@+id/controle_financeiro"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:onClick="controlefinanceiro"
-                android:padding="16dp">
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp"
+                android:onClick="controlefinanceiro">
 
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:src="@drawable/ic_financas"
                     app:tint="@color/white" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Financeiro"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center" />
             </LinearLayout>
 
-
-
+            <!-- Metas -->
             <LinearLayout
                 android:id="@+id/metas"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:onClick="metas"
-                android:padding="16dp">
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp"
+                android:onClick="metas">
 
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:src="@drawable/ic_recompensas"
                     app:tint="@color/white" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Metas"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Segundo bloco à direita -->
+        <!-- Segunda coluna de ícones -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:gravity="center">
 
+            <!-- Vídeos -->
             <LinearLayout
                 android:id="@+id/videos"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:onClick="videos"
-                android:padding="16dp">
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp"
+                android:onClick="videos">
 
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:src="@drawable/ic_videos"
                     app:tint="@color/white" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vídeos"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center" />
             </LinearLayout>
 
-
-
+            <!-- Configurações -->
             <LinearLayout
                 android:id="@+id/configuracoes"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp"
+                android:onClick="configuracoes">
 
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:src="@drawable/ic_configuracoes"
-                    app:tint="@color/cinza_escuro" />
+                    app:tint="@color/cinza_medio" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Configurações"
+                    android:textColor="@color/cinza_medio"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </LinearLayout>
