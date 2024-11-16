@@ -14,13 +14,12 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.telapi.R;
 import com.example.telapi.auth.GoogleAuthManager;
 import com.example.telapi.auth.AuthResultListener;
-import com.example.telapi.firebase.FirebaseAuthManager;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.example.telapi.firebase.UserManager;
 
 public class atv_login extends AppCompatActivity implements AuthResultListener {
 
     private GoogleAuthManager googleAuthManager;
-    private FirebaseAuthManager firebaseAuthManager;
+    private UserManager userManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,7 @@ public class atv_login extends AppCompatActivity implements AuthResultListener {
         });
 
         googleAuthManager = new GoogleAuthManager(this, this);
-        firebaseAuthManager = new FirebaseAuthManager(this, this);
+        userManager = new UserManager(this);
     }
 
     public void signInWithGoogle(View view) {
@@ -49,8 +48,8 @@ public class atv_login extends AppCompatActivity implements AuthResultListener {
 
     @Override
     public void onAuthSuccess(String displayName) {
-        // Continue com a lógica de navegação ou obtenção/criação de usuário aqui
-        Toast.makeText(this, "Autenticado com sucesso: " + displayName, Toast.LENGTH_SHORT).show();
+
+        userManager.getOrCreateUser(displayName);
         Intent intent = new Intent(atv_login.this, atv_menu.class);
         startActivity(intent);
         finish();
