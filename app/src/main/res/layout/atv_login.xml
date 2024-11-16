@@ -6,21 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/azul_escuro"
-    tools:context=".MainActivity">
+    tools:context=".atv_login">
 
-    <!-- Imagem de fundo que preenche toda a tela -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/trilhar_aguia_logo" />
-
-    <!-- Logo do aplicativo -->
-
-    <!-- Conteúdo do login com fundo azul -->
-
-    <!-- Botão de login com Google -->
-
-    <!-- Barra de progresso -->
+        android:src="@drawable/trilhar_aguia_logo"
+        android:scaleType="centerInside" />
 
     <LinearLayout
         android:id="@+id/btnGoogleSignIn"
@@ -28,11 +20,11 @@
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="70dp"
-        android:background="@color/cinza_claro"
+        android:background="@drawable/btn_background"
         android:gravity="center"
-        android:onClick="signInWithGoogle"
         android:orientation="horizontal"
-        android:padding="09dp">
+        android:padding="9dp"
+        android:onClick="signInWithGoogle">
 
         <ImageView
             android:layout_width="34dp"
@@ -49,10 +41,4 @@
             android:textSize="15sp" />
     </LinearLayout>
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/azul_escuro">
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
