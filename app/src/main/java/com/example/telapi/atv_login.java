@@ -12,7 +12,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -69,7 +68,7 @@ public class atv_login extends AppCompatActivity {
                 GoogleSignInAccount conta = task.getResult(ApiException.class);
                 autenticarNoFirebase(conta);
             } catch (ApiException e) {
-
+                Log.e(TAG, "Falha ao autenticar com o Google: " + e.getStatusCode(), e);
                 Toast.makeText(atv_login.this, "Falha ao autenticar com o Google.", Toast.LENGTH_SHORT).show();
             }
         }
@@ -81,15 +80,15 @@ public class atv_login extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser usuarioFirebase = autenticacaoFirebase.getCurrentUser();
+                        Log.d(TAG, "Autenticado com sucesso: " + usuarioFirebase.getDisplayName());
                         Toast.makeText(atv_login.this, "Autenticado com sucesso: " + usuarioFirebase.getDisplayName(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(atv_login.this, atv_menu.class);
                         startActivity(intent);
                         finish();
                     } else {
-
+                        Log.e(TAG, "Falha na autenticação com o Firebase", task.getException());
                         Toast.makeText(atv_login.this, "Falha na autenticação com o Firebase.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-
 }
