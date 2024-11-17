@@ -81,7 +81,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         btnExcluir = findViewById(R.id.btnExcluir);
 
         switchDespesaPaga = findViewById(R.id.switchDespesaPaga);
-        imgDespesaStatus = findViewById(R.id.imgDespesaStatus);
+
 
         despesaCRUD = new DespesaCRUD();
         db = FirebaseFirestore.getInstance();
@@ -163,8 +163,6 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         FloatingActionButton btnAddCategoria = findViewById(R.id.btnAddCategoria);
         btnAddCategoria.setOnClickListener(v -> abrirModalCategoria());
-
-        configurarTecladoNumerico();
         getCategorias();
     }
     private Despesa criarDespesa() {
@@ -211,29 +209,6 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         } else {
             imgDespesaStatus.setImageResource(R.drawable.naopago);
         }
-    }
-
-    private void configurarTecladoNumerico() {
-        findViewById(R.id.button0).setOnClickListener(this);
-        findViewById(R.id.button1).setOnClickListener(this);
-        findViewById(R.id.button2).setOnClickListener(this);
-        findViewById(R.id.button3).setOnClickListener(this);
-        findViewById(R.id.button4).setOnClickListener(this);
-        findViewById(R.id.button5).setOnClickListener(this);
-        findViewById(R.id.button6).setOnClickListener(this);
-        findViewById(R.id.button7).setOnClickListener(this);
-        findViewById(R.id.button8).setOnClickListener(this);
-        findViewById(R.id.button9).setOnClickListener(this);
-
-        findViewById(R.id.buttonErase).setOnClickListener(v -> apagarUltimoCaractere());
-    }
-
-    private void apagarUltimoCaractere() {
-        String currentValue = edtValor.getText().toString();
-        if (!currentValue.isEmpty()) {
-            currentValue = currentValue.substring(0, currentValue.length() - 1);
-        }
-        edtValor.setText(currentValue);
     }
 
     private void onNumberClick(View v) {

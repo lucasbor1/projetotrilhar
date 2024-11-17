@@ -7,18 +7,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/azul_escuro"
+    android:padding="16dp"
     tools:context=".Despesa.atv_despesa">
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
+
+    <!-- Espaçamento inicial -->
+    <Space android:layout_width="match_parent" android:layout_height="50dp" />
+
+    <!-- Barra superior com logo -->
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/azul_escuro">
 
-        <!-- Toolbar com ícone de navegação à esquerda -->
+        <!-- Toolbar com logo -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -26,18 +27,18 @@
             android:background="@color/azul_escuro"
             android:theme="?attr/actionBarTheme"
             android:title=""
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true" />
 
-        <!-- Logo centralizada na Toolbar -->
         <ImageView
             android:id="@+id/toolbarLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/trilhar_aguia_logo_toolbar_small"
             android:contentDescription="Logo"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 
+    <!-- Seção do título e botão de adicionar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,115 +46,97 @@
         android:gravity="center_vertical"
         android:padding="16dp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"            >
+            android:text="Minhas Despesas"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:gravity="start" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Minhas Despesas"
-                android:textColor="@color/white"
-                android:textSize="25sp"
-                android:gravity="end"
-                android:paddingEnd="40dp" />
-
-            <ImageButton
-                android:id="@+id/btnAdicionar"
-                android:layout_width="wrap_content"
-                android:layout_height="26dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="8dp"
-                android:src="@drawable/ic_add"
-                app:tint="@color/white"
-                android:layout_gravity="end|center_vertical" />
-
-        </LinearLayout>
-
+        <ImageButton
+            android:id="@+id/btnAdicionar"
+            android:layout_width="66dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:src="@drawable/ic_add"
+            app:tint="@color/white" />
     </LinearLayout>
 
+    <!-- Spinner de meses -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="16dp">
+        android:layout_marginBottom="16dp">
 
         <Spinner
             android:id="@+id/spnMeses"
             android:layout_width="0dp"
-            android:layout_height="51dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
             android:background="@drawable/spinner"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
             android:textColor="@color/white" />
-
-
-
     </LinearLayout>
 
+    <!-- Lista de despesas -->
     <ListView
         android:id="@+id/lstDespesas"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:background="#FFFFFF"
         android:padding="8dp" />
 
+    <!-- Total a pagar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Total a pagar:"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
 
-
         <TextView
             android:id="@+id/edtTotal"
             style="@style/AppTheme.EditTextStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="220dp"
+            android:layout_height="28dp"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:clickable="false"
-            android:ems="10"
-            android:inputType="number"
-            android:longClickable="false"
             android:textColor="#FEFEFE"
             android:textSize="20sp" />
-
-
     </LinearLayout>
 
+    <!-- Saldo a pagar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="0dp">
-
+        android:padding="8dp"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:gravity="start|center_vertical"
             android:text="Saldo a pagar:"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
@@ -162,35 +145,14 @@
             android:id="@+id/edtAberto"
             style="@style/AppTheme.EditTextStyle"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="31dp"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:clickable="false"
-            android:ems="10"
-            android:inputType="number"
-            android:longClickable="false"
             android:textColor="#FEFEFE"
             android:textSize="20sp" />
-
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
 
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:gravity="start|center_vertical"
-            android:text=""
-            android:textColor="#FFFFFF" />
-
-
-    </LinearLayout>
+    <!-- Espaçamento final -->
 
 </LinearLayout>

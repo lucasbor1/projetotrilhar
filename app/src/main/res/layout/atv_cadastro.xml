@@ -7,17 +7,15 @@
     android:layout_height="match_parent"
     android:background="@color/azul_escuro"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".Despesa.atv_cadastro">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
+    <!-- Header with Toolbar and Logo -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/azul_escuro"
-        tools:ignore="ExtraText">
+        android:paddingBottom="16dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -37,398 +35,177 @@
             android:layout_centerInParent="true" />
     </RelativeLayout>
 
-    <FrameLayout
+    <!-- Title Section -->
+    <TextView
+        android:id="@+id/Mod1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        android:background="@color/azul_escuro">
+        android:gravity="center"
+        android:text="Cadastro de Despesa"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"/>
 
-        <TextView
-            android:id="@+id/Mod1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/azul_escuro"
-            android:gravity="center"
-            android:text="Cadastro de Despesa"
-            android:textColor="@color/white"
-            android:textSize="25dp" />
-    </FrameLayout>
-
+    <!-- Category Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="16dp"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:hint="Categoria">
+            android:hint="Categoria"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteCategoria"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textSize="16sp"
-                android:textColor="@color/white" />
+                android:layout_height="52dp"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddCategoria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:foregroundGravity="center"
+            android:layout_marginStart="16dp"
             android:src="@drawable/ic_modal"
             app:backgroundTint="@color/azul_escuro"
             app:tint="@color/white" />
     </LinearLayout>
 
+    <!-- Description Section -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:hint="Descrição"
-        android:textColor="@color/white">
+        android:textColor="@color/white"
+        android:layout_marginBottom="16dp"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtDescricao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:inputType="text"
             android:textSize="16sp"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Due Date Section -->
+
+    <!-- Payment Switch Section -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:layout_height="145dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/imgCalendario"
             android:layout_width="38dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="Ícone de calendário"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:src="@drawable/ic_calendar" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="wrap_content"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:hint="Vencimento"
-            android:gravity="center"
             android:textColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtVencimento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:inputType="date"
-                android:textSize="16sp"
-                android:textColor="@color/white"
+                android:clickable="false"
                 android:focusable="false"
-                android:clickable="false" />
+                android:inputType="date"
+                android:textColor="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pagar"
-            android:textSize="24sp"
             android:textColor="@color/white"
-            android:paddingEnd="8dp" />
+            android:textSize="16sp"
+            android:paddingEnd="16dp"/>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switchDespesaPaga"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
-            app:thumbTint="@color/trocar_cor" />
-
-        <ImageView
-            android:id="@+id/imgDespesaStatus"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="0dp"
-            android:contentDescription="Status da despesa"
-            android:src="@drawable/naopago" />
+            app:thumbTint="@color/trocar_cor"
+            android:textSize="16sp" />
     </LinearLayout>
 
+    <!-- Action Buttons Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="09dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        android:gravity="center_horizontal">
 
         <Button
             android:id="@+id/btnExcluir"
-            style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginEnd="6dp"
-            android:backgroundTint="@color/azul_escuro"
+            android:layout_marginEnd="8dp"
             android:text="EXCLUIR"
-            android:textColor="@color/white" />
+            android:backgroundTint="@color/azul_escuro"
+            android:textColor="@color/white"
+            style="@style/Widget.Material3.Button.IconButton.Filled"/>
 
         <Button
             android:id="@+id/btnGravar"
-            style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/azul_escuro"
             android:text="SALVAR"
-            android:textColor="@color/white" />
+            android:backgroundTint="@color/azul_escuro"
+            android:textColor="@color/white"
+            style="@style/Widget.Material3.Button.IconButton.Filled"/>
     </LinearLayout>
 
+    <!-- Value Section -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_marginTop="16dp"
         android:hint="Valor"
-        android:textColor="@color/white">
+        android:textColor="@color/white"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtValor"
             android:layout_width="match_parent"
-            android:layout_height="66dp"
+            android:layout_height="wrap_content"
             android:clickable="false"
             android:focusable="false"
             android:gravity="center"
             android:inputType="numberDecimal"
             android:text="R$0,00"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <!-- Linha de botões -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/button7"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_cal"
-                android:text="7"
-                android:textColor="#757575"
-                android:textSize="20sp"
-                android:clickable="true"
-                android:elevation="3dp"
-                android:focusable="true"
-                android:gravity="center"
-                android:onClick="onNumberClick" />
-
-            <TextView
-                android:id="@+id/button8"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_cal"
-                android:text="8"
-                android:textColor="#757575"
-                android:textSize="20sp"
-                android:clickable="true"
-                android:elevation="3dp"
-                android:focusable="true"
-                android:gravity="center"
-                android:onClick="onNumberClick" />
-
-            <TextView
-                android:id="@+id/button9"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_cal"
-                android:text="9"
-                android:textColor="#757575"
-                android:textSize="20sp"
-                android:clickable="true"
-                android:elevation="3dp"
-                android:focusable="true"
-                android:gravity="center"
-                android:onClick="onNumberClick" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/button4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_cal"
-                android:text="4"
-                android:textColor="#757575"
-                android:textSize="20sp"
-                android:clickable="true"
-                android:elevation="3dp"
-                android:focusable="true"
-                android:gravity="center"
-                android:onClick="onNumberClick" />
-
-            <TextView
-                android:id="@+id/button5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_cal"
-                android:text="5"
-                android:textColor="#757575"
-                android:textSize="20sp"
-                android:clickable="true"
-                android:elevation="3dp"
-                android:focusable="true"
-                android:gravity="center"
-                android:onClick="onNumberClick" />
-
-            <TextView
-                android:id="@+id/button6"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_cal"
-                android:text="6"
-                android:textColor="#757575"
-                android:textSize="20sp"
-                android:clickable="true"
-                android:elevation="3dp"
-                android:focusable="true"
-                android:gravity="center"
-                android:onClick="onNumberClick" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/button1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_cal"
-                android:text="1"
-                android:textColor="#757575"
-                android:textSize="20sp"
-                android:clickable="true"
-                android:elevation="3dp"
-                android:focusable="true"
-                android:gravity="center"
-                android:onClick="onNumberClick" />
-
-            <TextView
-                android:id="@+id/button2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_cal"
-                android:text="2"
-                android:textColor="#757575"
-                android:textSize="20sp"
-                android:clickable="true"
-                android:elevation="3dp"
-                android:focusable="true"
-                android:gravity="center"
-                android:onClick="onNumberClick" />
-
-            <TextView
-                android:id="@+id/button3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_cal"
-                android:text="3"
-                android:textColor="#757575"
-                android:textSize="20sp"
-                android:clickable="true"
-                android:elevation="3dp"
-                android:focusable="true"
-                android:gravity="center"
-                android:onClick="onNumberClick" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_cal" />
-
-            <TextView
-                android:id="@+id/button0"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_cal"
-                android:text="0"
-                android:textColor="#757575"
-                android:textSize="20sp"
-                android:clickable="true"
-                android:elevation="3dp"
-                android:focusable="true"
-                android:gravity="center"
-                android:onClick="onNumberClick" />
-
-            <TextView
-                android:id="@+id/buttonErase"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_cal"
-                android:text="⌫"
-                android:textColor="#757575"
-                android:textSize="20sp"
-                android:clickable="true"
-                android:elevation="3dp"
-                android:focusable="true"
-                android:gravity="center" />
-        </LinearLayout>
-    </LinearLayout>
 </LinearLayout>

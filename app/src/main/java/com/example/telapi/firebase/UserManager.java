@@ -9,6 +9,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.example.telapi.firebase.User;
 
+import java.util.Objects;
+
 public class UserManager {
     private Context context;
     private FirebaseFirestore db;
@@ -20,8 +22,8 @@ public class UserManager {
         this.auth = FirebaseAuth.getInstance();
     }
 
-    public void getOrCreateUser(String displayName) {
-        String userId = auth.getCurrentUser().getUid();
+    public void getOrCreateUser(String userId) {
+        String displayName = Objects.requireNonNull(auth.getCurrentUser()).getDisplayName();
         DocumentReference userRef = db.collection("usuarios").document(userId);
 
         userRef.get().addOnCompleteListener(task -> {
@@ -40,15 +42,26 @@ public class UserManager {
     }
 
     private void createNewUser(String userId, String displayName) {
+        // Verifica se displayName não é nulo ou vazio antes de prosseguir
+        if (displayName == null || displayName.isEmpty()) {
+            // Exibe uma mensagem de erro (ou não faz nada)
+            Toast.makeText(context, "Erro: Nome inválido.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        User user = new User(displayName, auth.getCurrentUser().getEmail(), userId);
+        // Criação do objeto User com o nome correto
+        User user = new User(displayName, Objects.requireNonNull(auth.getCurrentUser()).getEmail(), userId);
+
+        // Referência do documento do usuário no Firestore
         DocumentReference userRef = db.collection("usuarios").document(userId);
 
+        // Salva os dados do usuário no Firestore
         userRef.set(user).addOnSuccessListener(aVoid -> {
-
+            // Exibe uma mensagem de sucesso com o nome correto
             Toast.makeText(context, "Usuário criado com sucesso: " + displayName, Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(e -> {
-            Toast.makeText(context, "Erro ao criar usuário", Toast.LENGTH_SHORT).show();
+            // Não exibe mensagem de erro ou qualquer outra ação, pois você não quer mostrar nada
         });
     }
+
 }
