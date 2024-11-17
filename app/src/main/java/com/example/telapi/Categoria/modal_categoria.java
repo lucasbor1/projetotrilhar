@@ -16,13 +16,10 @@ import android.widget.Toast;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.telapi.R;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class modal_categoria extends DialogFragment {
     private EditText edtCategoria;
@@ -30,8 +27,9 @@ public class modal_categoria extends DialogFragment {
     private ListView lvCategorias;
     private CategoriaDialogListener mListener;
 
-    private FirebaseFirestore db;
+    private CategoriaCRUD categoriaCRUD;
     private ArrayAdapter<String> categoriaAdapter;
+    private FirebaseAuth auth;
 
     public interface CategoriaDialogListener {
         void onCategoriaAdicionada(String categoria);
@@ -50,27 +48,22 @@ public class modal_categoria extends DialogFragment {
         btnAddCat = view.findViewById(R.id.btnAddCat);
         lvCategorias = view.findViewById(R.id.lvCategorias);
 
-        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        categoriaCRUD = new CategoriaCRUD();  // Instância do CRUD para manipular categorias do usuário
 
-
-        btnAddCat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String novaCategoria = edtCategoria.getText().toString();
-                adicionarCategoria(novaCategoria);
-            }
+        btnAddCat.setOnClickListener(v -> {
+            String novaCategoria = edtCategoria.getText().toString();
+            adicionarCategoria(novaCategoria);
         });
 
-        // Configurar a lista de categorias
         categoriaAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1);
         lvCategorias.setAdapter(categoriaAdapter);
-        lvCategorias.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String categoria = categoriaAdapter.getItem(position);
+        lvCategorias.setOnItemLongClickListener((parent, view1, position, id) -> {
+            String categoria = categoriaAdapter.getItem(position);
+            if (categoria != null) {
                 exibirDialogoConfirmacaoExclusao(categoria);
-                return true;
             }
+            return true;
         });
 
         carregarCategorias();
@@ -79,22 +72,13 @@ public class modal_categoria extends DialogFragment {
 
     private void adicionarCategoria(String novaCategoria) {
         if (!novaCategoria.isEmpty()) {
-            Map<String, Object> data = new HashMap<>();
-            data.put("nome", novaCategoria);
-
-            db.collection("categorias").add(data)
-                    .addOnSuccessListener(documentReference -> {
-                        Toast.makeText(getContext(), "Categoria adicionada com sucesso!", Toast.LENGTH_SHORT).show();
-                        edtCategoria.setText("");
-                        carregarCategorias();
-                        if (mListener != null) {
-                            mListener.onCategoriaAdicionada(novaCategoria);
-                        }
-                        dismiss();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(getContext(), "Erro ao adicionar categoria", Toast.LENGTH_SHORT).show();
-                    });
+            categoriaCRUD.adicionarCategoria(novaCategoria);
+            edtCategoria.setText("");
+            carregarCategorias();
+            if (mListener != null) {
+                mListener.onCategoriaAdicionada(novaCategoria);
+            }
+            dismiss();
         } else {
             Toast.makeText(getContext(), "Por favor, insira o nome da categoria", Toast.LENGTH_SHORT).show();
         }
@@ -103,56 +87,29 @@ public class modal_categoria extends DialogFragment {
     private void exibirDialogoConfirmacaoExclusao(String categoria) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setMessage("Deseja realmente excluir a categoria '" + categoria + "'?")
-                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        excluirCategoria(categoria);
-                    }
-                })
-                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
+                .setPositiveButton("Sim", (dialog, id) -> excluirCategoria(categoria))
+                .setNegativeButton("Não", (dialog, id) -> dialog.dismiss());
         builder.create().show();
     }
 
     private void excluirCategoria(String categoria) {
-        db.collection("categorias")
-                .whereEqualTo("nome", categoria)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (DocumentSnapshot document : queryDocumentSnapshots) {
-                        document.getReference().delete()
-                                .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(getContext(), "Categoria removida com sucesso!", Toast.LENGTH_SHORT).show();
-                                    carregarCategorias(); // Recarregar a lista de categorias
-                                })
-                                .addOnFailureListener(e -> {
-                                    Toast.makeText(getContext(), "Erro ao remover categoria", Toast.LENGTH_SHORT).show();
-                                });
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Erro ao encontrar categoria", Toast.LENGTH_SHORT).show();
-                });
+        categoriaCRUD.removerCategoria(categoria);
+        carregarCategorias();
     }
 
     private void carregarCategorias() {
-        db.collection("categorias")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<String> categorias = new ArrayList<>();
-                    for (DocumentSnapshot document : queryDocumentSnapshots) {
-                        String nomeCategoria = document.getString("nome");
-                        categorias.add(nomeCategoria);
-                    }
-                    categoriaAdapter.clear();
-                    categoriaAdapter.addAll(categorias);
-                    categoriaAdapter.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Erro ao carregar categorias", Toast.LENGTH_SHORT).show();
-                });
-    }
+        categoriaCRUD.listarCategorias(new CategoriaCRUD.CategoriasCallback() {
+            @Override
+            public void onCategoriasLoaded(List<String> categorias) {
+                categoriaAdapter.clear();
+                categoriaAdapter.addAll(categorias);
+                categoriaAdapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onCategoriasFailed(String errorMessage) {
+                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
