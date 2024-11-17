@@ -27,7 +27,7 @@ public class CategoriaCRUD {
         db.collection("usuarios")
                 .document(userId)
                 .collection("categorias")
-                .document(categoria)  
+                .document(categoria)
                 .set(new Categoria(categoria))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

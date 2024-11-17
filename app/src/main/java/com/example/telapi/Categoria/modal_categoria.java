@@ -49,7 +49,7 @@ public class modal_categoria extends DialogFragment {
         lvCategorias = view.findViewById(R.id.lvCategorias);
 
         auth = FirebaseAuth.getInstance();
-        categoriaCRUD = new CategoriaCRUD();  // Instância do CRUD para manipular categorias do usuário
+        categoriaCRUD = new CategoriaCRUD();
 
         btnAddCat.setOnClickListener(v -> {
             String novaCategoria = edtCategoria.getText().toString();
@@ -58,6 +58,14 @@ public class modal_categoria extends DialogFragment {
 
         categoriaAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1);
         lvCategorias.setAdapter(categoriaAdapter);
+        lvCategorias.setOnItemClickListener((parent, view1, position, id) -> {
+            String categoria = categoriaAdapter.getItem(position);
+            if (categoria != null && mListener != null) {
+                mListener.onCategoriaAdicionada(categoria);
+                dismiss();
+            }
+        });
+
         lvCategorias.setOnItemLongClickListener((parent, view1, position, id) -> {
             String categoria = categoriaAdapter.getItem(position);
             if (categoria != null) {
@@ -75,6 +83,7 @@ public class modal_categoria extends DialogFragment {
             categoriaCRUD.adicionarCategoria(novaCategoria);
             edtCategoria.setText("");
             carregarCategorias();
+
             if (mListener != null) {
                 mListener.onCategoriaAdicionada(novaCategoria);
             }
@@ -83,6 +92,7 @@ public class modal_categoria extends DialogFragment {
             Toast.makeText(getContext(), "Por favor, insira o nome da categoria", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void exibirDialogoConfirmacaoExclusao(String categoria) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());

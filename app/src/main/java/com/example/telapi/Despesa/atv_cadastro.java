@@ -5,6 +5,8 @@ import static com.example.telapi.Despesa.atv_despesa.REQUEST_CODE;
 import android.content.Intent;
 import android.icu.text.NumberFormat;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,12 +18,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.telapi.Categoria.Categoria;
 import com.example.telapi.Categoria.CategoriaCRUD;
 import com.example.telapi.Categoria.modal_categoria;
 import com.example.telapi.R;
 import com.example.telapi.calendario;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,6 +52,8 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
     private SwitchMaterial switchDespesaPaga;
     private ImageView imgDespesaStatus;
+    private List<Categoria> categorias;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,23 +61,12 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         EdgeToEdge.enable(this);
         setContentView(R.layout.atv_cadastro);
 
-        // Configura a Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false); // Remove o título
-
-        // Habilita o botão de voltar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        }
-        if (getSupportActionBar() != null) {
-            // Usa um ícone de tamanho maior do drawable
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            toolbar.setNavigationIcon(R.drawable.ic_botao_back_small); // Substitua por seu ícone personalizado
-        }
-
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(R.drawable.ic_botao_back_small);
 
         autoCompleteCategoria = findViewById(R.id.autoCompleteCategoria);
         edtDescricao = findViewById(R.id.edtDescricao);
@@ -79,9 +74,8 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         edtVencimento = findViewById(R.id.edtVencimento);
         btnGravar = findViewById(R.id.btnGravar);
         btnExcluir = findViewById(R.id.btnExcluir);
-
         switchDespesaPaga = findViewById(R.id.switchDespesaPaga);
-
+        imgDespesaStatus = findViewById(R.id.imgDespesaStatus);
 
         despesaCRUD = new DespesaCRUD();
         db = FirebaseFirestore.getInstance();
@@ -89,7 +83,9 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         ImageView imgCalendario = findViewById(R.id.imgCalendario);
         imgCalendario.setOnClickListener(v -> abrirCalendario());
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new String[]{});
+        // Certifique-se de inicializar a lista de categorias antes de usar no adapter
+        categorias = new ArrayList<>(); // Inicializando a lista
+        ArrayAdapter<Categoria> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, categorias);
         autoCompleteCategoria.setAdapter(adapter);
 
         Bundle extras = getIntent().getExtras();
@@ -97,7 +93,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             acao = extras.getString("acao");
             despesa = (Despesa) extras.getSerializable("obj");
         } else {
-            acao = "Inserir";
+            acao = "INSERIR";
             despesa = null;
         }
 
@@ -120,34 +116,63 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         });
 
         btnGravar.setOnClickListener(v -> {
-            Despesa despesaAtualizada = criarDespesa();
-            if (despesaAtualizada != null) {
-                if ("Inserir".equals(acao)) {
-                    despesaCRUD.adicionarDespesa(despesaAtualizada);
-                    Toast.makeText(atv_cadastro.this, "Despesa adicionada com sucesso: " + despesaAtualizada.toString(), Toast.LENGTH_SHORT).show();
+            Despesa despesaAtualizada = criarDespesa(); // Verifique aqui se despesaAtualizada não é null
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                    // Defina a variável novaDespesa aqui
-                    Despesa novaDespesa = despesaAtualizada;
+            if (despesaAtualizada == null) {
+                Toast.makeText(atv_cadastro.this, "Erro ao criar despesa. Tente novamente.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
+            if ("INSERIR".equals(acao)) {
+                String categoriaSelecionada = autoCompleteCategoria.getText().toString();
+
+                // Verifique se a categoria está vazia
+                if (categoriaSelecionada.isEmpty()) {
+                    Toast.makeText(atv_cadastro.this, "Por favor, selecione uma categoria válida.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Encontre a categoria correspondente no banco de dados
+                String categoria = categoriaSelecionada;
+
+                if (categoria == null) {
+                    Toast.makeText(atv_cadastro.this, "Categoria não encontrada", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Tente adicionar a despesa
+                try {
+                    despesaCRUD.adicionarDespesa(userId, categoria, despesaAtualizada);
+                    Toast.makeText(atv_cadastro.this, "Despesa adicionada com sucesso", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
-                    intent.putExtra("nova_despesa", novaDespesa);
+                    intent.putExtra("nova_despesa", despesaAtualizada);
                     setResult(RESULT_OK, intent);
                     finish();
-                } else if ("ALTERAR".equals(acao)) {
-                    despesaCRUD.alterarDespesa(despesaAtualizada);
-                    Toast.makeText(atv_cadastro.this, "Despesa atualizada com sucesso: " + despesaAtualizada.toString(), Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(atv_cadastro.this, "Erro ao adicionar despesa: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+            } else if ("ALTERAR".equals(acao)) {
+                try {
+                    despesaCRUD.alterarDespesa(userId, despesa.getCategoria(), despesaAtualizada);
+                    Toast.makeText(atv_cadastro.this, "Despesa atualizada com sucesso", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     intent.putExtra("despesa_atualizada", despesaAtualizada);
                     setResult(RESULT_OK, intent);
                     finish();
+                } catch (Exception e) {
+                    Toast.makeText(atv_cadastro.this, "Erro ao atualizar despesa: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+
         btnExcluir.setOnClickListener(v -> {
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             if (despesa != null) {
                 Log.d("atv_cadastro", "Tentando remover despesa com ID: " + despesa.getId());
-                despesaCRUD.removerDespesa(despesa.getId());
+                despesaCRUD.removerDespesa(userId, despesa.getCategoria(), despesa.getId());
                 Toast.makeText(atv_cadastro.this, "Despesa removida com sucesso", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();
                 intent.putExtra("despesa_removida", despesa);
@@ -158,15 +183,35 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-
         edtVencimento.setOnClickListener(v -> abrirCalendario());
 
         FloatingActionButton btnAddCategoria = findViewById(R.id.btnAddCategoria);
         btnAddCategoria.setOnClickListener(v -> abrirModalCategoria());
         getCategorias();
+
+        edtValor.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                formatarValor();
+            }
+        });
     }
+
+
     private Despesa criarDespesa() {
-        String categoria = autoCompleteCategoria.getText().toString();
+        String categoriaSelecionada = autoCompleteCategoria.getText().toString();
+
+        if (categoriaSelecionada.isEmpty()) {
+            Toast.makeText(this, "Por favor, selecione uma categoria válida.", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
         String descricao = edtDescricao.getText().toString();
         String valorStr = edtValor.getText().toString().replace("R$", "").replaceAll("[^\\d,]", "").replace(",", ".");
         double valor = valorStr.isEmpty() ? 0.0 : Double.parseDouble(valorStr);
@@ -174,16 +219,15 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         boolean isPaga = switchDespesaPaga.isChecked();
 
-        if (categoria.isEmpty() || descricao.isEmpty() || valor <= 0 || dataVencimentoStr.isEmpty()) {
+        if (descricao.isEmpty() || valor <= 0 || dataVencimentoStr.isEmpty()) {
             Toast.makeText(this, "Por favor, preencha todos os campos corretamente.", Toast.LENGTH_SHORT).show();
             return null;
         }
 
         String id = (despesa != null && despesa.getId() != null) ? despesa.getId() : UUID.randomUUID().toString();
 
-        return new Despesa(id, categoria, descricao, valor, dataVencimentoStr, isPaga);
+        return new Despesa(id, categoriaSelecionada, descricao, valor, dataVencimentoStr, isPaga);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -192,12 +236,12 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null && data.hasExtra("nova_despesa")) {
                 Despesa novaDespesa = (Despesa) data.getSerializableExtra("nova_despesa");
-
             }
         }
     }
 
     private void preencherCamposDespesa() {
+        // Preenche com o nome da categoria
         autoCompleteCategoria.setText(despesa.getCategoria());
         edtDescricao.setText(despesa.getDescricao());
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
@@ -210,6 +254,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             imgDespesaStatus.setImageResource(R.drawable.naopago);
         }
     }
+
 
     private void onNumberClick(View v) {
         TextView button = (TextView) v;
@@ -248,9 +293,68 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             String dataSelecionada = String.format("%02d/%02d/%d", dayOfMonth, monthOfYear + 1, year);
             edtVencimento.setText(dataSelecionada);
         }, ano, mes, dia);
-
         datePickerDialog.show();
     }
+
+    private void getCategorias() {
+        CollectionReference categoriasRef = db.collection("categorias");
+        categoriasRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                categorias.clear();
+                for (DocumentSnapshot document : task.getResult()) {
+                    Categoria categoria = document.toObject(Categoria.class);
+                    categorias.add(categoria);
+                    Log.d("atv_cadastro", "Categoria carregada: " + categoria.getCategoria());
+                }
+
+                ArrayAdapter<Categoria> adapter = new ArrayAdapter<>(atv_cadastro.this, android.R.layout.simple_dropdown_item_1line, categorias);
+                autoCompleteCategoria.setAdapter(adapter);
+            } else {
+                Toast.makeText(atv_cadastro.this, "Falha ao carregar categorias", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
+    private boolean isFormatting = false; // Flag para evitar loop infinito
+
+
+
+    private void formatarValor() {
+        if (isFormatting) return;  // Se já estamos formatando, não faça nada
+
+        isFormatting = true; // Inicia a formatação
+        String valorStr = edtValor.getText().toString().replace("R$", "").replaceAll("[^\\d,]", "").replace(",", ".");
+
+        if (valorStr.isEmpty()) {
+            edtValor.setText("R$0,00");  // Garantir que o campo tenha um valor inicial
+            edtValor.setSelection(4);  // Manter o cursor na posição correta
+            isFormatting = false;
+            return;
+        }
+
+        double valor = valorStr.isEmpty() ? 0.0 : Double.parseDouble(valorStr);
+
+        // Formatar o valor como moeda
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+        String valorFormatado = currencyFormat.format(valor);
+
+        // Remover temporariamente o TextWatcher
+      //  edtValor.removeTextChangedListener(valorTextWatcher);
+
+        // Atualizar o campo de texto com o valor formatado
+        edtValor.setText(valorFormatado);
+        edtValor.setSelection(valorFormatado.length());  // Manter o cursor no final
+
+        // Adicionar o TextWatcher novamente
+       // edtValor.addTextChangedListener(valorTextWatcher);
+
+        isFormatting = false;  // Finaliza a formatação
+    }
+
+
+
 
     private String formatarData(java.util.Date data) {
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
@@ -285,34 +389,9 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
         modal.show(getSupportFragmentManager(), "modal_categoria");
     }
-
-    private void getCategorias() {
-        CollectionReference categoriasRef = db.collection("categorias");
-
-        categoriasRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                List<String> categorias = new ArrayList<>();
-                for (DocumentSnapshot document : task.getResult()) {
-                    String nomeCategoria = document.getString("nome");
-                    categorias.add(nomeCategoria);
-                }
-
-                String[] categoriasArray = categorias.toArray(new String[0]);
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(atv_cadastro.this, android.R.layout.simple_dropdown_item_1line, categoriasArray);
-                autoCompleteCategoria.setAdapter(adapter);
-            }
-        });
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            // Finaliza a atividade atual e retorna à anterior
-            finish();
-            return true;
-        }
+        finish();
         return super.onOptionsItemSelected(item);
-
-
     }
 }

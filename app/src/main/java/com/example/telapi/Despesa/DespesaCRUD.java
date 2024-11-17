@@ -9,10 +9,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DespesaCRUD {
     private FirebaseFirestore db;
@@ -21,15 +17,18 @@ public class DespesaCRUD {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void adicionarDespesa(Despesa despesa) {
-        Log.d("DespesaCRUD", "Adicionando despesa: " + despesa.toString());
-        db.collection("despesas").add(despesa)
+    public void adicionarDespesa(String userId, String categoriaId, Despesa despesa) {
+        db.collection("usuarios")
+                .document(userId)
+                .collection("categorias")
+                .document(categoriaId)
+                .collection("despesas")
+                .add(despesa)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if (task.isSuccessful()) {
                             Log.d("DespesaCRUD", "Despesa adicionada com ID: " + task.getResult().getId());
-
                         } else {
                             Log.e("DespesaCRUD", "Erro ao adicionar despesa", task.getException());
                         }
@@ -37,16 +36,20 @@ public class DespesaCRUD {
                 });
     }
 
-    public void alterarDespesa(Despesa despesa) {
-        Log.d("DespesaCRUD", "Alterando despesa: " + despesa.toString());
-        DocumentReference docRef = db.collection("despesas").document(despesa.getId());
+    public void alterarDespesa(String userId, String categoriaId, Despesa despesa) {
+        DocumentReference docRef = db.collection("usuarios")
+                .document(userId)
+                .collection("categorias")
+                .document(categoriaId)
+                .collection("despesas")
+                .document(despesa.getId());
+
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.d("DespesaCRUD", "Documento existe, atualizando...");
                         docRef.set(despesa).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -67,15 +70,19 @@ public class DespesaCRUD {
         });
     }
 
-    public void removerDespesa(String idDespesa) {
-        Log.d("DespesaCRUD", "Tentando remover despesa com ID: " + idDespesa);
-
+    public void removerDespesa(String userId, String categoriaId, String idDespesa) {
         if (idDespesa == null || idDespesa.isEmpty()) {
             Log.e("DespesaCRUD", "ID da despesa inválido.");
             return;
         }
 
-        DocumentReference docRef = db.collection("despesas").document(idDespesa);
+        DocumentReference docRef = db.collection("usuarios")
+                .document(userId)
+                .collection("categorias")
+                .document(categoriaId)
+                .collection("despesas")
+                .document(idDespesa);
+
         docRef.delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -88,6 +95,4 @@ public class DespesaCRUD {
                     }
                 });
     }
-
-
 }

@@ -143,17 +143,23 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
             android:text="Pagar"
             android:textColor="@color/white"
-            android:textSize="16sp"
-            android:paddingEnd="16dp"/>
+            android:textSize="24sp" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switchDespesaPaga"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:thumbTint="@color/trocar_cor"
-            android:textSize="16sp" />
+            android:textSize="24sp"
+            app:thumbTint="@color/trocar_cor" />
+
+        <ImageView
+            android:id="@+id/imgDespesaStatus"
+            android:layout_width="78dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/naopago" />
     </LinearLayout>
 
     <!-- Action Buttons Section -->
@@ -199,13 +205,13 @@
             android:id="@+id/edtValor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
             android:gravity="center"
             android:inputType="numberDecimal"
             android:text="R$0,00"
             android:textColor="@color/white"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:importantForAccessibility="yes"/>
+
     </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

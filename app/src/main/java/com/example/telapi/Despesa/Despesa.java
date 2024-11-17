@@ -15,31 +15,16 @@ public class Despesa implements Serializable {
     private double valor;
     private String vencimento;
     private String categoria;
-    private  boolean pago;
+    private boolean pago;
 
+    // Construtor sem parâmetros
     public Despesa() {
-
+        this.id = UUID.randomUUID().toString();
     }
 
-    public boolean isAtrasada() {
-
-        Calendar hoje = Calendar.getInstance();
-
-        Calendar dataVencimento = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        try {
-            dataVencimento.setTime(sdf.parse(this.getVencimento()));
-        } catch (ParseException | java.text.ParseException e) {
-            e.printStackTrace();
-
-            return false;
-        }
-
-        return hoje.after(dataVencimento);
-    }
-
+    // Construtor com parâmetros
     public Despesa(String id, String categoria, String descricao, double valor, String vencimento, boolean pago) {
-        this.id = id;
+        this.id = id != null ? id : UUID.randomUUID().toString();
         this.categoria = categoria;
         this.descricao = descricao;
         this.valor = valor;
@@ -47,16 +32,25 @@ public class Despesa implements Serializable {
         this.pago = pago;
     }
 
+
+    public boolean isAtrasada() {
+        Calendar hoje = Calendar.getInstance();
+        Calendar dataVencimento = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+        try {
+            Date data = sdf.parse(this.getVencimento());
+            if (data != null) {
+                dataVencimento.setTime(data);
+                return hoje.after(dataVencimento);
+            }
+        } catch (ParseException | java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     // Getters e Setters
-
-    public boolean isPago() {
-        return pago;
-    }
-
-    public void setPago(boolean pago) {
-        this.pago = pago;
-    }
-
     public String getId() {
         return id;
     }
@@ -97,10 +91,18 @@ public class Despesa implements Serializable {
         this.categoria = categoria;
     }
 
+    public boolean isPago() {
+        return pago;
+    }
+
+    public void setPago(boolean pago) {
+        this.pago = pago;
+    }
+
     @Override
     public String toString() {
         return descricao + '\n' +
-               + valor +
-                "\n'" + vencimento;
+                "Valor: R$" + String.format(Locale.getDefault(), "%.2f", valor) + '\n' +
+                "Vencimento: " + vencimento;
     }
 }
