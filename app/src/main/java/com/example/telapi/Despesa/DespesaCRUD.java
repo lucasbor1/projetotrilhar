@@ -1,98 +1,98 @@
 package com.example.telapi.Despesa;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import com.example.telapi.DBHelper;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+public class DespesaCRUD implements DespesaRepository {
+    private DBHelper dbHelper;
+    private SQLiteDatabase database;
+    private Context context;
 
-public class DespesaCRUD {
-    private FirebaseFirestore db;
-
-    public DespesaCRUD() {
-        db = FirebaseFirestore.getInstance();
+    public DespesaCRUD(Context context, String userId) {
+        dbHelper = new DBHelper(context, userId);
+        database = dbHelper.openDatabase();
+        this.context = context;
     }
 
-    public void adicionarDespesa(String userId, String categoriaId, Despesa despesa) {
-        db.collection("usuarios")
-                .document(userId)
-                .collection("categorias")
-                .document(categoriaId)
-                .collection("despesas")
-                .add(despesa)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("DespesaCRUD", "Despesa adicionada com ID: " + task.getResult().getId());
-                        } else {
-                            Log.e("DespesaCRUD", "Erro ao adicionar despesa", task.getException());
-                        }
-                    }
-                });
+    public void adicionarDespesa(Despesa despesa) {
+        ContentValues values = new ContentValues();
+        values.put("categoria", despesa.getCategoria());
+        values.put("descricao", despesa.getDescricao());
+        values.put("valor", despesa.getValor());
+        values.put("vencimento", despesa.getVencimento());
+        values.put("pago", despesa.isPago() ? 1 : 0);
+
+        long resultado = database.insert("despesas", null, values);
+        if (resultado == -1) {
+            Toast.makeText(context, "Erro ao adicionar despesa", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Despesa adicionada com sucesso", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public void alterarDespesa(String userId, String categoriaId, Despesa despesa) {
-        DocumentReference docRef = db.collection("usuarios")
-                .document(userId)
-                .collection("categorias")
-                .document(categoriaId)
-                .collection("despesas")
-                .document(despesa.getId());
+    public void alterarDespesa(Despesa despesa) {
+        ContentValues values = new ContentValues();
+        values.put("categoria", despesa.getCategoria());
+        values.put("descricao", despesa.getDescricao());
+        values.put("valor", despesa.getValor());
+        values.put("vencimento", despesa.getVencimento());
+        values.put("pago", despesa.isPago() ? 1 : 0);
 
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        docRef.set(despesa).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d("DespesaCRUD", "Despesa alterada com ID: " + despesa.getId());
-                                } else {
-                                    Log.e("DespesaCRUD", "Erro ao alterar despesa", task.getException());
-                                }
-                            }
-                        });
-                    } else {
-                        Log.d("DespesaCRUD", "Documento não existe, não é possível atualizar.");
-                    }
-                } else {
-                    Log.e("DespesaCRUD", "Erro ao verificar existência do documento", task.getException());
-                }
-            }
-        });
+        int resultado = database.update("despesas", values, "id = ?", new String[]{String.valueOf(despesa.getId())});
+        if (resultado > 0) {
+            Toast.makeText(context, "Despesa atualizada com sucesso", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Erro ao atualizar despesa", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public void removerDespesa(String userId, String categoriaId, String idDespesa) {
-        if (idDespesa == null || idDespesa.isEmpty()) {
-            Log.e("DespesaCRUD", "ID da despesa inválido.");
-            return;
+    @Override
+    public void removerDespesa(int id) {
+        database.delete("despesas", "id = ?", new String[]{String.valueOf(id)});
+    }
+
+    @Override
+    public List<Despesa> listarDespesas() {
+        List<Despesa> despesas = new ArrayList<>();
+
+        if (database == null || !database.isOpen()) {
+            database = dbHelper.openDatabase();
         }
 
-        DocumentReference docRef = db.collection("usuarios")
-                .document(userId)
-                .collection("categorias")
-                .document(categoriaId)
-                .collection("despesas")
-                .document(idDespesa);
+        Cursor cursor = database.query("despesas", null, null, null, null, null, null);
 
-        docRef.delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("DespesaCRUD", "Despesa removida com ID: " + idDespesa);
-                        } else {
-                            Log.e("DespesaCRUD", "Erro ao remover despesa", task.getException());
-                        }
-                    }
-                });
+        if (cursor != null && cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("id");
+            int categoriaIndex = cursor.getColumnIndex("categoria");
+            int descricaoIndex = cursor.getColumnIndex("descricao");
+            int valorIndex = cursor.getColumnIndex("valor");
+            int vencimentoIndex = cursor.getColumnIndex("vencimento");
+            int pagoIndex = cursor.getColumnIndex("pago");
+
+            do {
+                int id = idIndex != -1 ? cursor.getInt(idIndex) : 0;
+                String categoria = categoriaIndex != -1 ? cursor.getString(categoriaIndex) : "";
+                String descricao = descricaoIndex != -1 ? cursor.getString(descricaoIndex) : "";
+                double valor = valorIndex != -1 ? cursor.getDouble(valorIndex) : 0.0;
+                String vencimento = vencimentoIndex != -1 ? cursor.getString(vencimentoIndex) : "";
+                boolean pago = pagoIndex != -1 && cursor.getInt(pagoIndex) == 1;
+
+                Despesa despesa = new Despesa(id, categoria, descricao, valor, vencimento, pago);
+                despesas.add(despesa);
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return despesas;
     }
+
 }

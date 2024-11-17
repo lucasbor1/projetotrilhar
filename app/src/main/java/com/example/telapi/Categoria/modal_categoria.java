@@ -1,18 +1,18 @@
 package com.example.telapi.Categoria;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.telapi.R;
@@ -29,39 +29,36 @@ public class modal_categoria extends DialogFragment {
 
     private CategoriaCRUD categoriaCRUD;
     private ArrayAdapter<String> categoriaAdapter;
-    private FirebaseAuth auth;
+    private String userId;
 
     public interface CategoriaDialogListener {
-        void onCategoriaAdicionada(String categoria);
-        void onCategoriaRemovida(String categoriaId);
+        void onCategoriaSelecionada(String nomeCategoria);
+        void onCategoriaRemovida(String nomeCategoria);
+        void onCategoriaAdicionada(String nomeCategoria);
     }
 
     public void setCategoriaDialogListener(CategoriaDialogListener listener) {
-        mListener = listener;
+        this.mListener = listener;
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.categorias, container, false);
-        edtCategoria = view.findViewById(R.id.edtCategoria);
-        btnAddCat = view.findViewById(R.id.btnAddCat);
-        lvCategorias = view.findViewById(R.id.lvCategorias);
+        inicializarComponentes(view);
 
-        auth = FirebaseAuth.getInstance();
-        categoriaCRUD = new CategoriaCRUD();
+        userId = FirebaseAuth.getInstance().getCurrentUser() != null ? FirebaseAuth.getInstance().getCurrentUser().getUid() : "default_user";
+        categoriaCRUD = new CategoriaCRUD(requireContext(), userId);
 
         btnAddCat.setOnClickListener(v -> {
-            String novaCategoria = edtCategoria.getText().toString();
+            String novaCategoria = edtCategoria.getText().toString().trim();
             adicionarCategoria(novaCategoria);
         });
 
-        categoriaAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1);
-        lvCategorias.setAdapter(categoriaAdapter);
         lvCategorias.setOnItemClickListener((parent, view1, position, id) -> {
-            String categoria = categoriaAdapter.getItem(position);
-            if (categoria != null && mListener != null) {
-                mListener.onCategoriaAdicionada(categoria);
+            String categoriaSelecionada = categoriaAdapter.getItem(position);
+            if (categoriaSelecionada != null && mListener != null) {
+                mListener.onCategoriaSelecionada(categoriaSelecionada);
                 dismiss();
             }
         });
@@ -78,48 +75,69 @@ public class modal_categoria extends DialogFragment {
         return view;
     }
 
-    private void adicionarCategoria(String novaCategoria) {
-        if (!novaCategoria.isEmpty()) {
-            categoriaCRUD.adicionarCategoria(novaCategoria);
-            edtCategoria.setText("");
-            carregarCategorias();
+    private void inicializarComponentes(View view) {
+        edtCategoria = view.findViewById(R.id.edtCategoria);
+        btnAddCat = view.findViewById(R.id.btnAddCat);
+        lvCategorias = view.findViewById(R.id.lvCategorias);
 
-            if (mListener != null) {
-                mListener.onCategoriaAdicionada(novaCategoria);
-            }
-            dismiss();
-        } else {
-            Toast.makeText(getContext(), "Por favor, insira o nome da categoria", Toast.LENGTH_SHORT).show();
-        }
+        categoriaAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1);
+        lvCategorias.setAdapter(categoriaAdapter);
     }
 
+    private void adicionarCategoria(String novaCategoria) {
+        if (novaCategoria.isEmpty()) {
+            Toast.makeText(getContext(), "Por favor, insira o nome da categoria", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (categoriaCRUD.categoriaJaExiste(novaCategoria)) {
+            Toast.makeText(getContext(), "Categoria já existente", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        categoriaCRUD.adicionarCategoria(novaCategoria);
+        edtCategoria.setText("");
+        carregarCategorias();
+
+        if (mListener != null) {
+            mListener.onCategoriaAdicionada(novaCategoria);
+        }
+    }
 
     private void exibirDialogoConfirmacaoExclusao(String categoria) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setMessage("Deseja realmente excluir a categoria '" + categoria + "'?")
                 .setPositiveButton("Sim", (dialog, id) -> excluirCategoria(categoria))
-                .setNegativeButton("Não", (dialog, id) -> dialog.dismiss());
-        builder.create().show();
+                .setNegativeButton("Não", (dialog, id) -> dialog.dismiss())
+                .create()
+                .show();
     }
 
     private void excluirCategoria(String categoria) {
         categoriaCRUD.removerCategoria(categoria);
         carregarCategorias();
+
+        if (mListener != null) {
+            mListener.onCategoriaRemovida(categoria);
+        }
     }
 
     private void carregarCategorias() {
-        categoriaCRUD.listarCategorias(new CategoriaCRUD.CategoriasCallback() {
-            @Override
-            public void onCategoriasLoaded(List<String> categorias) {
-                categoriaAdapter.clear();
-                categoriaAdapter.addAll(categorias);
-                categoriaAdapter.notifyDataSetChanged();
-            }
+        List<String> categorias = categoriaCRUD.listarCategorias();
+        if (categorias == null) {
+            categorias = new ArrayList<>();
+        }
 
-            @Override
-            public void onCategoriasFailed(String errorMessage) {
-                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });
+        categoriaAdapter.clear();
+        categoriaAdapter.addAll(categorias);
+        categoriaAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (categoriaCRUD != null) {
+            categoriaCRUD.close();
+        }
     }
 }

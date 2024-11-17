@@ -6,20 +6,27 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.telapi.R;
-import com.example.telapi.auth.GoogleAuthManager;
+import com.example.telapi.auth.AuthManager;
 import com.example.telapi.auth.AuthResultListener;
-import com.example.telapi.firebase.UserManager;
 
 public class atv_login extends AppCompatActivity implements AuthResultListener {
+    private AuthManager authManager;
 
-    private GoogleAuthManager googleAuthManager;
-    private UserManager userManager;
+    private final ActivityResultLauncher<Intent> googleSignInLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    authManager.handleSignInResult(result.getData());
+                } else {
+                    Toast.makeText(this, "Falha na autenticação com Google", Toast.LENGTH_SHORT).show();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,25 +39,20 @@ public class atv_login extends AppCompatActivity implements AuthResultListener {
             return insets;
         });
 
-        googleAuthManager = new GoogleAuthManager(this, this);
-        userManager = new UserManager(this);
+        // Inicializar o AuthManager
+        authManager = new AuthManager(this, this, googleSignInLauncher);
     }
 
+    // Método chamado ao clicar no botão de login
     public void signInWithGoogle(View view) {
-        googleAuthManager.signIn();
+        authManager.signInWithGoogle();
     }
 
+    // Método chamado após a autenticação bem-sucedida
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        googleAuthManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onAuthSuccess(String displayName) {
-
-        userManager.getOrCreateUser(displayName);
-        Intent intent = new Intent(atv_login.this, atv_menu.class);
+    public void onAuthSuccess(String userId) {
+        MyApp.getInstance().setUserId(userId);
+        Intent intent = new Intent(this, atv_menu.class);
         startActivity(intent);
         finish();
     }

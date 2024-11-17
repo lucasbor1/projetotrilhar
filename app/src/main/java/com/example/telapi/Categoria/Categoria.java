@@ -1,21 +1,20 @@
 package com.example.telapi.Categoria;
 
 public class Categoria {
-    private String categoria;
+    private String nome;
 
     public Categoria() {
-
     }
 
-    public Categoria(String categoria) {
-        this.categoria = categoria;
+    public Categoria(String nome) {
+        this.nome = nome;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getNome() {
+        return nome;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }
