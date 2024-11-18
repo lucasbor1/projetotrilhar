@@ -49,14 +49,12 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         EdgeToEdge.enable(this);
         setContentView(R.layout.atv_cadastro);
 
-        // Configuração da Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-        // Inicializar os componentes
         autoCompleteCategoria = findViewById(R.id.autoCompleteCategoria);
         edtDescricao = findViewById(R.id.edtDescricao);
         edtValor = findViewById(R.id.edtValor);
@@ -81,13 +79,11 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             btnExcluir.setVisibility(View.GONE);
         }
 
-        // Configurar Listeners
         btnAddCategoria.setOnClickListener(this);
         findViewById(R.id.imgCalendario).setOnClickListener(this);
         findViewById(R.id.btnGravar).setOnClickListener(this);
         btnExcluir.setOnClickListener(this);
 
-        // Listener para formatação do campo de valor
         edtValor.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -187,13 +183,12 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         if (despesas != null && !despesas.isEmpty()) {
             Log.d("atv_cadastro", "Despesas atualizadas: " + despesas.size() + " despesas.");
 
-            // Passando a lista de despesas atualizada de volta para a atividade pai (atv_despesa)
             Intent intent = new Intent();
-            intent.putExtra("despesas", (ArrayList<Despesa>) despesas);  // Adicionando a lista de despesas ao Intent
-            setResult(RESULT_OK, intent);  // Definindo o resultado da operação
+            intent.putExtra("despesas", (ArrayList<Despesa>) despesas);
+            setResult(RESULT_OK, intent);
 
             Log.d("atv_cadastro", "Resultado OK enviado.");
-            finish();  // Finalizando a atividade de cadastro
+            finish();
         } else {
             Log.d("atv_cadastro", "Lista de despesas vazia ou nula.");
         }

@@ -2,6 +2,7 @@ package com.example.telapi.Despesa;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.util.Log;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
@@ -27,6 +28,19 @@ public class DespesaFormHandler {
         this.edtValor = edtValor;
         this.edtVencimento = edtVencimento;
         this.switchDespesaPaga = switchDespesaPaga;
+
+        edtValor.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(android.text.Editable s) {
+                formatarValor();
+            }
+        });
     }
 
     public Despesa obterDespesa(int id) {
@@ -38,12 +52,24 @@ public class DespesaFormHandler {
         String valorStr = edtValor.getText().toString()
                 .replace("R$", "")
                 .replace("\u00A0", "")
-                .replaceAll("[^\\d.,]", "")
-                .replace(",", ".");
-        double valor = valorStr.isEmpty() ? 0.0 : Double.parseDouble(valorStr);
+                .trim();
+
+        double valor = 0.0;
+
+        try {
+            // Usando NumberFormat para converter o valor corretamente
+            NumberFormat format = NumberFormat.getInstance(new Locale("pt", "BR"));
+            Number number = format.parse(valorStr);
+            if (number != null) {
+                valor = number.doubleValue();
+            }
+        } catch (Exception e) {
+            Log.e("DespesaFormHandler", "Erro ao converter valor: " + e.getMessage());
+        }
 
         return new Despesa(id, categoria, descricao, valor, vencimento, pago);
     }
+
 
     public void setCategoria(String categoria) {
         autoCompleteCategoria.setText(categoria);
@@ -83,29 +109,37 @@ public class DespesaFormHandler {
 
         datePickerDialog.show();
     }
-
     public void formatarValor() {
         if (isFormatting) return;
         isFormatting = true;
 
-        String valorStr = edtValor.getText().toString()
-                .replace("R$", "")
-                .replace("\u00A0", "")
-                .replaceAll("[^\\d.,]", "")
-                .replace(",", ".");
-        if (valorStr.isEmpty()) {
-            edtValor.setText("R$0,00");
-            edtValor.setSelection(4);
+        try {
+            String valorStr = edtValor.getText().toString()
+                    .replace("R$", "")
+                    .replace("\u00A0", "")
+                    .replaceAll("[^\\d]", "");
+
+            if (valorStr.isEmpty()) {
+                edtValor.setText("R$ 0,00");
+                edtValor.setSelection(5);
+                isFormatting = false;
+                return;
+            }
+
+            double valor = Double.parseDouble(valorStr) / 100.0;
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+            String valorFormatado = currencyFormat.format(valor);
+
+            edtValor.setText(valorFormatado);
+            edtValor.setSelection(valorFormatado.length());
+
+        } catch (NumberFormatException e) {
+            Log.e("DespesaFormHandler", "Erro ao formatar valor: " + e.getMessage());
+            edtValor.setText("R$ 0,00");
+            edtValor.setSelection(5);
+        } finally {
             isFormatting = false;
-            return;
         }
-
-        double valor = Double.parseDouble(valorStr);
-        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-        String valorFormatado = currencyFormat.format(valor);
-
-        edtValor.setText(valorFormatado);
-        edtValor.setSelection(valorFormatado.length());
-        isFormatting = false;
     }
+
 }

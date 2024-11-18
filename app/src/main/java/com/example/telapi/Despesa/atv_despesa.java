@@ -136,7 +136,6 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            // Obter a ação realizada (inserir, atualizar ou remover)
             String acao = data.getStringExtra("acao");
             Despesa despesaAtualizada = (Despesa) data.getSerializableExtra("despesa");
 

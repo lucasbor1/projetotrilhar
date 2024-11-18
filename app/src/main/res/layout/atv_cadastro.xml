@@ -208,10 +208,11 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:inputType="numberDecimal"
-            android:text="R$0,00"
+            android:hint="R$ 0,00"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:importantForAccessibility="yes"/>
+
 
     </com.google.android.material.textfield.TextInputLayout>
 
