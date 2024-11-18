@@ -95,4 +95,31 @@ public class DespesaCRUD implements DespesaRepository {
         return despesas;
     }
 
+    public double obterTotalMensal(String mes) {
+        double totalMensal = 0;
+        Cursor cursor = database.rawQuery(
+                "SELECT SUM(valor) FROM despesas WHERE substr(vencimento, 4, 2) = ?",
+                new String[]{String.format("%02d", Integer.parseInt(mes))}
+        );
+        if (cursor.moveToFirst() && !cursor.isNull(0)) {
+            totalMensal = cursor.getDouble(0);
+        }
+        cursor.close();
+        return totalMensal;
+    }
+
+    public double obterTotalEmAberto(String mes) {
+        double totalAberto = 0;
+        Cursor cursor = database.rawQuery(
+                "SELECT SUM(valor) FROM despesas WHERE substr(vencimento, 4, 2) = ? AND pago = 0",
+                new String[]{String.format("%02d", Integer.parseInt(mes))}
+        );
+        if (cursor.moveToFirst() && !cursor.isNull(0)) {
+            totalAberto = cursor.getDouble(0);
+        }
+        cursor.close();
+        return totalAberto;
+    }
+
+
 }

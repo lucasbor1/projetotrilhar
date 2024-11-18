@@ -93,67 +93,63 @@
     <ListView
         android:id="@+id/lstDespesas"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="346dp"
         android:layout_weight="1"
         android:background="#FFFFFF"
-        android:padding="8dp" />
+        android:padding="0dp" />
 
-    <!-- Total a pagar -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="8dp"
-        android:gravity="center_vertical">
+        android:padding="0dp">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Total a pagar:"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/edtTotal"
-            style="@style/AppTheme.EditTextStyle"
-            android:layout_width="220dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:clickable="false"
-            android:textColor="#FEFEFE"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <!-- Saldo a pagar -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Saldo a pagar:"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/edtAberto"
-            style="@style/AppTheme.EditTextStyle"
+        <!-- Total a pagar -->
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="8dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:clickable="false"
-            android:textColor="#FEFEFE"
-            android:textSize="20sp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="0dp">
+
+            <TextView
+                android:id="@+id/edtTotal"
+                style="@style/AppTheme.EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:clickable="false"
+                android:gravity="start"
+                android:text="R$0,00"
+                android:textColor="#FEFEFE"
+                android:textSize="14sp"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <!-- Saldo a pagar -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="0dp">
+
+            <TextView
+                android:id="@+id/edtAberto"
+                style="@style/AppTheme.EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:clickable="false"
+                android:gravity="start"
+                android:text="R$0,00"
+                android:textColor="#FEFEFE"
+                android:textSize="14sp"
+                android:visibility="visible" />
+        </LinearLayout>
     </LinearLayout>
-
-    <!-- Espaçamento final -->
-
 </LinearLayout>
