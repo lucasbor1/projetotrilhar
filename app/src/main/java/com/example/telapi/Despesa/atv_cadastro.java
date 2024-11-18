@@ -1,8 +1,10 @@
 package com.example.telapi.Despesa;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -29,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class atv_cadastro extends AppCompatActivity implements View.OnClickListener {
+public class atv_cadastro extends AppCompatActivity implements View.OnClickListener, DespesaUpdateListener {
     private AutoCompleteTextView autoCompleteCategoria;
     private EditText edtDescricao, edtValor, edtVencimento;
     private SwitchMaterial switchDespesaPaga;
@@ -64,7 +66,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         btnExcluir = findViewById(R.id.btnExcluir);
 
         formHandler = new DespesaFormHandler(autoCompleteCategoria, edtDescricao, edtValor, edtVencimento, switchDespesaPaga);
-        despesaService = new DespesaService(new DespesaCRUD(this, MyApp.getInstance().getUserId()));
+        despesaService = new DespesaService(new DespesaCRUD(this, MyApp.getInstance().getUserId(), this));
         categoriaService = new CategoriaService(new CategoriaCRUD(this, MyApp.getInstance().getUserId()));
 
         carregarCategorias();
@@ -116,17 +118,21 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "Preencha todos os campos corretamente", Toast.LENGTH_SHORT).show();
             return;
         }
+
         despesaService.salvarOuAtualizarDespesa(novaDespesa, despesa != null);
+        setResult(RESULT_OK);
         finish();
     }
 
     private void excluirDespesa() {
         if (despesa != null) {
             despesaService.removerDespesa(despesa.getId());
-            Toast.makeText(this, "Despesa removida", Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK);
             finish();
         }
     }
+
+
 
     private void preencherCamposDespesa() {
         if (despesa != null) {
@@ -173,4 +179,26 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         });
         modal.show(getSupportFragmentManager(), "modal_categoria");
     }
+
+    @Override
+    public void onDespesaAtualizada(List<Despesa> despesas) {
+        Log.d("atv_cadastro", "onDespesaAtualizada chamado");
+
+        if (despesas != null && !despesas.isEmpty()) {
+            Log.d("atv_cadastro", "Despesas atualizadas: " + despesas.size() + " despesas.");
+
+            // Passando a lista de despesas atualizada de volta para a atividade pai (atv_despesa)
+            Intent intent = new Intent();
+            intent.putExtra("despesas", (ArrayList<Despesa>) despesas);  // Adicionando a lista de despesas ao Intent
+            setResult(RESULT_OK, intent);  // Definindo o resultado da operação
+
+            Log.d("atv_cadastro", "Resultado OK enviado.");
+            finish();  // Finalizando a atividade de cadastro
+        } else {
+            Log.d("atv_cadastro", "Lista de despesas vazia ou nula.");
+        }
+    }
+
+
+
 }

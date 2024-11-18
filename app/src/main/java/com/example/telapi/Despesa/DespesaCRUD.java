@@ -15,14 +15,21 @@ public class DespesaCRUD implements DespesaRepository {
     private DBHelper dbHelper;
     private SQLiteDatabase database;
     private Context context;
+    private DespesaUpdateListener updateListener;
 
-    public DespesaCRUD(Context context, String userId) {
+    private static final String TAG = "DespesaCRUD";  // Adicionado para logs
+
+    public DespesaCRUD(Context context, String userId, DespesaUpdateListener listener) {
         dbHelper = new DBHelper(context, userId);
         database = dbHelper.openDatabase();
         this.context = context;
+        this.updateListener = listener;
+        Log.d(TAG, "DespesaCRUD inicializado para o usuário: " + userId);
     }
 
     public void adicionarDespesa(Despesa despesa) {
+        Log.d(TAG, "Adicionando despesa: " + despesa.toString());
+
         ContentValues values = new ContentValues();
         values.put("categoria", despesa.getCategoria());
         values.put("descricao", despesa.getDescricao());
@@ -32,13 +39,18 @@ public class DespesaCRUD implements DespesaRepository {
 
         long resultado = database.insert("despesas", null, values);
         if (resultado == -1) {
+            Log.e(TAG, "Erro ao adicionar despesa");
+            atualizarDespesas();
             Toast.makeText(context, "Erro ao adicionar despesa", Toast.LENGTH_SHORT).show();
         } else {
+            Log.d(TAG, "Despesa adicionada com sucesso");
             Toast.makeText(context, "Despesa adicionada com sucesso", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void alterarDespesa(Despesa despesa) {
+        Log.d(TAG, "Alterando despesa: " + despesa.toString());
+
         ContentValues values = new ContentValues();
         values.put("categoria", despesa.getCategoria());
         values.put("descricao", despesa.getDescricao());
@@ -48,27 +60,40 @@ public class DespesaCRUD implements DespesaRepository {
 
         int resultado = database.update("despesas", values, "id = ?", new String[]{String.valueOf(despesa.getId())});
         if (resultado > 0) {
+            Log.d(TAG, "Despesa atualizada com sucesso");
+            atualizarDespesas();
             Toast.makeText(context, "Despesa atualizada com sucesso", Toast.LENGTH_SHORT).show();
         } else {
+            Log.e(TAG, "Erro ao atualizar despesa");
             Toast.makeText(context, "Erro ao atualizar despesa", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void removerDespesa(int id) {
-        database.delete("despesas", "id = ?", new String[]{String.valueOf(id)});
+        Log.d(TAG, "Removendo despesa com ID: " + id);
+
+        int rowsDeleted = database.delete("despesas", "id = ?", new String[]{String.valueOf(id)});
+        if (rowsDeleted > 0) {
+            Log.d(TAG, "Despesa removida com sucesso.");
+            atualizarDespesas();
+        } else {
+            Log.e(TAG, "Erro ao remover despesa.");
+        }
     }
 
     @Override
     public List<Despesa> listarDespesas() {
+        Log.d(TAG, "Listando todas as despesas.");
+
         List<Despesa> despesas = new ArrayList<>();
 
         if (database == null || !database.isOpen()) {
             database = dbHelper.openDatabase();
+            Log.d(TAG, "Banco de dados reaberto.");
         }
 
         Cursor cursor = database.query("despesas", null, null, null, null, null, null);
-
         if (cursor != null && cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex("id");
             int categoriaIndex = cursor.getColumnIndex("categoria");
@@ -87,15 +112,26 @@ public class DespesaCRUD implements DespesaRepository {
 
                 Despesa despesa = new Despesa(id, categoria, descricao, valor, vencimento, pago);
                 despesas.add(despesa);
+                Log.d(TAG, "Despesa carregada: " + despesa.toString());
             } while (cursor.moveToNext());
 
             cursor.close();
         }
 
+        Log.d(TAG, "Total de despesas listadas: " + despesas.size());
         return despesas;
     }
 
+    private void atualizarDespesas() {
+        Log.d(TAG, "Atualizando lista de despesas...");
+        List<Despesa> despesas = listarDespesas();
+        if (updateListener != null) {
+            updateListener.onDespesaAtualizada(despesas);
+        }
+    }
+
     public double obterTotalMensal(String mes) {
+        Log.d(TAG, "Obtendo total mensal para o mês: " + mes);
         double totalMensal = 0;
         Cursor cursor = database.rawQuery(
                 "SELECT SUM(valor) FROM despesas WHERE substr(vencimento, 4, 2) = ?",
@@ -105,10 +141,12 @@ public class DespesaCRUD implements DespesaRepository {
             totalMensal = cursor.getDouble(0);
         }
         cursor.close();
+        Log.d(TAG, "Total mensal para o mês " + mes + ": " + totalMensal);
         return totalMensal;
     }
 
     public double obterTotalEmAberto(String mes) {
+        Log.d(TAG, "Obtendo total em aberto para o mês: " + mes);
         double totalAberto = 0;
         Cursor cursor = database.rawQuery(
                 "SELECT SUM(valor) FROM despesas WHERE substr(vencimento, 4, 2) = ? AND pago = 0",
@@ -118,8 +156,7 @@ public class DespesaCRUD implements DespesaRepository {
             totalAberto = cursor.getDouble(0);
         }
         cursor.close();
+        Log.d(TAG, "Total em aberto para o mês " + mes + ": " + totalAberto);
         return totalAberto;
     }
-
-
 }
