@@ -9,7 +9,7 @@ import com.example.telapi.DBHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoriaCRUD {
+public class CategoriaCRUD implements CategoriaRepository {
     private DBHelper dbHelper;
     private SQLiteDatabase database;
     private Context context;

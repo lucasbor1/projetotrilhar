@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="CustomDatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorPrimary">@color/azul_escuro</item>
+        <item name="colorPrimaryVariant">@color/azul_escuro</item>
+        <item name="colorAccent">@color/azul_escuro</item>
+        <item name="android:textColorPrimary">@color/azul_escuro</item>
+        <item name="android:textColorSecondary">@color/azul_escuro</item>
+    </style>
 
         <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
             <item name="colorPrimary">@color/azul_escuro</item>

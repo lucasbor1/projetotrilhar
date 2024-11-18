@@ -15,5 +15,6 @@
     <color name="cinza_escuro">#333333</color>
     <color name="cinza_medio">#777777</color>
     <color name="verde_destaque">#4CAF50</color>
+    <color name="gray">#A9A9A9</color>
 
 </resources>
