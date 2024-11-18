@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class atv_cadastro extends AppCompatActivity implements View.OnClickListener, DespesaUpdateListener {
+
     private AutoCompleteTextView autoCompleteCategoria;
     private EditText edtDescricao, edtValor, edtVencimento;
     private SwitchMaterial switchDespesaPaga;
@@ -43,12 +44,27 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
     private Despesa despesa;
     private String acao;
 
+    // Lifecycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.atv_cadastro);
+        setupUI();
+        initializeVariables();
+        configureListeners();
+        loadCategories();
 
+        if ("ALTERAR".equals(acao) && despesa != null) {
+            fillExpenseFields();
+            btnExcluir.setVisibility(View.VISIBLE);
+        } else {
+            btnExcluir.setVisibility(View.GONE);
+        }
+    }
+
+    // UI setup
+    private void setupUI() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -62,23 +78,18 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         switchDespesaPaga = findViewById(R.id.switchDespesaPaga);
         btnAddCategoria = findViewById(R.id.btnAddCategoria);
         btnExcluir = findViewById(R.id.btnExcluir);
+    }
 
+    private void initializeVariables() {
         formHandler = new DespesaFormHandler(autoCompleteCategoria, edtDescricao, edtValor, edtVencimento, switchDespesaPaga);
         despesaService = new DespesaService(new DespesaCRUD(this, MyApp.getInstance().getUserId(), this));
         categoriaService = new CategoriaService(new CategoriaCRUD(this, MyApp.getInstance().getUserId()));
 
-        carregarCategorias();
-
         acao = getIntent().getStringExtra("acao");
         despesa = (Despesa) getIntent().getSerializableExtra("obj");
+    }
 
-        if ("ALTERAR".equals(acao) && despesa != null) {
-            preencherCamposDespesa();
-            btnExcluir.setVisibility(View.VISIBLE);
-        } else {
-            btnExcluir.setVisibility(View.GONE);
-        }
-
+    private void configureListeners() {
         btnAddCategoria.setOnClickListener(this);
         findViewById(R.id.imgCalendario).setOnClickListener(this);
         findViewById(R.id.btnGravar).setOnClickListener(this);
@@ -95,19 +106,8 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.btnGravar) {
-            salvarDespesa();
-        } else if (id == R.id.btnExcluir) {
-            excluirDespesa();
-        } else if (id == R.id.btnAddCategoria) {
-            abrirModalCategoria();
-        } else if (id == R.id.imgCalendario) {
-            formHandler.abrirCalendario(this);
-        }
-    }
+
+    // Expense operations
     private void salvarDespesa() {
         Despesa novaDespesa = formHandler.obterDespesa(despesa != null ? despesa.getId() : -1);
         if (novaDespesa == null) {
@@ -128,9 +128,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-
-    private void preencherCamposDespesa() {
+    private void fillExpenseFields() {
         if (despesa != null) {
             formHandler.setCategoria(despesa.getCategoria());
             formHandler.setDescricao(despesa.getDescricao());
@@ -140,7 +138,8 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void carregarCategorias() {
+    // Category operations
+    private void loadCategories() {
         List<String> nomesCategorias = categoriaService.listarCategorias();
         if (nomesCategorias == null) {
             nomesCategorias = new ArrayList<>();
@@ -164,16 +163,31 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             public void onCategoriaAdicionada(String nomeCategoria) {
                 if (nomeCategoria != null && !nomeCategoria.trim().isEmpty()) {
                     autoCompleteCategoria.setText(nomeCategoria);
-                    carregarCategorias();
+                    loadCategories();
                 }
             }
 
             @Override
             public void onCategoriaRemovida(String nomeCategoria) {
-                carregarCategorias();
+                loadCategories();
             }
         });
         modal.show(getSupportFragmentManager(), "modal_categoria");
+    }
+
+    // Listener handling
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btnGravar) {
+            salvarDespesa();
+        } else if (id == R.id.btnExcluir) {
+            excluirDespesa();
+        } else if (id == R.id.btnAddCategoria) {
+            abrirModalCategoria();
+        } else if (id == R.id.imgCalendario) {
+            formHandler.abrirCalendario(this);
+        }
     }
 
     @Override
@@ -193,7 +207,4 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             Log.d("atv_cadastro", "Lista de despesas vazia ou nula.");
         }
     }
-
-
-
 }

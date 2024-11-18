@@ -130,33 +130,4 @@ public class DespesaCRUD implements DespesaRepository {
         }
     }
 
-    public double obterTotalMensal(String mes) {
-        Log.d(TAG, "Obtendo total mensal para o mês: " + mes);
-        double totalMensal = 0;
-        Cursor cursor = database.rawQuery(
-                "SELECT SUM(valor) FROM despesas WHERE substr(vencimento, 4, 2) = ?",
-                new String[]{String.format("%02d", Integer.parseInt(mes))}
-        );
-        if (cursor.moveToFirst() && !cursor.isNull(0)) {
-            totalMensal = cursor.getDouble(0);
-        }
-        cursor.close();
-        Log.d(TAG, "Total mensal para o mês " + mes + ": " + totalMensal);
-        return totalMensal;
-    }
-
-    public double obterTotalEmAberto(String mes) {
-        Log.d(TAG, "Obtendo total em aberto para o mês: " + mes);
-        double totalAberto = 0;
-        Cursor cursor = database.rawQuery(
-                "SELECT SUM(valor) FROM despesas WHERE substr(vencimento, 4, 2) = ? AND pago = 0",
-                new String[]{String.format("%02d", Integer.parseInt(mes))}
-        );
-        if (cursor.moveToFirst() && !cursor.isNull(0)) {
-            totalAberto = cursor.getDouble(0);
-        }
-        cursor.close();
-        Log.d(TAG, "Total em aberto para o mês " + mes + ": " + totalAberto);
-        return totalAberto;
-    }
 }
