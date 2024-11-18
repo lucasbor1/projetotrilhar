@@ -155,6 +155,12 @@
             android:layout_height="wrap_content"
             android:textSize="24sp"
             app:thumbTint="@color/trocar_cor" />
+
+        <ImageView
+            android:id="@+id/imgDespesaStatus"
+            android:layout_width="78dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/naopago" />
     </LinearLayout>
 
     <!-- Action Buttons Section -->
