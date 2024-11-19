@@ -21,7 +21,7 @@ public class DespesaService {
         despesaRepository.removerDespesa(id);
     }
 
-    public List<Despesa> listarDespesas() {
-        return despesaRepository.listarDespesas();
+    public List<Despesa> listarDespesasPorMesAno(String mes, int ano) {
+        return despesaRepository.listarDespesasPorMesAno(mes, ano);
     }
 }

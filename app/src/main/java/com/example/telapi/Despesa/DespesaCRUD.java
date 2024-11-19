@@ -27,33 +27,90 @@ public class DespesaCRUD implements DespesaRepository {
 
     // Método para adicionar uma despesa
     public void adicionarDespesa(Despesa despesa) {
-        ContentValues values = new ContentValues();
-        values.put("categoria", despesa.getCategoria());
-        values.put("descricao", despesa.getDescricao());
-        values.put("valor", despesa.getValor());
-        values.put("vencimento", despesa.getVencimento());
-        values.put("ano", obterAnoDoVencimento(despesa.getVencimento())); // Derivando o ano
-        values.put("pago", despesa.isPago() ? 1 : 0);
+        if (despesa.isPermanente()) {
+            salvarDespesaPermanente(despesa);
+        } else if (despesa.isParcelada()) {
+            salvarDespesaParcelada(despesa);
+        } else {
+            salvarDespesaUnica(despesa);
+        }
+    }
 
+    private void salvarDespesaUnica(Despesa despesa) {
+        ContentValues values = criarContentValues(despesa);
         long resultado = database.insert("despesas", null, values);
         if (resultado == -1) {
-            Log.e(TAG, "Erro ao adicionar despesa");
+            Log.e(TAG, "Erro ao adicionar despesa única");
             Toast.makeText(context, "Erro ao adicionar despesa", Toast.LENGTH_SHORT).show();
         } else {
-            Log.d(TAG, "Despesa adicionada com sucesso");
+            Log.d(TAG, "Despesa única adicionada com sucesso");
             Toast.makeText(context, "Despesa adicionada com sucesso", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void salvarDespesaPermanente(Despesa despesa) {
+        Calendar calendario = Calendar.getInstance();
+        int mesAtual = calendario.get(Calendar.MONTH) + 1; // Meses começam em 0
+        int anoAtual = calendario.get(Calendar.YEAR);
+
+        for (int i = 0; i < 12; i++) { // Adicionar para os próximos 12 meses
+            ContentValues values = criarContentValues(despesa);
+            values.put("vencimento", String.format("01/%02d/%d", mesAtual, anoAtual));
+            values.put("ano", anoAtual);
+            values.put("permanente", 1); // Marca como permanente
+
+            long resultado = database.insert("despesas", null, values);
+            if (resultado == -1) {
+                Log.e(TAG, "Erro ao adicionar despesa permanente");
+            }
+
+            // Incrementar o mês
+            mesAtual++;
+            if (mesAtual > 12) {
+                mesAtual = 1;
+                anoAtual++;
+            }
+        }
+
+        Log.d(TAG, "Despesa permanente adicionada com sucesso");
+        Toast.makeText(context, "Despesa permanente adicionada com sucesso", Toast.LENGTH_SHORT).show();
+    }
+
+    private void salvarDespesaParcelada(Despesa despesa) {
+        Calendar calendario = Calendar.getInstance();
+        int mesAtual = calendario.get(Calendar.MONTH) + 1;
+        int anoAtual = calendario.get(Calendar.YEAR);
+        int parcela = 1;
+
+        for (int i = 0; i < despesa.getNumeroParcelas(); i++) { // Adicionar as parcelas
+            ContentValues values = criarContentValues(despesa);
+            values.put("vencimento", String.format("01/%02d/%d", mesAtual, anoAtual));
+            values.put("ano", anoAtual);
+            values.put("parcelada", 1); // Marca como parcelada
+            values.put("numeroParcelas", despesa.getNumeroParcelas());
+            values.put("parcelaAtual", parcela);
+
+            long resultado = database.insert("despesas", null, values);
+            if (resultado == -1) {
+                Log.e(TAG, "Erro ao adicionar despesa parcelada");
+            }
+
+            // Incrementar parcela e o mês
+            parcela++;
+            mesAtual++;
+            if (mesAtual > 12) {
+                mesAtual = 1;
+                anoAtual++;
+            }
+        }
+
+        Log.d(TAG, "Despesa parcelada adicionada com sucesso");
+        Toast.makeText(context, "Despesa parcelada adicionada com sucesso", Toast.LENGTH_SHORT).show();
+    }
+
     // Método para alterar uma despesa
     public void alterarDespesa(Despesa despesa) {
-        ContentValues values = new ContentValues();
-        values.put("categoria", despesa.getCategoria());
-        values.put("descricao", despesa.getDescricao());
-        values.put("valor", despesa.getValor());
-        values.put("vencimento", despesa.getVencimento());
-        values.put("ano", obterAnoDoVencimento(despesa.getVencimento())); // Derivando o ano
-        values.put("pago", despesa.isPago() ? 1 : 0);
+        ContentValues values = criarContentValues(despesa);
 
         int resultado = database.update("despesas", values, "id = ?", new String[]{String.valueOf(despesa.getId())});
         if (resultado > 0) {
@@ -83,24 +140,8 @@ public class DespesaCRUD implements DespesaRepository {
         Cursor cursor = database.query("despesas", null, null, null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex("id");
-            int categoriaIndex = cursor.getColumnIndex("categoria");
-            int descricaoIndex = cursor.getColumnIndex("descricao");
-            int valorIndex = cursor.getColumnIndex("valor");
-            int vencimentoIndex = cursor.getColumnIndex("vencimento");
-            int anoIndex = cursor.getColumnIndex("ano");
-            int pagoIndex = cursor.getColumnIndex("pago");
-
             do {
-                int id = cursor.getInt(idIndex);
-                String categoria = cursor.getString(categoriaIndex);
-                String descricao = cursor.getString(descricaoIndex);
-                double valor = cursor.getDouble(valorIndex);
-                String vencimento = cursor.getString(vencimentoIndex);
-                int ano = cursor.getInt(anoIndex);
-                boolean pago = cursor.getInt(pagoIndex) == 1;
-
-                despesas.add(new Despesa(id, categoria, descricao, valor, vencimento, ano, pago));
+                despesas.add(criarDespesa(cursor));
             } while (cursor.moveToNext());
 
             cursor.close();
@@ -141,16 +182,76 @@ public class DespesaCRUD implements DespesaRepository {
         return totalAberto;
     }
 
-    // Método auxiliar para obter o ano do campo vencimento
-    private int obterAnoDoVencimento(String vencimento) {
+    // Métodos auxiliares
+    private ContentValues criarContentValues(Despesa despesa) {
+        ContentValues values = new ContentValues();
+        values.put("descricao", despesa.getDescricao());
+        values.put("valor", despesa.getValor());
+        values.put("vencimento", despesa.getVencimento());
+        values.put("ano", despesa.getAno());
+        values.put("pago", despesa.isPago() ? 1 : 0);
+        values.put("categoria", despesa.getCategoria());
+        values.put("permanente", despesa.isPermanente() ? 1 : 0);
+        values.put("parcelada", despesa.isParcelada() ? 1 : 0);
+        values.put("numeroParcelas", despesa.getNumeroParcelas());
+        values.put("parcelaAtual", despesa.getParcelaAtual());
+        return values;
+    }
+    private Despesa criarDespesa(Cursor cursor) {
+        int id = obterValorSeguro(cursor, "id", 0);
+        String categoria = obterValorSeguro(cursor, "categoria", "");
+        String descricao = obterValorSeguro(cursor, "descricao", "");
+        double valor = obterValorSeguro(cursor, "valor", 0.0);
+        String vencimento = obterValorSeguro(cursor, "vencimento", "");
+        int ano = obterValorSeguro(cursor, "ano", 0);
+        boolean pago = obterValorSeguro(cursor, "pago", 0) == 1;
+        boolean permanente = obterValorSeguro(cursor, "permanente", 0) == 1;
+        boolean parcelada = obterValorSeguro(cursor, "parcelada", 0) == 1;
+        int numeroParcelas = obterValorSeguro(cursor, "numeroParcelas", 0);
+        int parcelaAtual = obterValorSeguro(cursor, "parcelaAtual", 0);
+
+        return new Despesa(id, categoria, descricao, valor, vencimento, ano, pago, permanente, parcelada, numeroParcelas, parcelaAtual);
+    }
+
+    private int obterIndiceSeguro(Cursor cursor, String coluna) {
+        int index = cursor.getColumnIndex(coluna);
+        return index >= 0 ? index : -1;
+    }
+
+    private <T> T obterValorSeguro(Cursor cursor, String coluna, T valorPadrao) {
+        int index = obterIndiceSeguro(cursor, coluna);
+        if (index == -1) {
+            return valorPadrao;
+        }
+
         try {
-            String[] partesData = vencimento.split("/");
-            if (partesData.length == 3) {
-                return Integer.parseInt(partesData[2]);
+            if (valorPadrao instanceof String) {
+                return (T) cursor.getString(index);
+            } else if (valorPadrao instanceof Integer) {
+                return (T) Integer.valueOf(cursor.getInt(index));
+            } else if (valorPadrao instanceof Double) {
+                return (T) Double.valueOf(cursor.getDouble(index));
             }
         } catch (Exception e) {
-            Log.e(TAG, "Erro ao obter o ano do vencimento: " + e.getMessage());
+            Log.e(TAG, "Erro ao obter valor da coluna " + coluna + ": " + e.getMessage());
         }
-        return Calendar.getInstance().get(Calendar.YEAR);
+
+        return valorPadrao;
     }
+    public List<Despesa> listarDespesasPorMesAno(String mes, int ano) {
+        List<Despesa> despesas = new ArrayList<>();
+        String mesFormatado = String.format(Locale.getDefault(), "%02d", Integer.parseInt(mes));
+        String query = "SELECT * FROM despesas WHERE substr(vencimento, 4, 2) = ? AND ano = ?";
+        Cursor cursor = database.rawQuery(query, new String[]{mesFormatado, String.valueOf(ano)});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                despesas.add(criarDespesa(cursor));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+        return despesas;
+    }
+
 }

@@ -103,7 +103,7 @@
     <!-- Payment Switch Section -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="145dp"
+        android:layout_height="108dp"
         android:layout_marginBottom="16dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -137,25 +137,84 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
+        android:orientation="vertical"
         android:layout_marginBottom="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Linha para Switch e CheckBox de Despesa Permanente -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
-            android:text="Pagar"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switchDespesaPaga"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="16dp"
+                android:text="Pagar"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchDespesaPaga"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:thumbTint="@color/trocar_cor" />
+
+        </LinearLayout>
+
+        <!-- Linha para CheckBox de Despesa Parcelada -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
-            app:thumbTint="@color/trocar_cor" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/checkboxDespesaParcelada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Despesa Parcelada"
+                android:textColor="@color/white" />
+
+            <CheckBox
+                android:id="@+id/checkboxDespesaPermanente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Despesa Permanente"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <!-- Campo para Número de Parcelas -->
+        <LinearLayout
+            android:id="@+id/layoutParcelas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Número de Parcelas"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtNumeroParcelas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
     </LinearLayout>
+
 
     <!-- Action Buttons Section -->
     <com.google.android.material.textfield.TextInputEditText

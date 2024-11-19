@@ -7,4 +7,5 @@ public interface DespesaRepository {
     void alterarDespesa(Despesa despesa);
     void removerDespesa(int id);
     List<Despesa> listarDespesas();
+    List<Despesa> listarDespesasPorMesAno(String mes, int ano);
 }

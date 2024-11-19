@@ -7,10 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 4;
     private static final String DB_NAME_PREFIX = "despesas_";
     private SQLiteDatabase database;
-    private String userUid;
+    private final String userUid;
 
     public DBHelper(Context context, String uid) {
         super(context, DB_NAME_PREFIX + uid + ".db", null, DB_VERSION);
@@ -19,26 +19,28 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Tabela de despesas
         String createTableDespesas = "CREATE TABLE IF NOT EXISTS despesas (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "descricao TEXT, " +
                 "valor REAL, " +
                 "vencimento TEXT, " +
-                "ano INTEGER, " + // Adicionada a coluna ano
+                "ano INTEGER, " +
                 "pago INTEGER, " +
-                "categoria TEXT" +
+                "categoria TEXT, " +
+                "permanente INTEGER DEFAULT 0, " + // Nova coluna para despesas permanentes
+                "parcelada INTEGER DEFAULT 0, " +  // Nova coluna para despesas parceladas
+                "numeroParcelas INTEGER DEFAULT 0, " + // Número total de parcelas
+                "parcelaAtual INTEGER DEFAULT 0 " +    // Parcela atual para controle
                 ");";
         db.execSQL(createTableDespesas);
 
-        // Tabela de categorias
+
         String createTableCategorias = "CREATE TABLE IF NOT EXISTS categorias (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "nome TEXT UNIQUE" +
                 ");";
         db.execSQL(createTableCategorias);
 
-        // Tabela de usuários
         String createTableUsuarios = "CREATE TABLE IF NOT EXISTS usuarios (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "nome TEXT, " +
@@ -54,9 +56,15 @@ public class DBHelper extends SQLiteOpenHelper {
             // Atualiza a tabela despesas para adicionar a coluna ano
             db.execSQL("ALTER TABLE despesas ADD COLUMN ano INTEGER DEFAULT 0");
         }
+        if (oldVersion < 4) {
+            // Adiciona as colunas para despesas permanentes e parceladas
+            db.execSQL("ALTER TABLE despesas ADD COLUMN permanente INTEGER DEFAULT 0");
+            db.execSQL("ALTER TABLE despesas ADD COLUMN parcelada INTEGER DEFAULT 0");
+            db.execSQL("ALTER TABLE despesas ADD COLUMN numeroParcelas INTEGER DEFAULT 0");
+            db.execSQL("ALTER TABLE despesas ADD COLUMN parcelaAtual INTEGER DEFAULT 0");
+        }
     }
 
-    // Abrir o banco de dados para o usuário autenticado
     public SQLiteDatabase openDatabase() {
         if (database == null || !database.isOpen()) {
             database = this.getWritableDatabase();
@@ -70,7 +78,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    // Inserir usuário na tabela de usuários
     public void inserirUsuario(String nome, String email, String uid) {
         SQLiteDatabase db = openDatabase();
         ContentValues values = new ContentValues();
@@ -78,15 +85,13 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("email", email);
         values.put("uid", uid);
 
-        // Verifica se o usuário já existe
+
         Cursor cursor = db.rawQuery("SELECT * FROM usuarios WHERE uid = ?", new String[]{uid});
         if (cursor.getCount() == 0) {
             db.insert("usuarios", null, values);
         }
         cursor.close();
     }
-
-    // Método para buscar usuário pelo UID
     public Cursor buscarUsuario(String uid) {
         SQLiteDatabase db = openDatabase();
         return db.rawQuery("SELECT * FROM usuarios WHERE uid = ?", new String[]{uid});

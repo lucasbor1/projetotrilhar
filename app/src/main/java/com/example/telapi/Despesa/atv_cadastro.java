@@ -8,8 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -32,8 +33,10 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
 
     // === Variáveis de Instância ===
     private AutoCompleteTextView autoCompleteCategoria;
-    private EditText edtDescricao, edtValor, edtVencimento;
+    private EditText edtDescricao, edtValor, edtVencimento, edtNumeroParcelas;
     private SwitchMaterial switchDespesaPaga;
+    private CheckBox checkboxDespesaPermanente, checkboxDespesaParcelada;
+    private LinearLayout layoutParcelas;
     private FloatingActionButton btnAddCategoria;
     private View btnExcluir;
 
@@ -75,10 +78,18 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         edtValor = findViewById(R.id.edtValor);
         edtVencimento = findViewById(R.id.edtVencimento);
         switchDespesaPaga = findViewById(R.id.switchDespesaPaga);
+        checkboxDespesaPermanente = findViewById(R.id.checkboxDespesaPermanente);
+        checkboxDespesaParcelada = findViewById(R.id.checkboxDespesaParcelada);
+        layoutParcelas = findViewById(R.id.layoutParcelas);
+        edtNumeroParcelas = findViewById(R.id.edtNumeroParcelas);
         btnAddCategoria = findViewById(R.id.btnAddCategoria);
         btnExcluir = findViewById(R.id.btnExcluir);
 
-        formHandler = new DespesaFormHandler(autoCompleteCategoria, edtDescricao, edtValor, edtVencimento, switchDespesaPaga);
+        formHandler = new DespesaFormHandler(
+                autoCompleteCategoria, edtDescricao, edtValor,
+                edtVencimento, switchDespesaPaga,
+                checkboxDespesaPermanente, checkboxDespesaParcelada, edtNumeroParcelas
+        );
         despesaService = new DespesaService(new DespesaCRUD(this, MyApp.getInstance().getUserId()));
         categoriaService = new CategoriaService(new CategoriaCRUD(this, MyApp.getInstance().getUserId()));
     }
@@ -92,6 +103,19 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             @Override
             public void afterTextChanged(Editable s) {
                 formHandler.formatarValor();
+            }
+        });
+
+        checkboxDespesaParcelada.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            layoutParcelas.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            if (!isChecked) edtNumeroParcelas.setText("");
+        });
+
+        checkboxDespesaPermanente.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                checkboxDespesaParcelada.setChecked(false);
+                layoutParcelas.setVisibility(View.GONE);
+                edtNumeroParcelas.setText("");
             }
         });
     }
@@ -123,6 +147,8 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             formHandler.setValor(despesa.getValor());
             formHandler.setVencimento(despesa.getVencimento());
             formHandler.setPago(despesa.isPago());
+            formHandler.setPermanente(despesa.isPermanente());
+            formHandler.setParcelada(despesa.isParcelada(), despesa.getNumeroParcelas(), despesa.getParcelaAtual());
         }
     }
 
@@ -205,7 +231,6 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             formHandler.abrirCalendario(this);
         }
     }
-
     // === Atualizações de Despesas ===
     @Override
     public void onDespesaAtualizada(List<Despesa> despesas) {
