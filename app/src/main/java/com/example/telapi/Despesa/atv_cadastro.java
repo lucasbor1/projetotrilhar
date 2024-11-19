@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -78,7 +79,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         btnExcluir = findViewById(R.id.btnExcluir);
 
         formHandler = new DespesaFormHandler(autoCompleteCategoria, edtDescricao, edtValor, edtVencimento, switchDespesaPaga);
-        despesaService = new DespesaService(new DespesaCRUD(this, MyApp.getInstance().getUserId(), this));
+        despesaService = new DespesaService(new DespesaCRUD(this, MyApp.getInstance().getUserId()));
         categoriaService = new CategoriaService(new CategoriaCRUD(this, MyApp.getInstance().getUserId()));
     }
 
@@ -125,10 +126,18 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private boolean validarVencimento(String vencimento) {
+        if (vencimento.isEmpty()) return false;
+
+        String regex = "\\d{2}/\\d{2}/\\d{4}";
+        return vencimento.matches(regex);
+    }
+
     private void salvarDespesa() {
         Despesa novaDespesa = formHandler.obterDespesa(despesa != null ? despesa.getId() : -1);
-        if (novaDespesa == null) {
-            Toast.makeText(this, "Preencha todos os campos corretamente", Toast.LENGTH_SHORT).show();
+
+        if (novaDespesa == null || !validarVencimento(novaDespesa.getVencimento())) {
+            Toast.makeText(this, "Preencha todos os campos corretamente, incluindo o vencimento.", Toast.LENGTH_SHORT).show();
             return;
         }
 

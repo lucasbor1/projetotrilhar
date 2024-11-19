@@ -158,6 +158,17 @@
     </LinearLayout>
 
     <!-- Action Buttons Section -->
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edtValor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="R$ 0,00"
+        android:importantForAccessibility="yes"
+        android:inputType="numberDecimal"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -195,17 +206,6 @@
         android:hint="Valor"
         android:textColor="@color/white"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtValor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="numberDecimal"
-            android:hint="R$ 0,00"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:importantForAccessibility="yes"/>
 
 
     </com.google.android.material.textfield.TextInputLayout>

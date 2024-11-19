@@ -12,23 +12,27 @@ public class Despesa implements Serializable {
     private String categoria;
     private String descricao;
     private double valor;
-    private String vencimento;
+    private String vencimento; //  formato "dd/MM/yyyy"
+    private int ano;
     private boolean pago;
 
-    public Despesa(String categoria, String descricao, double valor, String vencimento, boolean pago) {
+    // Construtores
+    public Despesa(String categoria, String descricao, double valor, String vencimento, int ano, boolean pago) {
         this.categoria = categoria;
         this.descricao = descricao;
         this.valor = valor;
         this.vencimento = vencimento;
+        this.ano = ano;
         this.pago = pago;
     }
 
-    public Despesa(int id, String categoria, String descricao, double valor, String vencimento, boolean pago) {
+    public Despesa(int id, String categoria, String descricao, double valor, String vencimento, int ano, boolean pago) {
         this.id = id;
         this.categoria = categoria;
         this.descricao = descricao;
         this.valor = valor;
         this.vencimento = vencimento;
+        this.ano = ano;
         this.pago = pago;
     }
 
@@ -41,7 +45,6 @@ public class Despesa implements Serializable {
             Date data = sdf.parse(this.getVencimento());
             if (data != null) {
                 dataVencimento.setTime(data);
-
                 return !isPago() && hoje.after(dataVencimento);
             }
         } catch (ParseException e) {
@@ -66,6 +69,9 @@ public class Despesa implements Serializable {
     public String getVencimento() { return vencimento; }
     public void setVencimento(String vencimento) { this.vencimento = vencimento; }
 
+    public int getAno() { return ano; }
+    public void setAno(int ano) { this.ano = ano; }
+
     public boolean isPago() { return pago; }
     public void setPago(boolean pago) { this.pago = pago; }
 
@@ -74,6 +80,7 @@ public class Despesa implements Serializable {
         return descricao + '\n' +
                 "Valor: R$" + String.format(Locale.getDefault(), "%.2f", valor) + '\n' +
                 "Vencimento: " + vencimento + '\n' +
+                "Ano: " + ano + '\n' +
                 (isAtrasada() ? "Status: Atrasada" : "Status: Em dia");
     }
 }

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
     private static final String DB_NAME_PREFIX = "despesas_";
     private SQLiteDatabase database;
     private String userUid;
@@ -25,6 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "descricao TEXT, " +
                 "valor REAL, " +
                 "vencimento TEXT, " +
+                "ano INTEGER, " + // Adicionada a coluna ano
                 "pago INTEGER, " +
                 "categoria TEXT" +
                 ");";
@@ -49,10 +50,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS despesas");
-        db.execSQL("DROP TABLE IF EXISTS categorias");
-        db.execSQL("DROP TABLE IF EXISTS usuarios");
-        onCreate(db);
+        if (oldVersion < 3) {
+            // Atualiza a tabela despesas para adicionar a coluna ano
+            db.execSQL("ALTER TABLE despesas ADD COLUMN ano INTEGER DEFAULT 0");
+        }
     }
 
     // Abrir o banco de dados para o usuário autenticado

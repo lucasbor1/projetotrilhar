@@ -48,6 +48,7 @@ public class DespesaFormHandler {
         String descricao = edtDescricao.getText().toString().trim();
         String vencimento = edtVencimento.getText().toString().trim();
         boolean pago = switchDespesaPaga.isChecked();
+        int ano = obterAnoDoVencimento(vencimento);
 
         String valorStr = edtValor.getText().toString()
                 .replace("R$", "")
@@ -66,9 +67,20 @@ public class DespesaFormHandler {
             Log.e("DespesaFormHandler", "Erro ao converter valor: " + e.getMessage());
         }
 
-        return new Despesa(id, categoria, descricao, valor, vencimento, pago);
+        return new Despesa(id, categoria, descricao, valor, vencimento, ano, pago);
     }
 
+    private int obterAnoDoVencimento(String vencimento) {
+        try {
+            String[] partesData = vencimento.split("/");
+            if (partesData.length == 3) {
+                return Integer.parseInt(partesData[2]);
+            }
+        } catch (Exception e) {
+            Log.e("DespesaFormHandler", "Erro ao obter o ano do vencimento: " + e.getMessage());
+        }
+        return Calendar.getInstance().get(Calendar.YEAR);
+    }
 
     public void setCategoria(String categoria) {
         autoCompleteCategoria.setText(categoria);
@@ -91,7 +103,7 @@ public class DespesaFormHandler {
         switchDespesaPaga.setChecked(pago);
     }
 
-    void abrirCalendario(Context context) {
+    public void abrirCalendario(Context context) {
         Calendar calendario = Calendar.getInstance();
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -108,6 +120,7 @@ public class DespesaFormHandler {
 
         datePickerDialog.show();
     }
+
     public void formatarValor() {
         if (isFormatting) return;
         isFormatting = true;
@@ -140,5 +153,4 @@ public class DespesaFormHandler {
             isFormatting = false;
         }
     }
-
 }

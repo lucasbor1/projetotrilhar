@@ -79,10 +79,26 @@
 
         <Spinner
             android:id="@+id/spnMeses"
+            android:layout_width="205dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="3"
+            android:background="@drawable/spinner"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:textColor="@color/white" />
+
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="match_parent" />
+
+
+        <Spinner
+            android:id="@+id/spnAnos"
             android:layout_width="0dp"
             android:layout_height="44dp"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:layout_weight="6"
             android:background="@drawable/spinner"
             android:paddingStart="0dp"
             android:paddingEnd="0dp"

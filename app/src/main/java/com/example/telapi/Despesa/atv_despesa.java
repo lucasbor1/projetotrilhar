@@ -34,15 +34,14 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
     private static final String TAG = "atv_despesa";
 
     private ImageButton btnAdicionar;
-    private Spinner spnMeses;
+    private Spinner spnMeses, spnAnos;
     private ListView lstDespesas;
     private TextView edtTotal, edtAberto;
 
     private DespesaAdapter despesasAdapter;
     private DespesaCRUD despesaCRUD;
     private String userId;
-    private Map<String, List<Despesa>> despesasPorMes;
-
+    private Map<String, Map<Integer, List<Despesa>>> despesasPorMesAno;
     private ActivityResultLauncher<Intent> cadastroLauncher;
 
     @Override
@@ -54,7 +53,7 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
         inicializarFirebase();
         inicializarUI();
         configurarToolbar();
-        configurarSpinner();
+        configurarSpinners();
         configurarBotaoAdicionar();
         configurarCadastroLauncher();
 
@@ -69,13 +68,14 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
             Toast.makeText(this, "Erro ao obter ID do usuário", Toast.LENGTH_SHORT).show();
             finish();
         }
-        despesaCRUD = new DespesaCRUD(this, userId, this);
-        despesasPorMes = new HashMap<>();
+        despesaCRUD = new DespesaCRUD(this, userId);
+        despesasPorMesAno = new HashMap<>();
     }
 
     private void inicializarUI() {
         btnAdicionar = findViewById(R.id.btnAdicionar);
         spnMeses = findViewById(R.id.spnMeses);
+        spnAnos = findViewById(R.id.spnAnos);
         lstDespesas = findViewById(R.id.lstDespesas);
         edtTotal = findViewById(R.id.edtTotal);
         edtAberto = findViewById(R.id.edtAberto);
@@ -102,21 +102,33 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
         }
     }
 
-    private void configurarSpinner() {
-        AdpSpinner adapter = new AdpSpinner(this, R.layout.item_spinner, getResources().getStringArray(R.array.meses));
-        spnMeses.setAdapter(adapter);
-
-        spnMeses.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void configurarSpinners() {
+        AdpSpinner adapterMeses = new AdpSpinner(this, R.layout.item_spinner, getResources().getStringArray(R.array.meses));
+        spnMeses.setAdapter(adapterMeses);
+        List<String> anos = gerarListaAnos();
+        AdpSpinner adapterAnos = new AdpSpinner(this, R.layout.item_spinner, anos.toArray(new String[0]));
+        spnAnos.setAdapter(adapterAnos);
+        AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String mesSelecionado = (String) parent.getItemAtPosition(position);
-                exibirDespesasPorMes(mesSelecionado);
+                exibirDespesasPorMesAno();
                 atualizarTotalMensal();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
-        });
+        };
+
+        spnMeses.setOnItemSelectedListener(listener);
+        spnAnos.setOnItemSelectedListener(listener);
+    }
+
+    private List<String> gerarListaAnos() {
+        List<String> anos = new ArrayList<>();
+        int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
+        for (int i = anoAtual - 10; i <= anoAtual + 10; i++) {
+            anos.add(String.valueOf(i));
+        }
+        return anos;
     }
 
     private void configurarBotaoAdicionar() {
@@ -137,11 +149,11 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
 
     private void carregarDespesas() {
         List<Despesa> todasDespesas = despesaCRUD.listarDespesas();
-        despesasPorMes.clear();
+        despesasPorMesAno.clear();
 
         if (todasDespesas != null) {
             for (Despesa despesa : todasDespesas) {
-                adicionarDespesaNova(despesa);
+                adicionarDespesaPorMesAno(despesa);
             }
             despesasAdapter.setDespesas(todasDespesas);
         } else {
@@ -151,19 +163,33 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
         despesasAdapter.notifyDataSetChanged();
     }
 
-    private void adicionarDespesaNova(Despesa novaDespesa) {
-        String mes = obterMesDaDespesa(novaDespesa);
-        despesasPorMes.computeIfAbsent(mes, k -> new ArrayList<>()).add(novaDespesa);
+    private void adicionarDespesaPorMesAno(Despesa despesa) {
+        String mes = obterMesDaDespesa(despesa);
+        int ano = despesa.getAno();
+        despesasPorMesAno.computeIfAbsent(mes, k -> new HashMap<>())
+                .computeIfAbsent(ano, k -> new ArrayList<>())
+                .add(despesa);
     }
 
-    private void exibirDespesasPorMes(String mesSelecionado) {
-        List<Despesa> despesas = despesasPorMes.getOrDefault(mesSelecionado, new ArrayList<>());
+
+    private void exibirDespesasPorMesAno() {
+        String mesSelecionado = spnMeses.getSelectedItem().toString();
+        int anoSelecionado = Integer.parseInt(spnAnos.getSelectedItem().toString());
+
+        List<Despesa> despesas = despesasPorMesAno
+                .getOrDefault(mesSelecionado, new HashMap<>())
+                .getOrDefault(anoSelecionado, new ArrayList<>());
+
         despesasAdapter.setDespesas(despesas);
+        despesasAdapter.notifyDataSetChanged();
     }
-
     private void atualizarTotalMensal() {
         String mesSelecionado = spnMeses.getSelectedItem().toString();
-        List<Despesa> despesas = despesasPorMes.getOrDefault(mesSelecionado, new ArrayList<>());
+        int anoSelecionado = Integer.parseInt(spnAnos.getSelectedItem().toString());
+
+        List<Despesa> despesas = despesasPorMesAno
+                .getOrDefault(mesSelecionado, new HashMap<>())
+                .getOrDefault(anoSelecionado, new ArrayList<>());
 
         double totalMensal = 0;
         double despesasEmAberto = 0;
@@ -196,13 +222,15 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
         String[] nomesMeses = getResources().getStringArray(R.array.meses);
         return nomesMeses[mes - 1];
     }
-
     private void configurarSpinnerMesAtual() {
         Calendar calendar = Calendar.getInstance();
         int mesAtual = calendar.get(Calendar.MONTH);
-        spnMeses.setSelection(mesAtual);
-    }
+        int anoAtual = calendar.get(Calendar.YEAR);
 
+        spnMeses.setSelection(mesAtual);
+        List<String> anos = gerarListaAnos();
+        spnAnos.setSelection(anos.indexOf(String.valueOf(anoAtual)));
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
