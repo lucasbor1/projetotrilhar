@@ -57,7 +57,6 @@ public class DespesaFormHandler {
         double valor = 0.0;
 
         try {
-            // Usando NumberFormat para converter o valor corretamente
             NumberFormat format = NumberFormat.getInstance(new Locale("pt", "BR"));
             Number number = format.parse(valorStr);
             if (number != null) {

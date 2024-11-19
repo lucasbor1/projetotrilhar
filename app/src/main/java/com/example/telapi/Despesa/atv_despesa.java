@@ -2,7 +2,6 @@ package com.example.telapi.Despesa;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,11 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.telapi.AdpSpinner;
-import com.example.telapi.Despesa.Despesa;
-import com.example.telapi.Despesa.DespesaAdapter;
-import com.example.telapi.Despesa.DespesaCRUD;
-import com.example.telapi.Despesa.DespesaUpdateListener;
-import com.example.telapi.Despesa.atv_cadastro;
 import com.example.telapi.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -37,20 +31,19 @@ import java.util.Map;
 
 public class atv_despesa extends AppCompatActivity implements DespesaUpdateListener {
 
+    private static final String TAG = "atv_despesa";
+
     private ImageButton btnAdicionar;
     private Spinner spnMeses;
     private ListView lstDespesas;
-    private TextView edtTotal;
-    private TextView edtAberto;
-    public static final int REQUEST_CODE = 1;
+    private TextView edtTotal, edtAberto;
 
     private DespesaAdapter despesasAdapter;
     private DespesaCRUD despesaCRUD;
     private String userId;
     private Map<String, List<Despesa>> despesasPorMes;
-    private ActivityResultLauncher<Intent> cadastroLauncher;
 
-    private static final String TAG = "atv_despesa";
+    private ActivityResultLauncher<Intent> cadastroLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +51,47 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
         EdgeToEdge.enable(this);
         setContentView(R.layout.atv_despesa);
 
+        inicializarFirebase();
+        inicializarUI();
+        configurarToolbar();
+        configurarSpinner();
+        configurarBotaoAdicionar();
+        configurarCadastroLauncher();
+
+        carregarDespesas();
+        configurarSpinnerMesAtual();
+        atualizarTotalMensal();
+    }
+
+    private void inicializarFirebase() {
+        userId = FirebaseAuth.getInstance().getUid();
+        if (userId == null) {
+            Toast.makeText(this, "Erro ao obter ID do usuário", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        despesaCRUD = new DespesaCRUD(this, userId, this);
+        despesasPorMes = new HashMap<>();
+    }
+
+    private void inicializarUI() {
+        btnAdicionar = findViewById(R.id.btnAdicionar);
+        spnMeses = findViewById(R.id.spnMeses);
+        lstDespesas = findViewById(R.id.lstDespesas);
+        edtTotal = findViewById(R.id.edtTotal);
+        edtAberto = findViewById(R.id.edtAberto);
+
+        despesasAdapter = new DespesaAdapter(this, new ArrayList<>());
+        lstDespesas.setAdapter(despesasAdapter);
+
+        lstDespesas.setOnItemClickListener((parent, view, position, id) -> {
+            Despesa despesaSelecionada = despesasAdapter.getDespesa(position);
+            if (despesaSelecionada != null) {
+                abrirTelaCadastro(despesaSelecionada);
+            }
+        });
+    }
+
+    private void configurarToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -66,30 +100,10 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
+    }
 
-        btnAdicionar = findViewById(R.id.btnAdicionar);
-        spnMeses = findViewById(R.id.spnMeses);
-        lstDespesas = findViewById(R.id.lstDespesas);
-        edtTotal = findViewById(R.id.edtTotal);
-        edtAberto = findViewById(R.id.edtAberto);
-        despesasPorMes = new HashMap<>();
-
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        userId = (auth.getCurrentUser() != null) ? auth.getCurrentUser().getUid() : null;
-        despesaCRUD = new DespesaCRUD(this, userId, this);
-
-        if (userId == null) {
-            Log.e(TAG, "Erro: User ID é null");
-            Toast.makeText(this, "Erro ao obter ID do usuário", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
-        despesasAdapter = new DespesaAdapter(this, new ArrayList<>());
-        lstDespesas.setAdapter(despesasAdapter);
-
-        String[] mesesArray = getResources().getStringArray(R.array.meses);
-        AdpSpinner adapter = new AdpSpinner(this, R.layout.item_spinner, mesesArray);
+    private void configurarSpinner() {
+        AdpSpinner adapter = new AdpSpinner(this, R.layout.item_spinner, getResources().getStringArray(R.array.meses));
         spnMeses.setAdapter(adapter);
 
         spnMeses.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -103,125 +117,29 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+    }
 
+    private void configurarBotaoAdicionar() {
+        btnAdicionar.setOnClickListener(v -> abrirTelaCadastro(null));
+    }
+
+    private void configurarCadastroLauncher() {
         cadastroLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
-                        Log.d(TAG, "Cadastro atualizado com sucesso");
+                        carregarDespesas();
+                        atualizarTotalMensal();
                     }
                 }
         );
-
-        btnAdicionar.setOnClickListener(v -> {
-            Intent intent = new Intent(atv_despesa.this, atv_cadastro.class);
-            intent.putExtra("userId", userId);
-            cadastroLauncher.launch(intent);
-        });
-
-        lstDespesas.setOnItemClickListener((parent, view, position, id) -> {
-            Despesa despesaSelecionada = despesasAdapter.getDespesa(position);
-            if (despesaSelecionada != null) {
-                abrirTelaCadastroComDespesa(despesaSelecionada);
-            }
-        });
-
-        carregarDespesas();
-        configurarSpinnerMesAtual();
-        atualizarTotalMensal();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            String acao = data.getStringExtra("acao");
-            Despesa despesaAtualizada = (Despesa) data.getSerializableExtra("despesa");
-
-            if (despesaAtualizada != null) {
-                if ("ATUALIZAR".equals(acao)) {
-                    atualizarDespesaNaLista(despesaAtualizada);
-                } else if ("REMOVER".equals(acao)) {
-                    removerDespesaNaLista(despesaAtualizada);
-                }
-            }
-
-            despesasAdapter.notifyDataSetChanged();
-            atualizarTotalMensal();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume chamado - recarregando despesas");
-        carregarDespesas();
-        despesasAdapter.notifyDataSetChanged();
-        atualizarTotalMensal();
-    }
-
-
-    private void atualizarDespesaNaLista(Despesa despesaAtualizada) {
-        for (int i = 0; i < despesasAdapter.getCount(); i++) {
-            Despesa despesa = despesasAdapter.getDespesa(i);
-            if (despesa.getId() == despesaAtualizada.getId()) {
-                despesasAdapter.getDespesa(i).setDescricao(despesaAtualizada.getDescricao());
-                despesasAdapter.getDespesa(i).setValor(despesaAtualizada.getValor());
-                despesasAdapter.getDespesa(i).setVencimento(despesaAtualizada.getVencimento());
-                despesasAdapter.getDespesa(i).setPago(despesaAtualizada.isPago());
-                despesasAdapter.notifyDataSetChanged();
-                return;
-            }
-        }
-    }
-
-    private void removerDespesaNaLista(Despesa despesaRemovida) {
-        for (int i = 0; i < despesasAdapter.getCount(); i++) {
-            Despesa despesa = despesasAdapter.getDespesa(i);
-            if (despesa.getId() == despesaRemovida.getId()) {
-                despesasAdapter.remove(despesa);
-                despesasAdapter.notifyDataSetChanged();
-                return;
-            }
-        }
-    }
-
-
-
-    private void abrirTelaCadastroComDespesa(Despesa despesa) {
-        Intent intent = new Intent(atv_despesa.this, atv_cadastro.class);
-        intent.putExtra("acao", "ALTERAR");
-        intent.putExtra("obj", despesa);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onDespesaAtualizada(List<Despesa> despesas) {
-        Log.d("atv_despesa", "onDespesaAtualizada chamado");
-        if (despesas == null || despesas.isEmpty()) {
-            Log.d("atv_despesa", "Lista de despesas vazia ou nula.");
-        } else {
-            Log.d("atv_despesa", "Despesas atualizadas: " + despesas.size() + " despesas.");
-        }
-
-        // Atualizando o adapter
-        despesasAdapter.clear();
-        if (despesas != null && !despesas.isEmpty()) {
-            despesasAdapter.addAll(despesas);
-            despesasAdapter.notifyDataSetChanged();
-            Log.d("atv_despesa", "Adapter atualizado com as despesas.");
-        }
-
-        atualizarTotalMensal();
-        Log.d("atv_despesa", "Resultado OK enviado.");
     }
 
     private void carregarDespesas() {
         List<Despesa> todasDespesas = despesaCRUD.listarDespesas();
         despesasPorMes.clear();
 
-        if (todasDespesas != null && !todasDespesas.isEmpty()) {
+        if (todasDespesas != null) {
             for (Despesa despesa : todasDespesas) {
                 adicionarDespesaNova(despesa);
             }
@@ -235,55 +153,41 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
 
     private void adicionarDespesaNova(Despesa novaDespesa) {
         String mes = obterMesDaDespesa(novaDespesa);
-        List<Despesa> despesasDoMes = despesasPorMes.getOrDefault(mes, new ArrayList<>());
-        despesasDoMes.add(novaDespesa);
-        despesasPorMes.put(mes, despesasDoMes);
+        despesasPorMes.computeIfAbsent(mes, k -> new ArrayList<>()).add(novaDespesa);
     }
 
-    private void exibirDespesasPorMes(String mes) {
-        List<Despesa> despesas = despesasPorMes.get(mes);
-        despesasAdapter.clear();
-        if (despesas != null) {
-            despesasAdapter.addAll(despesas);
-        }
-        despesasAdapter.notifyDataSetChanged();
+    private void exibirDespesasPorMes(String mesSelecionado) {
+        List<Despesa> despesas = despesasPorMes.getOrDefault(mesSelecionado, new ArrayList<>());
+        despesasAdapter.setDespesas(despesas);
     }
 
     private void atualizarTotalMensal() {
         String mesSelecionado = spnMeses.getSelectedItem().toString();
-        Log.d("atv_despesa", "Atualizando total mensal para o mês: " + mesSelecionado);
-
-        List<Despesa> despesas = despesasPorMes.get(mesSelecionado);
+        List<Despesa> despesas = despesasPorMes.getOrDefault(mesSelecionado, new ArrayList<>());
 
         double totalMensal = 0;
         double despesasEmAberto = 0;
 
-        if (despesas != null) {
-            Log.d("atv_despesa", "Número de despesas para o mês " + mesSelecionado + ": " + despesas.size());
-
-            for (Despesa despesa : despesas) {
-                totalMensal += despesa.getValor();
-                if (!despesa.isPago()) {
-                    despesasEmAberto += despesa.getValor();
-                }
-                Log.d("atv_despesa", "Despesa: " + despesa.toString() + " | Pago: " + despesa.isPago());
+        for (Despesa despesa : despesas) {
+            totalMensal += despesa.getValor();
+            if (!despesa.isPago()) {
+                despesasEmAberto += despesa.getValor();
             }
-        } else {
-            Log.d("atv_despesa", "Nenhuma despesa encontrada para o mês: " + mesSelecionado);
         }
 
-        Log.d("atv_despesa", "Total Mensal: " + totalMensal + " | Total Em Aberto: " + despesasEmAberto);
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-        String totalMensalFormatado = currencyFormat.format(totalMensal);
-        String despesasAbertoFormatado = currencyFormat.format(despesasEmAberto);
-
-        edtTotal.setText("Total: " + totalMensalFormatado);
-        edtAberto.setText("Em Aberto: " + despesasAbertoFormatado);
-
-        Log.d("atv_despesa", "edtTotal: " + totalMensalFormatado);
-        Log.d("atv_despesa", "edtAberto: " + despesasAbertoFormatado);
+        edtTotal.setText("Total: " + currencyFormat.format(totalMensal));
+        edtAberto.setText("Em Aberto: " + currencyFormat.format(despesasEmAberto));
     }
 
+    private void abrirTelaCadastro(Despesa despesa) {
+        Intent intent = new Intent(this, atv_cadastro.class);
+        if (despesa != null) {
+            intent.putExtra("acao", "ALTERAR");
+            intent.putExtra("obj", despesa);
+        }
+        cadastroLauncher.launch(intent);
+    }
 
     private String obterMesDaDespesa(Despesa despesa) {
         String vencimento = despesa.getVencimento();
@@ -294,8 +198,9 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
     }
 
     private void configurarSpinnerMesAtual() {
-        Calendar cal = Calendar.getInstance();
-        spnMeses.setSelection(cal.get(Calendar.MONTH));
+        Calendar calendar = Calendar.getInstance();
+        int mesAtual = calendar.get(Calendar.MONTH);
+        spnMeses.setSelection(mesAtual);
     }
 
     @Override
@@ -305,5 +210,11 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDespesaAtualizada(List<Despesa> despesas) {
+        carregarDespesas();
+        atualizarTotalMensal();
     }
 }

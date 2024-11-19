@@ -10,18 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.telapi.Categoria.CategoriaCRUD;
 import com.example.telapi.Categoria.CategoriaService;
 import com.example.telapi.Categoria.modal_categoria;
-import com.example.telapi.Despesa.Despesa;
-import com.example.telapi.Despesa.DespesaCRUD;
-import com.example.telapi.Despesa.DespesaFormHandler;
-import com.example.telapi.Despesa.DespesaService;
 import com.example.telapi.MyApp;
 import com.example.telapi.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,29 +28,47 @@ import java.util.List;
 import java.util.Objects;
 
 public class atv_cadastro extends AppCompatActivity implements View.OnClickListener, DespesaUpdateListener {
+
+    // === Variáveis de Instância ===
     private AutoCompleteTextView autoCompleteCategoria;
     private EditText edtDescricao, edtValor, edtVencimento;
     private SwitchMaterial switchDespesaPaga;
     private FloatingActionButton btnAddCategoria;
     private View btnExcluir;
+
     private DespesaFormHandler formHandler;
     private DespesaService despesaService;
     private CategoriaService categoriaService;
+
     private Despesa despesa;
     private String acao;
 
+    // === Ciclo de Vida ===
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.atv_cadastro);
 
+        inicializarToolbar();
+        inicializarComponentes();
+        configurarFormHandler();
+        configurarListeners();
+
+        carregarCategorias();
+        verificarAcao();
+    }
+
+    // === Inicialização ===
+    private void inicializarToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
+    }
 
+    private void inicializarComponentes() {
         autoCompleteCategoria = findViewById(R.id.autoCompleteCategoria);
         edtDescricao = findViewById(R.id.edtDescricao);
         edtValor = findViewById(R.id.edtValor);
@@ -66,24 +80,9 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         formHandler = new DespesaFormHandler(autoCompleteCategoria, edtDescricao, edtValor, edtVencimento, switchDespesaPaga);
         despesaService = new DespesaService(new DespesaCRUD(this, MyApp.getInstance().getUserId(), this));
         categoriaService = new CategoriaService(new CategoriaCRUD(this, MyApp.getInstance().getUserId()));
+    }
 
-        carregarCategorias();
-
-        acao = getIntent().getStringExtra("acao");
-        despesa = (Despesa) getIntent().getSerializableExtra("obj");
-
-        if ("ALTERAR".equals(acao) && despesa != null) {
-            preencherCamposDespesa();
-            btnExcluir.setVisibility(View.VISIBLE);
-        } else {
-            btnExcluir.setVisibility(View.GONE);
-        }
-
-        btnAddCategoria.setOnClickListener(this);
-        findViewById(R.id.imgCalendario).setOnClickListener(this);
-        findViewById(R.id.btnGravar).setOnClickListener(this);
-        btnExcluir.setOnClickListener(this);
-
+    private void configurarFormHandler() {
         edtValor.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -95,19 +94,37 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.btnGravar) {
-            salvarDespesa();
-        } else if (id == R.id.btnExcluir) {
-            excluirDespesa();
-        } else if (id == R.id.btnAddCategoria) {
-            abrirModalCategoria();
-        } else if (id == R.id.imgCalendario) {
-            formHandler.abrirCalendario(this);
+
+    private void configurarListeners() {
+        btnAddCategoria.setOnClickListener(this);
+        findViewById(R.id.imgCalendario).setOnClickListener(this);
+        findViewById(R.id.btnGravar).setOnClickListener(this);
+        btnExcluir.setOnClickListener(this);
+    }
+
+    private void verificarAcao() {
+        acao = getIntent().getStringExtra("acao");
+        despesa = (Despesa) getIntent().getSerializableExtra("obj");
+
+        if ("ALTERAR".equals(acao) && despesa != null) {
+            preencherCamposDespesa();
+            btnExcluir.setVisibility(View.VISIBLE);
+        } else {
+            btnExcluir.setVisibility(View.GONE);
         }
     }
+
+    // === Métodos do Formulário ===
+    private void preencherCamposDespesa() {
+        if (despesa != null) {
+            formHandler.setCategoria(despesa.getCategoria());
+            formHandler.setDescricao(despesa.getDescricao());
+            formHandler.setValor(despesa.getValor());
+            formHandler.setVencimento(despesa.getVencimento());
+            formHandler.setPago(despesa.isPago());
+        }
+    }
+
     private void salvarDespesa() {
         Despesa novaDespesa = formHandler.obterDespesa(despesa != null ? despesa.getId() : -1);
         if (novaDespesa == null) {
@@ -128,18 +145,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-
-    private void preencherCamposDespesa() {
-        if (despesa != null) {
-            formHandler.setCategoria(despesa.getCategoria());
-            formHandler.setDescricao(despesa.getDescricao());
-            formHandler.setValor(despesa.getValor());
-            formHandler.setVencimento(despesa.getVencimento());
-            formHandler.setPago(despesa.isPago());
-        }
-    }
-
+    // === Categorias ===
     private void carregarCategorias() {
         List<String> nomesCategorias = categoriaService.listarCategorias();
         if (nomesCategorias == null) {
@@ -176,6 +182,22 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         modal.show(getSupportFragmentManager(), "modal_categoria");
     }
 
+    // === Listener de Clicks ===
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btnGravar) {
+            salvarDespesa();
+        } else if (id == R.id.btnExcluir) {
+            excluirDespesa();
+        } else if (id == R.id.btnAddCategoria) {
+            abrirModalCategoria();
+        } else if (id == R.id.imgCalendario) {
+            formHandler.abrirCalendario(this);
+        }
+    }
+
+    // === Atualizações de Despesas ===
     @Override
     public void onDespesaAtualizada(List<Despesa> despesas) {
         Log.d("atv_cadastro", "onDespesaAtualizada chamado");
@@ -193,7 +215,4 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
             Log.d("atv_cadastro", "Lista de despesas vazia ou nula.");
         }
     }
-
-
-
 }
