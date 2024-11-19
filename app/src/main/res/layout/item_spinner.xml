@@ -3,7 +3,7 @@
     android:id="@+id/mes"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/azul_escuro"
+    android:background="@drawable/spinner"
     android:gravity="center"
     android:padding="12dp"
     android:textColor="@color/white"
