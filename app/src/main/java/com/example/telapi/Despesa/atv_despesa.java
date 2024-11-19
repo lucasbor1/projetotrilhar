@@ -2,6 +2,7 @@ package com.example.telapi.Despesa;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -108,18 +109,19 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
     }
     private void configurarSpinners() {
         List<String> anos = gerarListaAnos();
-        ArrayAdapter<String> adapterAnos = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, anos);
-        adapterAnos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapterAnos = new ArrayAdapter<>(this, R.layout.item_spinner, anos);
+        adapterAnos.setDropDownViewResource(R.layout.item_spinner);
         spnAnos.setAdapter(adapterAnos);
 
-        ArrayAdapter<CharSequence> adapterMeses = ArrayAdapter.createFromResource(this, R.array.meses, android.R.layout.simple_spinner_item);
-        adapterMeses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> adapterMeses = ArrayAdapter.createFromResource(this, R.array.meses, R.layout.item_spinner);
+        adapterMeses.setDropDownViewResource(R.layout.item_spinner);
         spnMeses.setAdapter(adapterMeses);
 
         spnMeses.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 exibirDespesasPorMesAno();
+                atualizarTotalMensal();
             }
 
             @Override
@@ -130,6 +132,7 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 exibirDespesasPorMesAno();
+                atualizarTotalMensal();
             }
 
             @Override
@@ -195,25 +198,19 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
         despesasAdapter.setDespesas(despesasFiltradas);
         despesasAdapter.notifyDataSetChanged();
     }
-
     private void atualizarTotalMensal() {
         String mesSelecionado = spnMeses.getSelectedItem().toString();
         int anoSelecionado = Integer.parseInt(spnAnos.getSelectedItem().toString());
 
-        List<Despesa> despesas = despesasPorMesAno
-                .getOrDefault(mesSelecionado, new HashMap<>())
-                .getOrDefault(anoSelecionado, new ArrayList<>());
-
-        double totalMensal = 0;
-        double despesasEmAberto = 0;
-
-        for (Despesa despesa : despesas) {
-            totalMensal += despesa.getValor();
-            if (!despesa.isPago()) {
-                despesasEmAberto += despesa.getValor();
-            }
-        }
-
+        Log.d("AtualizarTotal", "Mês Selecionado: " + mesSelecionado);
+        Log.d("AtualizarTotal", "Ano Selecionado: " + anoSelecionado);
+        int numeroMes = obterNumeroDoMes(mesSelecionado);
+        String mesFormatado = String.format(Locale.getDefault(), "%02d", numeroMes);
+        Log.d("AtualizarTotal", "Número do Mês: " + mesFormatado);
+        double totalMensal = despesaCRUD.obterTotalMensal(mesFormatado, anoSelecionado);
+        double despesasEmAberto = despesaCRUD.obterTotalEmAberto(mesFormatado, anoSelecionado);
+        Log.d("AtualizarTotal", "Total Mensal: " + totalMensal);
+        Log.d("AtualizarTotal", "Despesas em Aberto: " + despesasEmAberto);
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
         edtTotal.setText("Total: " + currencyFormat.format(totalMensal));
         edtAberto.setText("Em Aberto: " + currencyFormat.format(despesasEmAberto));
@@ -250,7 +247,6 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
         Calendar calendar = Calendar.getInstance();
         int mesAtual = calendar.get(Calendar.MONTH);
         int anoAtual = calendar.get(Calendar.YEAR);
-
         spnMeses.setSelection(mesAtual);
         List<String> anos = gerarListaAnos();
         spnAnos.setSelection(anos.indexOf(String.valueOf(anoAtual)));
