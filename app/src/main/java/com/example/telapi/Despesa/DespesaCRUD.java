@@ -87,31 +87,26 @@ public class DespesaCRUD implements DespesaRepository {
 
     private void salvarDespesaParcelada(Despesa despesa) {
         Calendar calendario = Calendar.getInstance();
-        int mesAtual = calendario.get(Calendar.MONTH) + 1;  // Meses começam em 0, por isso somamos 1
+        int mesAtual = calendario.get(Calendar.MONTH) + 1;
         int anoAtual = calendario.get(Calendar.YEAR);
         int parcela = 1;
 
-        for (int i = 0; i < despesa.getNumeroParcelas(); i++) {  // Adicionar as parcelas
+        for (int i = 0; i < despesa.getNumeroParcelas(); i++) {
             ContentValues values = criarContentValues(despesa);
-
-            // Configura o vencimento para a parcela
             values.put("vencimento", String.format("%02d/%02d/%d", despesa.getDiaVencimento(), mesAtual, anoAtual));
             values.put("ano", anoAtual);
-            values.put("parcelada", 1);  // Marca como parcelada
+            values.put("parcelada", 1);
             values.put("numeroParcelas", despesa.getNumeroParcelas());
             values.put("parcelaAtual", parcela);
 
-            // A primeira parcela é paga, as demais não
-            boolean isPago = (parcela == 1) ? true : false;  // Só a primeira parcela será paga
+            boolean isPago = (parcela == 1) ? true : false;
             values.put("pago", isPago ? 1 : 0);
 
-            // Insere a despesa na tabela
             long resultado = database.insert("despesas", null, values);
             if (resultado == -1) {
                 Log.e(TAG, "Erro ao adicionar despesa parcelada");
             }
 
-            // Incrementar o mês e a parcela
             parcela++;
             mesAtual++;
             if (mesAtual > 12) {
