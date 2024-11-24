@@ -50,21 +50,29 @@ public class DespesaCRUD implements DespesaRepository {
 
     private void salvarDespesaPermanente(Despesa despesa) {
         Calendar calendario = Calendar.getInstance();
-        int mesAtual = calendario.get(Calendar.MONTH) + 1; // Meses começam em 0
+        int mesAtual = calendario.get(Calendar.MONTH) + 1;  // Meses começam em 0, por isso somamos 1
         int anoAtual = calendario.get(Calendar.YEAR);
+        int diaVencimento = Integer.parseInt(despesa.getVencimento().split("/")[0]);  // Obtemos o dia da data de vencimento fornecida
 
         for (int i = 0; i < 12; i++) { // Adicionar para os próximos 12 meses
             ContentValues values = criarContentValues(despesa);
-            values.put("vencimento", String.format("01/%02d/%d", mesAtual, anoAtual));
+
+            // Configura o vencimento para a despesa
+            values.put("vencimento", String.format("%02d/%02d/%d", diaVencimento, mesAtual, anoAtual));
             values.put("ano", anoAtual);
             values.put("permanente", 1); // Marca como permanente
 
+            // A primeira despesa permanente é paga, as demais ficam em aberto
+            boolean isPago = (i == 0) ? true : false;  // Somente o primeiro mês será pago
+            values.put("pago", isPago ? 1 : 0);
+
+            // Insere a despesa na tabela
             long resultado = database.insert("despesas", null, values);
             if (resultado == -1) {
                 Log.e(TAG, "Erro ao adicionar despesa permanente");
             }
 
-            // Incrementar o mês
+            // Incrementar o mês, se o mês ultrapassar 12, reinicia o mês para 1 e incrementa o ano
             mesAtual++;
             if (mesAtual > 12) {
                 mesAtual = 1;
@@ -76,26 +84,34 @@ public class DespesaCRUD implements DespesaRepository {
         Toast.makeText(context, "Despesa permanente adicionada com sucesso", Toast.LENGTH_SHORT).show();
     }
 
+
     private void salvarDespesaParcelada(Despesa despesa) {
         Calendar calendario = Calendar.getInstance();
-        int mesAtual = calendario.get(Calendar.MONTH) + 1;
+        int mesAtual = calendario.get(Calendar.MONTH) + 1;  // Meses começam em 0, por isso somamos 1
         int anoAtual = calendario.get(Calendar.YEAR);
         int parcela = 1;
 
-        for (int i = 0; i < despesa.getNumeroParcelas(); i++) { // Adicionar as parcelas
+        for (int i = 0; i < despesa.getNumeroParcelas(); i++) {  // Adicionar as parcelas
             ContentValues values = criarContentValues(despesa);
-            values.put("vencimento", String.format("01/%02d/%d", mesAtual, anoAtual));
+
+            // Configura o vencimento para a parcela
+            values.put("vencimento", String.format("%02d/%02d/%d", despesa.getDiaVencimento(), mesAtual, anoAtual));
             values.put("ano", anoAtual);
-            values.put("parcelada", 1); // Marca como parcelada
+            values.put("parcelada", 1);  // Marca como parcelada
             values.put("numeroParcelas", despesa.getNumeroParcelas());
             values.put("parcelaAtual", parcela);
 
+            // A primeira parcela é paga, as demais não
+            boolean isPago = (parcela == 1) ? true : false;  // Só a primeira parcela será paga
+            values.put("pago", isPago ? 1 : 0);
+
+            // Insere a despesa na tabela
             long resultado = database.insert("despesas", null, values);
             if (resultado == -1) {
                 Log.e(TAG, "Erro ao adicionar despesa parcelada");
             }
 
-            // Incrementar parcela e o mês
+            // Incrementar o mês e a parcela
             parcela++;
             mesAtual++;
             if (mesAtual > 12) {
@@ -197,6 +213,7 @@ public class DespesaCRUD implements DespesaRepository {
         values.put("parcelaAtual", despesa.getParcelaAtual());
         return values;
     }
+
     private Despesa criarDespesa(Cursor cursor) {
         int id = obterValorSeguro(cursor, "id", 0);
         String categoria = obterValorSeguro(cursor, "categoria", "");
@@ -238,6 +255,7 @@ public class DespesaCRUD implements DespesaRepository {
 
         return valorPadrao;
     }
+
     public List<Despesa> listarDespesasPorMesAno(String mes, int ano) {
         List<Despesa> despesas = new ArrayList<>();
         String mesFormatado = String.format(Locale.getDefault(), "%02d", Integer.parseInt(mes));
@@ -253,5 +271,4 @@ public class DespesaCRUD implements DespesaRepository {
 
         return despesas;
     }
-
 }

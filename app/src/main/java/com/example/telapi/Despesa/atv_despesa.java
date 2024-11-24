@@ -191,7 +191,14 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
     private void exibirDespesasPorMesAno() {
         String mesSelecionado = spnMeses.getSelectedItem().toString();
         int anoSelecionado = Integer.parseInt(spnAnos.getSelectedItem().toString());
+
+        // Obtendo o número do mês com verificação
         int numeroMes = obterNumeroDoMes(mesSelecionado);
+        if (numeroMes < 1 || numeroMes > 12) {
+            Log.e(TAG, "Mês inválido: " + numeroMes);
+            return;
+        }
+
         String mesFormatado = String.format(Locale.getDefault(), "%02d", numeroMes);
         List<Despesa> despesasFiltradas = despesaService.listarDespesasPorMesAno(mesFormatado, anoSelecionado);
 
@@ -228,10 +235,19 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
     private String obterMesDaDespesa(Despesa despesa) {
         String vencimento = despesa.getVencimento();
         String[] partesData = vencimento.split("/");
+
+        // Corrigindo o cálculo do mês
         int mes = Integer.parseInt(partesData[1]);
+
+        if (mes < 1 || mes > 12) {
+            Log.e(TAG, "Mês inválido: " + mes);
+            return "Mês inválido";
+        }
+
         String[] nomesMeses = getResources().getStringArray(R.array.meses);
-        return nomesMeses[mes - 1];
+        return nomesMeses[mes - 1];  // Meses no array começam em 0, então subtrai 1
     }
+
 
     private int obterNumeroDoMes(String nomeMes) {
         String[] nomesMeses = getResources().getStringArray(R.array.meses);

@@ -68,6 +68,11 @@ public class Despesa implements Serializable {
         return false;
     }
 
+    public int getDiaVencimento() {
+        String[] partesData = vencimento.split("/");
+        return Integer.parseInt(partesData[0]);
+    }
+
     // Getters e Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
