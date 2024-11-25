@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.telapi.Despesa.atv_despesa;
+import com.example.telapi.grafico.atv_graph;
 
 public class atv_menu extends AppCompatActivity {
 
@@ -35,9 +36,13 @@ public class atv_menu extends AppCompatActivity {
         Intent intent = new Intent(this, atv_modulos.class);
         startActivity(intent);
     }
-
     public void metas(View view) {
         Intent intent = new Intent(this, atv_metas.class);
+        startActivity(intent);
+    }
+
+    public void graph(View view) {
+        Intent intent = new Intent(this, atv_graph.class);
         startActivity(intent);
     }
 }

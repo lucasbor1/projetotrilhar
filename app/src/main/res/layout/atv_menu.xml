@@ -125,24 +125,24 @@
 
             <!-- Configurações -->
             <LinearLayout
-                android:id="@+id/configuracoes"
+                android:id="@+id/graph"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:onClick="configuracoes">
+                android:onClick="graph">
 
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/ic_configuracoes"
+                    android:src="@drawable/ic_grafico"
                     app:tint="@color/cinza_medio" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Configurações"
+                    android:text="Gráficos"
                     android:textColor="@color/cinza_medio"
                     android:layout_marginTop="8dp"
                     android:gravity="center" />
