@@ -83,8 +83,14 @@ public class DespesaAdapter extends ArrayAdapter<Despesa> {
         txtValor.setText(NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(despesa.getValor()));
         txtVencimento.setText(despesa.getVencimento());
 
-        int color = despesa.isPago() ? R.color.azul_escuro : (despesa.isAtrasada() ? R.color.vermelho_claro : R.color.cinza_claro);
+        int color = despesa.isPago()
+                ? R.color.verde_destaque
+                : (despesa.isAtrasada()
+                ? R.color.vermelho_claro
+                : R.color.cinza_claro);
+
         cardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), color));
+
 
         return convertView;
     }
