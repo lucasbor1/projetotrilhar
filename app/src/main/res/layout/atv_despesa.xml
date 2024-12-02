@@ -136,7 +136,8 @@
             <TextView
                 android:id="@+id/edtTotal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
+                android:paddingTop="10dp"
                 android:gravity="start"
                 android:text="R$0,00"
                 android:textColor="#FEFEFE"
@@ -154,7 +155,8 @@
             <TextView
                 android:id="@+id/edtAberto"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
+                android:paddingTop="10dp"
                 android:gravity="start"
                 android:text="R$0,00"
                 android:textColor="#FEFEFE"
