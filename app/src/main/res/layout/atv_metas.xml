@@ -4,21 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#060D41"
+    android:background="@color/azul_escuro"
     android:orientation="vertical"
-    android:gravity="bottom">
-    <!-- Toolbar para adicionar botão de voltar -->
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
+    android:gravity="top"
+    android:padding="16dp"
+    tools:context=".grafico.atv_graph">
+
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/azul_escuro">
 
-        <!-- Toolbar com ícone de navegação à esquerda -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -28,7 +24,6 @@
             android:title=""
             android:layout_alignParentStart="true"/>
 
-        <!-- Logo centralizada na Toolbar -->
         <ImageView
             android:id="@+id/toolbarLogo"
             android:layout_width="wrap_content"
@@ -38,36 +33,33 @@
             android:layout_centerInParent="true"/>
     </RelativeLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="16dp" />
     <TextView
         android:id="@+id/textViewTitulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:text="Suas metas"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="20sp" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="16dp" />
+        android:textSize="24sp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif-medium"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/white" />
+        android:background="@color/white"
+        android:layout_marginTop="16dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="8dp">
 
             <!-- Meta 1 -->
             <LinearLayout
@@ -75,21 +67,22 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <CheckBox
                     android:id="@+id/checkBoxMeta1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/white"/>
 
                 <TextView
                     android:id="@+id/textViewMeta1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:text="Coloque todas as despesas no aplicativo."
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:layout_marginStart="16dp" />
             </LinearLayout>
 
             <!-- Meta 2 -->
@@ -98,21 +91,22 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <CheckBox
                     android:id="@+id/checkBoxMeta2"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/white"/>
 
                 <TextView
                     android:id="@+id/textViewMeta2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:text="Veja todos os vídeos do módulo 1."
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:layout_marginStart="16dp" />
             </LinearLayout>
 
             <!-- Meta 3 -->
@@ -121,21 +115,22 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <CheckBox
                     android:id="@+id/checkBoxMeta3"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/white"/>
 
                 <TextView
                     android:id="@+id/textViewMeta3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:text="Pague todas as despesas que tiver."
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:layout_marginStart="16dp" />
             </LinearLayout>
 
             <!-- Meta 4 -->
@@ -144,21 +139,22 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <CheckBox
                     android:id="@+id/checkBoxMeta4"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/white"/>
 
                 <TextView
                     android:id="@+id/textViewMeta4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:text="Economize R$ 100,00."
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:layout_marginStart="16dp" />
             </LinearLayout>
 
             <!-- Meta 5 -->
@@ -167,31 +163,26 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <CheckBox
                     android:id="@+id/checkBoxMeta5"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/white"/>
 
                 <TextView
                     android:id="@+id/textViewMeta5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:text="Abra uma conta em uma Fintech."
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:layout_marginStart="16dp" />
             </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

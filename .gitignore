@@ -1,3 +1,4 @@
+# Ignore all the local configuration and build files
 *.iml
 .gradle
 /local.properties
@@ -8,10 +9,17 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
+
+# Ignore the build directory but include the APKs
 /build/*
-!/build/outputs/apk/debug/*.apk
+
+# Ignore captures and other native build files
 /captures
 .externalNativeBuild
 .cxx
+
+# Ignore local properties again just to make sure
 local.properties
+
+# Ignore .idea directory
 .idea
