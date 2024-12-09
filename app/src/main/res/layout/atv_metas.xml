@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:gravity="top"
     android:padding="16dp"
-    tools:context=".grafico.atv_graph">
+    tools:context=".grafico.AtvGraph">
 
     <RelativeLayout
         android:layout_width="match_parent"

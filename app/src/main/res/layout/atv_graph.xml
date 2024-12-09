@@ -6,65 +6,68 @@
     android:background="@drawable/bg_gradient"
     tools:context=".grafico.AtvGraph">
 
-    <!-- Toolbar com título centralizado e seta de voltar -->
+    <RelativeLayout
+        android:id="@+id/toolbarContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/toolbar_gradient"
+    app:layout_constraintTop_toTopOf="parent"
+    android:elevation="4dp">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:paddingTop="20dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/toolbar_gradient"
-        android:elevation="4dp"
-        app:contentInsetStart="0dp"
-        app:contentInsetLeft="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:background="@android:color/transparent"
+        android:theme="?attr/actionBarTheme"
+        android:title=""
+        app:navigationIcon="@drawable/ic_botao_back_small" />
 
-        <!-- Seta de voltar -->
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_botao_back_small"
-            android:contentDescription="Voltar"
-            android:layout_gravity="start"
-            android:padding="16dp" />
-
-        <!-- Título centralizado -->
-        <TextView
-            android:id="@+id/toolbarTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Relatório de Despesas"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:gravity="center"
-            android:fontFamily="sans-serif-medium" />
-    </androidx.appcompat.widget.Toolbar>
-
-    <!-- Tabs abaixo da Toolbar -->
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayoutPeriod"
-        android:layout_width="0dp"
+    <ImageView
+        android:id="@+id/toolbarLogo"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/tablayout_gradient"
-        android:elevation="2dp"
-        app:tabIndicatorColor="@color/amarelo"
-        app:tabSelectedTextColor="@color/amarelo"
-        app:tabTextColor="@color/cinza_medio"
-        app:tabIndicatorHeight="4dp"
-        app:tabIndicatorFullWidth="true"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:src="@drawable/trilhar_aguia_logo_toolbar_small"
+        android:contentDescription="Logo"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp" />
 
-    <!-- ViewPager2 para os fragments -->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/tabLayoutPeriod"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/toolbarTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Relatório de Despesas"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:fontFamily="sans-serif-medium"
+        android:layout_below="@id/toolbarLogo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp" />
+</RelativeLayout>
+
+<com.google.android.material.tabs.TabLayout
+android:id="@+id/tabLayoutPeriod"
+android:layout_width="0dp"
+android:layout_height="wrap_content"
+android:background="@drawable/tablayout_gradient"
+android:elevation="2dp"
+app:tabIndicatorColor="@color/amarelo"
+app:tabSelectedTextColor="@color/amarelo"
+app:tabTextColor="@color/cinza_medio"
+app:tabIndicatorHeight="4dp"
+app:tabIndicatorFullWidth="true"
+app:layout_constraintTop_toBottomOf="@id/toolbarContainer"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
+
+<androidx.viewpager2.widget.ViewPager2
+android:id="@+id/viewPager"
+android:layout_width="0dp"
+android:layout_height="0dp"
+app:layout_constraintTop_toBottomOf="@id/tabLayoutPeriod"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintEnd_toEndOf="parent"
+app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>

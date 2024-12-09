@@ -24,7 +24,8 @@ public class AtvGraph extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_botao_back_small);
         }
 
