@@ -137,13 +137,13 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:src="@drawable/ic_grafico"
-                    app:tint="@color/cinza_medio" />
+                    app:tint="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Gráficos"
-                    android:textColor="@color/cinza_medio"
+                    android:textColor="@color/white"
                     android:layout_marginTop="8dp"
                     android:gravity="center" />
             </LinearLayout>

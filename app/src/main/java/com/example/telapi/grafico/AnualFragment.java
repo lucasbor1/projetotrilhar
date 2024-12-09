@@ -27,8 +27,10 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
 public class AnualFragment extends Fragment {
@@ -115,28 +117,37 @@ public class AnualFragment extends Fragment {
     }
 
     private void processarDespesas(List<Despesa> despesas) {
+        Map<String, Float> totaisPorCategoria = new HashMap<>();
+        float totalGeral = 0f;
+
+        // Soma os valores por categoria
+        for (Despesa despesa : despesas) {
+            String categoria = despesa.getCategoria();
+            float valor = (float) despesa.getValor();
+            totaisPorCategoria.put(categoria, totaisPorCategoria.getOrDefault(categoria, 0f) + valor);
+            totalGeral += valor;
+        }
+
+        // Prepara os dados para o gráfico
         List<PieEntry> entries = new ArrayList<>();
         List<String> categorias = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
         List<Float> valores = new ArrayList<>();
 
-        float total = 0f;
+        for (Map.Entry<String, Float> entry : totaisPorCategoria.entrySet()) {
+            String categoria = entry.getKey();
+            float valor = entry.getValue();
+            float porcentagem = (valor / totalGeral) * 100;
 
-        for (Despesa despesa : despesas) {
-            total += despesa.getValor();
-        }
-
-        for (Despesa despesa : despesas) {
-            float valor = (float) despesa.getValor();
-            float porcentagem = (valor / total) * 100;
-            entries.add(new PieEntry(porcentagem));
-            categorias.add(despesa.getDescricao());
+            entries.add(new PieEntry(porcentagem, categoria));
+            categorias.add(categoria);
             valores.add(valor);
             colors.add(gerarCorAleatoria());
         }
 
         exibirGrafico(entries, colors, categorias, valores);
     }
+
 
     private void exibirGrafico(List<PieEntry> entries, List<Integer> colors, List<String> categorias, List<Float> valores) {
         PieDataSet dataSet = new PieDataSet(entries, "");
