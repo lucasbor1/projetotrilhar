@@ -23,11 +23,13 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class MensalFragment extends Fragment {
@@ -44,15 +46,11 @@ public class MensalFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mensal, container, false);
 
-        // Inicializar componentes
         spinnerMes = view.findViewById(R.id.spinnerMes);
         spinnerAno = view.findViewById(R.id.spinnerAno);
         pieChart = view.findViewById(R.id.pieChartMensal);
 
-        // Inicializar Firebase e banco de dados
         inicializarFirebase();
-
-        // Configurações
         configurarSpinners();
         configurarGrafico();
 
@@ -134,40 +132,79 @@ public class MensalFragment extends Fragment {
             pieChart.clear();
             Toast.makeText(getContext(), "Nenhuma despesa encontrada.", Toast.LENGTH_SHORT).show();
         } else {
-            List<PieEntry> entries = new ArrayList<>();
-            List<String> categorias = new ArrayList<>();
-            List<Integer> colors = new ArrayList<>();
-
-            for (Despesa despesa : despesas) {
-                entries.add(new PieEntry((float) despesa.getValor(), despesa.getDescricao()));
-                categorias.add(despesa.getDescricao());
-                colors.add(gerarCorAleatoria());
-            }
-
-            exibirGrafico(entries, colors, categorias);
+            processarDespesas(despesas);
         }
     }
 
-    private void exibirGrafico(List<PieEntry> entries, List<Integer> colors, List<String> categorias) {
+    private void processarDespesas(List<Despesa> despesas) {
+        List<PieEntry> entries = new ArrayList<>();
+        List<String> categorias = new ArrayList<>();
+        List<Integer> colors = new ArrayList<>();
+        List<Float> valores = new ArrayList<>();
+
+        float total = 0f;
+
+        for (Despesa despesa : despesas) {
+            total += despesa.getValor();
+        }
+
+        for (Despesa despesa : despesas) {
+            float valor = (float) despesa.getValor();
+            float porcentagem = (valor / total) * 100;
+            entries.add(new PieEntry(porcentagem));
+            categorias.add(despesa.getDescricao());
+            valores.add(valor);
+            colors.add(gerarCorAleatoria());
+        }
+
+        exibirGrafico(entries, colors, categorias, valores);
+    }
+    private void exibirGrafico(List<PieEntry> entries, List<Integer> colors, List<String> categorias, List<Float> valores) {
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(colors);
         dataSet.setValueTextSize(14f);
         dataSet.setValueTextColor(getResources().getColor(R.color.white));
 
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format(Locale.getDefault(), "%.1f%%", value);
+            }
+        });
+
         PieData data = new PieData(dataSet);
         pieChart.setData(data);
-        pieChart.invalidate();
 
-        configurarLegendasPersonalizadas(categorias, colors);
+        for (int i = 0; i < entries.size(); i++) {
+            float value = entries.get(i).getValue();
+            if (value > 25) {
+                dataSet.setValueTextSize(20f);
+            } else if (value > 10) {
+                dataSet.setValueTextSize(16f);
+            } else {
+                dataSet.setValueTextSize(12f);
+            }
+        }
+
+        pieChart.invalidate();
+        configurarLegendasPersonalizadas(categorias, valores, colors);
     }
 
-    private void configurarLegendasPersonalizadas(List<String> categorias, List<Integer> colors) {
+
+
+    private void configurarLegendasPersonalizadas(List<String> categorias, List<Float> valores, List<Integer> colors) {
         LinearLayout legendContainer = requireView().findViewById(R.id.legendContainer);
         legendContainer.removeAllViews();
 
         for (int i = 0; i < categorias.size(); i++) {
             LinearLayout itemLayout = new LinearLayout(getContext());
             itemLayout.setOrientation(LinearLayout.HORIZONTAL);
+            itemLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ));
+            itemLayout.setPadding(0, 8, 0, 8);
+            itemLayout.setGravity(android.view.Gravity.CENTER_VERTICAL);
 
             View colorIndicator = new View(getContext());
             LinearLayout.LayoutParams colorParams = new LinearLayout.LayoutParams(32, 32);
@@ -175,13 +212,16 @@ public class MensalFragment extends Fragment {
             colorIndicator.setLayoutParams(colorParams);
             colorIndicator.setBackgroundColor(colors.get(i));
 
+            String legendaTexto = categorias.get(i).toUpperCase() + " - TOTAL R$ " +
+                    String.format(Locale.getDefault(), "%.2f", valores.get(i));
             TextView categoryText = new TextView(getContext());
-            categoryText.setText(categorias.get(i));
+            categoryText.setText(legendaTexto);
             categoryText.setTextColor(getResources().getColor(R.color.white));
             categoryText.setTextSize(14f);
 
             itemLayout.addView(colorIndicator);
             itemLayout.addView(categoryText);
+
             legendContainer.addView(itemLayout);
         }
     }

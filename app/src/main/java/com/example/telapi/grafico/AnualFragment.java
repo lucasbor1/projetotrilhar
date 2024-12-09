@@ -23,10 +23,12 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class AnualFragment extends Fragment {
@@ -35,7 +37,6 @@ public class AnualFragment extends Fragment {
 
     private Spinner spinnerAno;
     private PieChart pieChart;
-    private LinearLayout legendContainer;
     private DespesaCRUD despesaCRUD;
     private String userId;
 
@@ -44,15 +45,10 @@ public class AnualFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_anual, container, false);
 
-        // Inicializar componentes
         spinnerAno = view.findViewById(R.id.spinnerAno);
         pieChart = view.findViewById(R.id.pieChartAnual);
-        legendContainer = view.findViewById(R.id.legendContainer);
 
-        // Inicializar Firebase e banco de dados
         inicializarFirebase();
-
-        // Configurações
         configurarSpinnerAno();
         configurarGrafico();
 
@@ -102,9 +98,10 @@ public class AnualFragment extends Fragment {
         pieChart.getDescription().setEnabled(false);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleRadius(50f);
-        pieChart.setTransparentCircleRadius(55f);
+        pieChart.setTransparentCircleRadius(40f);
         pieChart.getLegend().setEnabled(false);
     }
+
     private void atualizarDespesas() {
         String anoSelecionado = spinnerAno.getSelectedItem().toString();
         List<Despesa> despesas = despesaCRUD.listarDespesasPorAno(Integer.parseInt(anoSelecionado));
@@ -113,39 +110,71 @@ public class AnualFragment extends Fragment {
             pieChart.clear();
             Toast.makeText(getContext(), "Nenhuma despesa encontrada para o ano selecionado.", Toast.LENGTH_SHORT).show();
         } else {
-            List<PieEntry> entries = new ArrayList<>();
-            List<String> categorias = new ArrayList<>();
-            List<Integer> colors = new ArrayList<>();
-
-            for (Despesa despesa : despesas) {
-                entries.add(new PieEntry((float) despesa.getValor(), despesa.getDescricao()));
-                categorias.add(despesa.getDescricao());
-                colors.add(gerarCorAleatoria());
-            }
-
-            exibirGrafico(entries, colors, categorias);
+            processarDespesas(despesas);
         }
     }
 
-    private void exibirGrafico(List<PieEntry> entries, List<Integer> colors, List<String> categorias) {
+    private void processarDespesas(List<Despesa> despesas) {
+        List<PieEntry> entries = new ArrayList<>();
+        List<String> categorias = new ArrayList<>();
+        List<Integer> colors = new ArrayList<>();
+        List<Float> valores = new ArrayList<>();
+
+        float total = 0f;
+
+        for (Despesa despesa : despesas) {
+            total += despesa.getValor();
+        }
+
+        for (Despesa despesa : despesas) {
+            float valor = (float) despesa.getValor();
+            float porcentagem = (valor / total) * 100;
+            entries.add(new PieEntry(porcentagem));
+            categorias.add(despesa.getDescricao());
+            valores.add(valor);
+            colors.add(gerarCorAleatoria());
+        }
+
+        exibirGrafico(entries, colors, categorias, valores);
+    }
+
+    private void exibirGrafico(List<PieEntry> entries, List<Integer> colors, List<String> categorias, List<Float> valores) {
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(colors);
+
+        // Define um tamanho de texto padrão
         dataSet.setValueTextSize(14f);
         dataSet.setValueTextColor(getResources().getColor(R.color.white));
 
+        // Customiza o ValueFormatter para ajustar o texto dinamicamente
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format(Locale.getDefault(), "%.1f%%", value);
+            }
+        });
+
         PieData data = new PieData(dataSet);
+
         pieChart.setData(data);
         pieChart.invalidate();
 
-        configurarLegendasPersonalizadas(categorias, colors);
+        configurarLegendasPersonalizadas(categorias, valores, colors);
     }
 
-    private void configurarLegendasPersonalizadas(List<String> categorias, List<Integer> colors) {
+    private void configurarLegendasPersonalizadas(List<String> categorias, List<Float> valores, List<Integer> colors) {
+        LinearLayout legendContainer = requireView().findViewById(R.id.legendContainer);
         legendContainer.removeAllViews();
 
         for (int i = 0; i < categorias.size(); i++) {
             LinearLayout itemLayout = new LinearLayout(getContext());
             itemLayout.setOrientation(LinearLayout.HORIZONTAL);
+            itemLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ));
+            itemLayout.setPadding(0, 8, 0, 8);
+            itemLayout.setGravity(android.view.Gravity.CENTER_VERTICAL);
 
             View colorIndicator = new View(getContext());
             LinearLayout.LayoutParams colorParams = new LinearLayout.LayoutParams(32, 32);
@@ -153,13 +182,16 @@ public class AnualFragment extends Fragment {
             colorIndicator.setLayoutParams(colorParams);
             colorIndicator.setBackgroundColor(colors.get(i));
 
+            String legendaTexto = categorias.get(i).toUpperCase() + " - TOTAL R$ " +
+                    String.format(Locale.getDefault(), "%.2f", valores.get(i));
             TextView categoryText = new TextView(getContext());
-            categoryText.setText(categorias.get(i));
+            categoryText.setText(legendaTexto);
             categoryText.setTextColor(getResources().getColor(R.color.white));
             categoryText.setTextSize(14f);
 
             itemLayout.addView(colorIndicator);
             itemLayout.addView(categoryText);
+
             legendContainer.addView(itemLayout);
         }
     }
