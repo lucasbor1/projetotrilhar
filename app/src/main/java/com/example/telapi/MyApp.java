@@ -19,13 +19,11 @@ public class MyApp extends Application {
         return instance;
     }
 
-    // Método para obter o userId global
     public String getUserId() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getString(KEY_USER_ID, null);
     }
 
-    // Método para definir o userId global
     public void setUserId(String userId) {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -33,7 +31,6 @@ public class MyApp extends Application {
         editor.apply();
     }
 
-    // Método para limpar o userId (por exemplo, no logout)
     public void clearUserId() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();

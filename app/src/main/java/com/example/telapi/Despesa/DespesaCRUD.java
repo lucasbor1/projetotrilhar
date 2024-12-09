@@ -263,7 +263,23 @@ public class DespesaCRUD implements DespesaRepository {
             } while (cursor.moveToNext());
             cursor.close();
         }
+        return despesas;
+    }
+
+    public List<Despesa> listarDespesasPorAno(int ano) {
+        List<Despesa> despesas = new ArrayList<>();
+        String query = "SELECT * FROM despesas WHERE ano = ?";
+
+        Cursor cursor = database.rawQuery(query, new String[]{String.valueOf(ano)});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                despesas.add(criarDespesa(cursor));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
 
         return despesas;
     }
+
 }
