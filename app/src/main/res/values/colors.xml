@@ -7,7 +7,7 @@
     <color name="button_default">#CCCCCC</color>
     <color name="vermelho">#FF5252</color>
     <color name="verde">#4CAF50</color>
-    <color name="azul_claro">#90CAF9</color>
+    <color name="azul_claro">#0288D1</color>
     <color name="verde_claro">#4CAF50</color>
     <color name="vermelho_claro">#FF7043</color>
     <color name="cinza_claro">#BDBDBD</color>
@@ -15,4 +15,9 @@
     <color name="cinza_medio">#777777</color>
     <color name="verde_destaque">#4CAF50</color>
     <color name="gray">#A9A9A9</color>
+    <color name="azul_medio">#2D2F5C</color>
+    <color name="amarelo">#FFEB3B</color>
+    <color name="azul_cinza">#455A64</color>
+    <color name="laranja">#FF9800</color>
+    <color name="cinza">#9E9E9E</color>
 </resources>

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="@color/azul_escuro"
     tools:context=".grafico.atv_graph">
 
@@ -12,114 +11,32 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Despesas"
-        android:textSize="24sp"
+        android:text="Despesas por Categoria"
+        android:textSize="28sp"
         android:textColor="#FFFFFF"
         android:fontFamily="sans-serif-medium"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/spinnerMes"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="16dp" />
 
-    <Spinner
-        android:id="@+id/spinnerMes"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutPeriod"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#FFEB3B"
-        app:layout_constraintBottom_toTopOf="@+id/cardSomatorioMensal"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:tabIndicatorColor="@color/amarelo"
+        app:tabSelectedTextColor="@color/amarelo"
+        app:tabTextColor="#FFFFFF"
+        android:background="@color/azul_medio"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardSomatorioMensal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:elevation="6dp"
-        app:cardCornerRadius="12dp"
-        android:backgroundTint="#0288D1"
-        app:layout_constraintBottom_toTopOf="@+id/pieChartMensal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerMes">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/tvSomatorioMensal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Somatório Mensal: R$ 0,00"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/pieChartMensal"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/spinnerAnual"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayoutPeriod"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardSomatorioMensal"
-        android:layout_centerInParent="true" />
-
-    <Spinner
-        android:id="@+id/spinnerAnual"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#FFEB3B"
-        app:layout_constraintBottom_toTopOf="@+id/cardSomatorioAnual"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pieChartMensal" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardSomatorioAnual"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:elevation="6dp"
-        app:cardCornerRadius="12dp"
-        android:backgroundTint="#0288D1"
-        app:layout_constraintBottom_toTopOf="@+id/pieChartAnual"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerAnual">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/tvSomatorioAnual"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Somatório Anual: R$ 0,00"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/pieChartAnual"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardSomatorioAnual"
-        android:layout_centerInParent="true" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

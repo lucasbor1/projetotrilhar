@@ -16,7 +16,7 @@
         android:theme="@style/Theme.TelaPi"
         tools:targetApi="31">
         <activity
-            android:name=".grafico.atv_graph"
+            android:name=".grafico.AtvGraph"
             android:exported="false" />
         <activity
             android:name=".Videos.TelaVideo"
