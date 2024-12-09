@@ -105,6 +105,7 @@ public class atv_despesa extends AppCompatActivity implements DespesaUpdateListe
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+            toolbar.setNavigationIcon(R.drawable.ic_botao_back_small);
         }
     }
     private void configurarSpinners() {

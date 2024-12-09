@@ -36,7 +36,7 @@ public class TelaVideo extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             // Usa um ícone de tamanho maior do drawable
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            toolbar.setNavigationIcon(R.drawable.ic_botao_back_small); // Substitua por seu ícone personalizado
+            toolbar.setNavigationIcon(R.drawable.ic_botao_back_small);
         }
 
 
