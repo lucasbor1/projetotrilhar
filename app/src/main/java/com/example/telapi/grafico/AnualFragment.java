@@ -152,12 +152,10 @@ public class AnualFragment extends Fragment {
     private void exibirGrafico(List<PieEntry> entries, List<Integer> colors, List<String> categorias, List<Float> valores) {
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(colors);
-
-        // Define um tamanho de texto padrão
         dataSet.setValueTextSize(14f);
         dataSet.setValueTextColor(getResources().getColor(R.color.white));
 
-        // Customiza o ValueFormatter para ajustar o texto dinamicamente
+
         dataSet.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {

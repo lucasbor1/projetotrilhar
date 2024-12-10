@@ -20,4 +20,8 @@
     <color name="azul_cinza">#455A64</color>
     <color name="laranja">#FF9800</color>
     <color name="cinza">#9E9E9E</color>
+    <color name="colorPrimary">#00796B</color>
+    <color name="colorPrimaryDark">#004D40</color>
+    <color name="colorAccent">#FFFFFF</color>
+    <color name="statusBarColor">#004D40</color>
 </resources>

@@ -69,6 +69,7 @@ public class atv_cadastro extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setNavigationIcon(R.drawable.ic_botao_back_small);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
